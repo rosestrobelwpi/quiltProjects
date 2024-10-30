@@ -8,6 +8,11 @@
     font-family: Arial, sans-serif;
   }
 
+  .about-container {
+    background-color: #f4f4f4;
+    color: black;
+  }
+
   .navbar {
     background-color: #f4f4f4;
     padding: 10px;

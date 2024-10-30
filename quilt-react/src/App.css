@@ -23,6 +23,8 @@ body {
   gap: 2%;
 }
 
+.react-codemirror2 > .CodeMirror:first-child { display: none; }
+
 .navbar {
   margin-top: 0;
   background-color: #f4f4f4;

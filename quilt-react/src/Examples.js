@@ -3,7 +3,7 @@ import './examples.css';
 
 function Examples() {
   return (
-    <div className="container">
+    <div className="examples-container">
       <div className="navbar">
         <ul>
           <li><a href="/" id="logo">Logo</a></li>

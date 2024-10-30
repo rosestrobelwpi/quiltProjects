@@ -3,7 +3,7 @@ import './about.css';
 
 function About() {
   return (
-    <div className="container">
+    <div className="about-container">
       <div className="navbar">
         <ul>
           <li><a href="/" id="logo">Logo</a></li>
