@@ -20,12 +20,12 @@ function Play() {
   // };
 
 
-  // const handleClear = () => {
-  //   setTextareaValue("");
-  //   const canvas = canvasRef.current;
-  //   const ctx = canvas.getContext("2d");
-  //   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  // };
+  const handleClear = () => {
+    setTextareaValue("");
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  };
 
   const codeToCanvas = (text) => {
     const canvas = canvasRef.current;
@@ -76,7 +76,8 @@ function Play() {
               Clear
             </button>
         </div> */}
-        <button onClick={handleSubmit}>Submit</button> {/* Submit button */}
+        <button onClick={handleSubmit}>Submit</button>
+        <button onClick={handleClear}>Clear</button>
       <div className="container2">
         <div className="parser-container">
           <CodeMirror
