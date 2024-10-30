@@ -35,6 +35,14 @@ function Play() {
     ctx.fillText(text, 30, 50);
   }
 
+  const handleCodeChange = (editor, data, value) => {
+    setTextareaValue(textareaValue); // Update the state with the new code value
+  };
+
+  const handleSubmit = () => {
+    console.log('Submitted code:', textareaValue); // Access the code string here
+  };
+
   return (
     <div className="play-container">
     <div className="navbar">
@@ -68,6 +76,7 @@ function Play() {
               Clear
             </button>
         </div> */}
+        <button onClick={handleSubmit}>Submit</button> {/* Submit button */}
       <div className="container2">
         <div className="parser-container">
           <CodeMirror
@@ -84,6 +93,7 @@ function Play() {
             onInputRead={(editor, canvasRef) => {
             }}
               />
+          
         </div>
         <div className="drawing-container">
           <canvas id="canvas" ref={canvasRef}></canvas>
