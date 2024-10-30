@@ -12,19 +12,12 @@ function Play() {
   const [textareaValue, setTextareaValue] = useState("");
   const canvasRef = useRef(null);
 
-
-  // const handleSubmit = () => {
-  //   console.log("Submitted:", textareaValue);
-  //   const canvas = canvasRef.current;
-  //   const ctx = canvas.getContext("2d");
-  // };
-
-
   const handleClear = () => {
     setTextareaValue("");
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
   };
 
   const codeToCanvas = (text) => {
@@ -36,11 +29,11 @@ function Play() {
   }
 
   const handleCodeChange = (editor, data, value) => {
-    setTextareaValue(textareaValue); // Update the state with the new code value
+    setTextareaValue(textareaValue); 
   };
 
   const handleSubmit = () => {
-    console.log('Submitted code:', textareaValue); // Access the code string here
+    console.log('Submitted code:', textareaValue); //inputed code
   };
 
   return (
@@ -65,8 +58,10 @@ function Play() {
         </ul>
       </div>
       </div>
-      <div className="header">
+      <div className="play-header">
         <h1>Quilt NEOW</h1>
+        <button onClick={handleSubmit}>Submit</button>
+        <button onClick={handleClear}>Clear</button>
       </div>
       {/* <div className="btn-container">
             <button id="submit-button" onClick={handleSubmit}>
@@ -76,8 +71,7 @@ function Play() {
               Clear
             </button>
         </div> */}
-        <button onClick={handleSubmit}>Submit</button>
-        <button onClick={handleClear}>Clear</button>
+        
       <div className="container2">
         <div className="parser-container">
           <CodeMirror

@@ -88,7 +88,7 @@
     gap: 20px;
   }
 
-  button {
+  .btn-container button {
     font-size: 30px;
     padding: 10px 10px;
     width: 250px;
@@ -99,11 +99,11 @@
     transition: 0.5s;
   }
   
-  button:hover {
-    transform: scale(1.1);
+  .btn-container button:hover {
+    opacity: 0.9;;
   }
 
-  button a {
+  .btn-container button a {
     text-decoration: none;
     color: black;
   }
