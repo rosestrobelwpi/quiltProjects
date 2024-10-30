@@ -1,0 +1,109 @@
+  body {
+    margin: 0 auto;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-position: 0 0;
+    overflow: hidden;
+    background-color: rgb(34, 34, 58);
+  }
+
+  canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+  }
+
+  /* .sky-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url("https://t4.ftcdn.net/jpg/01/76/01/51/360_F_176015185_mPGNcaL7WygUCaaNWR5nhiC08H4tboBE.jpg");
+    animation: scrollBackground 20s linear infinite;
+    background-size: cover, contain;
+    z-index: -1;
+  } */
+
+  /* .grass-background {
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 0;
+    background-size: cover;
+    min-width: 100%;
+    z-index: 0;
+  }
+
+  .grass-background img {
+    min-width: 100%;
+    height: 90%;
+  } */
+
+  .bedroom-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.bedroom-background img {
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover; /* Ensures the image scales to cover the entire div */
+}
+  
+  .home-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 2;
+  }
+  
+  .container h1 {
+    font-family: "Handjet", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-size: 110px;
+    text-align: center;
+    letter-spacing: 10px;
+    padding: 0;
+    margin: 0;
+    color: white;
+  }
+  
+  .btn-container {
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  button {
+    font-size: 30px;
+    padding: 10px 10px;
+    width: 250px;
+    height: 70px;
+    border-radius: 10px;
+    border: 2px solid black;
+    cursor: pointer;
+    transition: 0.5s;
+  }
+  
+  button:hover {
+    transform: scale(1.1);
+  }
+
+  button a {
+    text-decoration: none;
+    color: black;
+  }
