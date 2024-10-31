@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 
 function Play() {
 
-  const [textareaValue, setTextareaValue] = useState("");
+  const [value, setTextareaValue] = useState("");
   const canvasRef = useRef(null);
 
   const handleClear = () => {
@@ -29,16 +29,17 @@ function Play() {
   }
 
   const handleCodeChange = (editor, data, value) => {
-    setTextareaValue(textareaValue); 
+    setTextareaValue(value);
+    codeToCanvas(value);
   };
 
   const handleSubmit = () => {
-    console.log('Submitted code:', textareaValue); //inputed code
+    console.log("Text value: ", value)
   };
 
   return (
     <div className="play-container">
-    <div className="navbar">
+    {/* <div className="navbar">
       <ul>
         <li>
           <a href="/" id="logo">Logo</a>
@@ -57,21 +58,18 @@ function Play() {
           </li>
         </ul>
       </div>
+      </div> */}
+      {/* <div className="play-header">
+        <h1>Quilt Designer</h1>
+       
+      </div> */}
+    
+      <div className="button-container">
+        <h1>Quilt Designer</h1>
+        <button id="home-button"><a href="/">Home</a></button>
+        <button id="submit-button" onClick={handleSubmit}>Submit</button>
+        <button id="clear-button" onClick={handleClear}>Clear</button>
       </div>
-      <div className="play-header">
-        <h1>Quilt NEOW</h1>
-        <button onClick={handleSubmit}>Submit</button>
-        <button onClick={handleClear}>Clear</button>
-      </div>
-      {/* <div className="btn-container">
-            <button id="submit-button" onClick={handleSubmit}>
-              Submit
-            </button>
-            <button id="clear-button" onClick={handleClear}>
-              Clear
-            </button>
-        </div> */}
-        
       <div className="container2">
         <div className="parser-container">
           <CodeMirror
