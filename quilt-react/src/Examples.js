@@ -1,5 +1,7 @@
 import React from 'react';
 import './examples.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faHouse, faPenFancy } from '@fortawesome/free-solid-svg-icons';
 
 function Examples() {
   return (
@@ -15,6 +17,12 @@ function Examples() {
             <li><a href="/about">About Us</a></li>
           </ul>
         </div>
+      </div>
+      <div className='document-links'>
+        <ul>
+          <li><a href='#'><FontAwesomeIcon icon={faHouse} className='icon' />Getting Started</a></li>
+          <li><a href='#'><FontAwesomeIcon icon={faPenFancy} className='icon' /> Creating Patterns</a></li>
+        </ul>
       </div>
       <h1>Examples</h1>
       <div className="picture-container">
