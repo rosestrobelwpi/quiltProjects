@@ -1,8 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    font-family: "Libre Franklin", sans-serif;
   }
   
 
@@ -12,10 +15,12 @@
     margin-bottom: 5em;
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Ensures space between logo and navbar items */
+    justify-content: space-between; 
     position: fixed;
     top: 0;
     left: 0;
+    color: #1B4965;
+    height: 60px;
 }
   
   .navbar-links {
@@ -44,11 +49,15 @@
   h1 {
     text-align: center;
     font-size: 55px;
+    margin-top: 70px;
   }
 
 .examples-container {
     margin: 0;
     height: 100%;
+    background-color: #f4f4f4;
+    margin-top: 20%;
+    color: #1B4965;
 }
 
 .picture-container {
@@ -58,7 +67,6 @@
     margin-top: 10em;
     height: 100vh;
     overflow-y: auto;
-    padding-top: 10%;
 }
 
 img {
@@ -73,4 +81,54 @@ img {
 img:hover {
     transform: scale(1.02);
     cursor: pointer;
+}
+
+.document-links {
+  text-align: center;
+  padding-top: 20em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.document-links ul {
+  display: flex;
+  gap: 20px;
+  padding: 0;
+  margin: 0;
+}
+
+.document-links ul li:hover {
+  opacity: 0.8;
+  box-shadow: 1px 1px 5px#1B4965;
+  transition: 0.3s;
+}
+
+.document-links ul li {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  font-size: 20px;
+  list-style: none;
+  background-color: #f4f4f4;
+  width: 15vw;
+  height: 12vh;
+  border-radius: 10px;
+  border: 1px solid #1B4965;
+}
+
+.document-links ul li a {
+  color: #1B4965;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-direction: column;
+}
+
+.icon {
+  font-size: 30px;
 }
