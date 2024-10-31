@@ -2,10 +2,9 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: rgb(180, 201, 219);
+  background-color:#CAE9FF;
   color: white;
   box-sizing: border-box;
-  
 }
 
 .play-container {
@@ -13,6 +12,8 @@ body {
   flex-direction: column;
   align-items: center;
   padding-top: 200px; 
+  height: 100%;
+
 }
 
 .container2 {
@@ -24,10 +25,10 @@ body {
 }
 
 .react-codemirror2 > .CodeMirror:first-child { display: none; }
-
+/* 
 .navbar {
   margin-top: 0;
-  background-color: #f4f4f4;
+  background-color: #CAE9FF;
   padding: 10px;
   margin-bottom: 10px;
   width: 100vw;
@@ -57,19 +58,12 @@ body {
 #logo {
   margin-left: 2em;
   font-weight: 700;
-}
-
-
-.play-header h1 {
-  text-align: center;
-  font-size: 50px;
-}
+} */
 
 .play-header {
   position: fixed;
   top: 10%;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
@@ -80,30 +74,26 @@ body {
   width: 50%;
 }
 
-.container {
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
 .parser-container {
   display: flex;
   /* justify-content: space-between; */
   /* width: 100vw; */
   align-items: flex-start;
   /* margin: 20px; */
-  height: 100vh;
+  height: 100%;
   position: fixed;
-  top: 30%;
+  top: 7%;
   left: 0;
+  background-color:#CAE9FF;
 }
 
 .CodeMirror {
   width: 50vw;
   border: 2px solid white;
-  height: 100%;
+  min-height: 800px;
 }
+
+
 
 .drawing-container {
   flex-grow: 1;
@@ -113,18 +103,53 @@ body {
   width: 50vw;
   height: 100%;
   position: fixed;
-  top: 30%;
+  top: 7%;
   left: 50%;
+  background-color:#CAE9FF;
 }
 
 
 .drawing-container canvas {
   width: 100%;
-  height: 100%;
+  height: 800px;
   background-color: white;
 }
 
 .quilt-container {
   display: flex;
   flex-direction: column;
+}
+
+.button-container {
+  position: fixed;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100vw;
+  padding: 10px 20px;
+  background-color:#CAE9FF;
+}
+
+.button-container button {
+  font-family: Arial, sans-serif;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.button-container h1 {
+  font-size: 40px;
+  margin: 0;
+  text-align: center;
+  flex: 1;
+  color: #1B4965;
+}
+
+#home-button, #submit-button, #clear-button {
+  min-width: 80px;
+}
+
+#home-button a {
+  text-decoration: none;
+  color: black;
 }
