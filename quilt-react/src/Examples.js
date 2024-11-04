@@ -20,13 +20,13 @@ function Examples() {
       </div>
       <div className='document-links'>
         <ul>
-          <li><a href='#'><FontAwesomeIcon icon={faHouse} className='icon' />Getting Started</a></li>
+          <li><a href='/gettingStarted'><FontAwesomeIcon icon={faHouse} className='icon' />Getting Started</a></li>
           <li><a href='#'><FontAwesomeIcon icon={faPenFancy} className='icon' /> Creating Patterns</a></li>
         </ul>
       </div>
       <h1>Examples</h1>
       <div className="picture-container">
-        <a href="/examples/example-one.html"><img src="https://www.merchpatterns.com/images/Pattern_Motifs_Calico.jpg" alt="Pattern Motifs Calico" /></a>
+        <a href="/exampleOne"><img src="https://www.merchpatterns.com/images/Pattern_Motifs_Calico.jpg" alt="Pattern Motifs Calico" /></a>
         <a href="/examples/example-one.html"><img src="https://www.merchpatterns.com/images/Pattern_Motifs_Roses.jpg" alt="Pattern Motifs Roses" /></a>
         <a href="/examples/example-one.html"><img src="https://www.merchpatterns.com/images/Pattern_Motif_ZFloral_Leaves_3.jpg" alt="Pattern Motif Z Floral Leaves" /></a>
         <a href="/examples/example-one.html"><img src="https://www.merchpatterns.com/images/Pattern_Motifs_Calico.jpg" alt="Pattern Motifs Calico" /></a>

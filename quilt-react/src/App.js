@@ -4,6 +4,8 @@ import Play from './Play';
 import Home from './Home'
 import About from './About'
 import Examples from './Examples'
+import GettingStarted from './GettingStarted'
+import ExampleOne from './examples/ExampleOne'
 
 
 function App() {
@@ -13,6 +15,8 @@ function App() {
       <Route path="/play" element={<Play />} />
       <Route path="/about" element={<About />} />
       <Route path="/examples" element={<Examples />} />
+      <Route path="/exampleOne" element={<ExampleOne />} />
+      <Route path="/gettingStarted" element={<GettingStarted />} />
     </Routes>
   );
 }
