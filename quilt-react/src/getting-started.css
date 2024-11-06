@@ -14,7 +14,7 @@
     margin-bottom: 5em;
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Ensures space between logo and navbar items */
+    justify-content: space-between; 
 }
   
   .navbar-links {
@@ -71,6 +71,7 @@
     margin: 0 auto;
     line-height: 1.5;
     text-align: left;
+    display: block;
   }
   
   pre {

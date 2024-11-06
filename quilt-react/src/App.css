@@ -2,9 +2,6 @@
 body {
   margin: 0;
   padding: 0;
-  background-color:#CAE9FF;
-  color: white;
-  box-sizing: border-box;
 }
 
 .play-container {
@@ -13,7 +10,7 @@ body {
   align-items: center;
   padding-top: 200px; 
   height: 100%;
-
+  background-color:#CAE9FF;
 }
 
 .container2 {
@@ -145,11 +142,11 @@ body {
   color: #1B4965;
 }
 
-#home-button, #submit-button, #clear-button {
+#home-button, #submit-button, #clear-button, #example-button {
   min-width: 80px;
 }
 
-#home-button a {
+#home-button a, #example-button a {
   text-decoration: none;
   color: black;
 }

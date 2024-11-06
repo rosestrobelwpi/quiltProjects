@@ -65,8 +65,10 @@ function Play() {
       </div> */}
     
       <div className="button-container">
+      <button id="home-button"><a href="/">Home</a></button>
+      <button id="example-button"><a href="/">Examples</a></button>
         <h1>Quilt Designer</h1>
-        <button id="home-button"><a href="/">Home</a></button>
+        
         <button id="submit-button" onClick={handleSubmit}>Submit</button>
         <button id="clear-button" onClick={handleClear}>Clear</button>
       </div>

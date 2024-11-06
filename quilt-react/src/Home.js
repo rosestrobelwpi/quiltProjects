@@ -14,6 +14,8 @@ function Home() {
 
     const raindrops = [];
 
+
+
     function createRaindrop() {
       const x = Math.random() * canvas.width;
       const y = -5;
@@ -53,11 +55,16 @@ function Home() {
       requestAnimationFrame(animate);
     }
 
+
     animate();
   }, []);
 
   return (
+    <div className='home-body'>
     <div>
+     
+
+      
       <canvas ref={canvasRef} id="rainfall"></canvas>
       <div className="bedroom-background">
         <img src="./static/bedroom.png" alt="Bedroom background" />
@@ -76,6 +83,7 @@ function Home() {
           </button>
         </div>
       </div>
+    </div>
     </div>
   );
 }
