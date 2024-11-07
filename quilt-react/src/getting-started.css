@@ -8,7 +8,7 @@
     font-family: Arial, sans-serif;
   }
   
-  .navbar {
+  /* .navbar {
     background-color: #f4f4f4;
     padding: 10px;
     margin-bottom: 5em;
@@ -38,7 +38,7 @@
   #logo {
     margin-left: 2em;
     font-weight: 700;
-  }
+  } */
 
   h1 {
     text-align: center;
@@ -51,37 +51,39 @@
     margin: 0;
     height: 100%;
     width: 100%;
-    background-color: #f4f4f4;
+    background-color: #2a2a2e;
 }
   
   h1 {
     text-align: center;
     margin-bottom: 1em;
     font-size: 55px;
+    color: #d9d9e0;
   }
 
   p {
     margin-bottom: 30px;
     line-height: 1.5;
+    color: #d9d9e0;
   }
   
   .text-container {
-    max-width: 600px;
-    width: 80vw;
+    width: 50vw;
     margin: 0 auto;
-    line-height: 1.5;
+    line-height: 2;
     text-align: left;
     display: block;
   }
   
   pre {
-    background-color: #e7e7ec;
+    background-color: #101014;
     padding: 15px;
     border-radius: 5px;
     margin-bottom: 2em;
     text-align: left;
     overflow-y: auto;
     width: 100%;
+    color: #d9d9e0;
 
   }
   
@@ -92,10 +94,10 @@
   }
   
   .keyword {
-    color: blueviolet;
+    color: rgb(106, 42, 255);
   }
   
   .variable {
-    color: rgb(221, 121, 27);
+    color: rgb(255, 142, 35);
   }
   
