@@ -4,7 +4,7 @@ import './about.css';
 function About() {
   return (
     <div className="about-container">
-      <div className="navbar">
+       <div className="navbar">
         <ul>
           <li><a href="/" id="logo">Quilt Designer</a></li>
         </ul>
@@ -13,6 +13,7 @@ function About() {
             <li><a href="/">Home</a></li>
             <li><a href="/play">Play</a></li>
             <li><a href="/about">About Us</a></li>
+            <li><a href="/examples">Docs</a></li>
           </ul>
         </div>
       </div>
