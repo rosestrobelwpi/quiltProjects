@@ -6,6 +6,10 @@ import "codemirror/theme/material.css";
 import "codemirror/mode/javascript/javascript";
 import { Link } from 'react-router-dom';
 
+// Import custom parser and interpreter
+import parser from './parser';
+import interpreter from './interpreter';
+
 // Define a muted color palette
 const colorPalette = {
     Red: '#b57c7c',        // Muted red
@@ -59,11 +63,13 @@ function Play() {
     // Only called on Submit button click
     const handleSubmit = () => {
         try {
-            const design = eval(`(${textInput})`); // Interpret input as design object
-            renderDesign(design);              // Render design on canvas
+            // Parse and interpret custom language input
+            const parsedInput = parser.parse(textInput);
+            const design = interpreter.evaluate(parsedInput);
+            renderDesign(design); // Render design on canvas
         } catch (error) {
             console.error("Error interpreting code:", error);
-            alert("Error interpreting your code. Please enter a valid design object.");
+            alert("Error interpreting your code. Please enter a valid design structure.");
         }
     };
 
