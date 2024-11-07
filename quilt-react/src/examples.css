@@ -11,7 +11,7 @@
   
 
   .navbar {
-    background-color: #f4f4f4;
+    background-color: #101014;
     padding: 10px;
     margin-bottom: 5em;
     display: flex;
@@ -20,13 +20,14 @@
     position: fixed;
     top: 0;
     left: 0;
-    color: #1B4965;
-    height: 60px;
+    height: 6%;
+    width: 100%;
 }
   
   .navbar-links {
     display: flex;
     justify-content: flex-end;
+    height: 100%;
   }
 
   .navbar ul {
@@ -38,13 +39,30 @@
   
   .navbar a {
     text-decoration: none;
-    color: #333;
+    color: #d9d9e0;
     font-size: 18px;
+    height: 100% !important;
+    display: flex;
+    align-items: center;
+    padding: 0px 20px;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  .navbar a:hover {
+    background-color: white;
+    color: black;
   }
 
   #logo {
     margin-left: 2em;
     font-weight: 700;
+    font-size: 25px;
+    padding: 0;
+  }
+
+  #logo:hover {
+    background-color: #101014;
+    color: white;
   }
 
   h1 {
@@ -56,9 +74,8 @@
 .examples-container {
     margin: 0;
     height: 100%;
-    background-color: #f4f4f4;
-    margin-top: 20%;
-    color: #1B4965;
+    background-color: #2a2a2e;
+    color: #d9d9e0;
 }
 
 .picture-container {
@@ -86,12 +103,12 @@
 
 .document-links {
   text-align: center;
-  padding-top: 20em;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: row;
   gap: 20px;
+  margin: 10em 0em 8em 0em;
 }
 
 .document-links ul {
@@ -118,11 +135,11 @@
   width: 20vw;
   height: 15vh;
   border-radius: 10px;
-  border: 1px solid #1B4965;
+  border: 1px solid #101014;
 }
 
 .document-links ul li a {
-  color: #1B4965;
+  color: #101014;
   text-decoration: none;
   display: flex;
   align-items: center;
