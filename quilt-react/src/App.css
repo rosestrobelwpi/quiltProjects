@@ -1,5 +1,6 @@
 
-body {
+html, body {
+  background-color: #2a2a2e;
   margin: 0;
   padding: 0;
 }
@@ -7,55 +8,52 @@ body {
 .play-container {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-  padding-top: 200px; 
+  padding-top: 100px; 
   height: 100%;
-  background-color:#CAE9FF;
+  background-color:#2a2a2e;
 }
 
+.button-help {
+  z-index: 2;
+  display: flex;                
+  gap: 2em;                     
+  margin-left: 1%;
+  margin-bottom: 18em;           
+}
+
+.btn-action {
+  display: flex;                
+  align-items: center;          
+  gap: 0.5em;                  
+}
+
+.button-help code {
+  background-color: #d9d9e0;
+  border-radius: 5px;
+  padding: 5px;                
+  font-size: 14px;
+  vertical-align: middle;       /* Ensures code element aligns in middle */
+}
+
+.btn-action span {
+  font-size: 14px;
+  color: #d9d9e0;       
+  margin: 0;   
+}
+
+
 .container2 {
-  margin-top: 3%;
   display: flex;
   flex-direction: column;
   gap: 2%;
-  position: fixed;
+  margin: auto;
+  width: 100%;  
+  align-items: flex-start;  
 }
 
 .react-codemirror2 > .CodeMirror:first-child { display: none; }
-/* 
-.navbar {
-  margin-top: 0;
-  background-color: #CAE9FF;
-  padding: 10px;
-  margin-bottom: 10px;
-  width: 100vw;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.navbar-links {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.navbar ul {
-  display: flex;
-  gap: 5em;
-  list-style: none;
-  margin-right: 2em;
-}
-
-.navbar a {
-  text-decoration: none;
-  color: #333;
-  font-size: 18px;
-}
-
-#logo {
-  margin-left: 2em;
-  font-weight: 700;
-} */
 
 .play-header {
   position: fixed;
@@ -78,19 +76,20 @@ body {
   align-items: flex-start;
   /* margin: 20px; */
   height: 100%;
-  position: fixed;
-  top: 10%;
-  left: 0;
-  background-color:#CAE9FF;
+  width: 100%;
+  background-color: #2a2a2e !important;
+  margin-left: 1%;
+  margin-top: 1%;
 }
 
 .CodeMirror {
-  width: 50vw;
-  border: 2px solid white;
-  min-height: 800px;
+  background-color: #3f3f49 !important;
+  border: none !important;
 }
 
-
+.CodeMirror-gutter {
+  background-color: #444450 !important;
+}
 
 .drawing-container {
   flex-grow: 1;
@@ -98,26 +97,29 @@ body {
   justify-content: center;
   align-items: center;
   width: 50vw;
-  height: 100%;
-  position: fixed;
-  top: 10%;
-  left: 50%;
-  background-color:#CAE9FF;
+  height: 100vh !important;
+  margin-top: 1%;
 }
-
 
 .drawing-container canvas {
   width: 100%;
-  height: 800px;
-  background-color: white;
+  height: 100%;
+  background-color: #2a2a2e !important;
 }
 
-.quilt-container {
+#canvas {
+  height: 100vh;
+  
+}
+
+
+
+/* .quilt-container {
   display: flex;
   flex-direction: column;
-}
+} */
 
-.button-container {
+/* .button-container {
   position: fixed;
   top: 0;
   display: flex;
@@ -149,4 +151,4 @@ body {
 #home-button a, #example-button a {
   text-decoration: none;
   color: black;
-}
+} */
