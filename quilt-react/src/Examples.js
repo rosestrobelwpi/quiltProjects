@@ -8,7 +8,7 @@ function Examples() {
     <div className="examples-container">
       <div className="navbar">
         <ul>
-          <li><a href="/" id="logo">Logo</a></li>
+          <li><a href="/" id="logo">Quilt Designer</a></li>
         </ul>
         <div className="navbar-links">
           <ul>
