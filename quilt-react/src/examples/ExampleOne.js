@@ -87,24 +87,17 @@ function Play() {
   return (
     <div className="play-container">
     <div className="navbar">
-      <ul>
-        <li>
-          <a href="/" id="logo">Quilt Designer</a>
-        </li>
-      </ul>
-      <div className="navbar-links">
         <ul>
-          <li>
-            <a href="/">Home</a>    
-          </li>
-          <li>
-            <a href="/examples">Docs</a>    
-          </li>
-          <li>
-            <a href="/about">About Us</a>
-          </li>
+          <li><a href="/" id="logo">Quilt Designer</a></li>
         </ul>
-      </div>
+        <div className="navbar-links">
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/play">Play</a></li>
+            <li><a href="/about">About Us</a></li>
+            <li><a href="/examples">Docs</a></li>
+          </ul>
+        </div>
       </div>
       {/* <div className="play-header">
         <h1>Quilt Designer</h1>
