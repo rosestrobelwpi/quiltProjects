@@ -10,10 +10,11 @@
   }
 
   .about-container {
-    background-color: #2a2a2e;
-    color: #d9d9e0;
+    background-color: #FEFAE0;
+    color: #BC6C25;
   }
-
+  
+/* 
   .navbar {
     background-color: #414146;
     width: 100%;
@@ -22,7 +23,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between; 
-}
+} */
   
   .navbar-links {
     display: flex;
