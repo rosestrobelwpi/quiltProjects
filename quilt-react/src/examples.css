@@ -11,7 +11,7 @@
   
 
   .navbar {
-    background-color: #101014;
+    background-color: #BC6C25;
     padding: 10px;
     margin-bottom: 5em;
     display: flex;
@@ -22,6 +22,7 @@
     left: 0;
     height: 6%;
     width: 100%;
+    font-family: "Roboto", serif;
 }
   
   .navbar-links {
@@ -39,7 +40,7 @@
   
   .navbar a {
     text-decoration: none;
-    color: #d9d9e0;
+    color: #FEFAE0;
     font-size: 18px;
     height: 100% !important;
     display: flex;
@@ -49,8 +50,8 @@
   }
 
   .navbar a:hover {
-    background-color: white;
-    color: black;
+    background-color: #FEFAE0;
+    color: #101014;
   }
 
   #logo {
@@ -61,8 +62,8 @@
   }
 
   #logo:hover {
-    background-color: #101014;
-    color: white;
+    background-color: #BC6C25;
+    color: #FEFAE0;
   }
 
   h1 {
@@ -74,8 +75,8 @@
 .examples-container {
     margin: 0;
     height: 100%;
-    background-color: #2a2a2e;
-    color: #d9d9e0;
+    background-color: #FEFAE0;
+    color: #DDA15E;
 }
 
 .picture-container {
