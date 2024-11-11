@@ -7,7 +7,7 @@ import "codemirror/mode/javascript/javascript";
 import { Link } from 'react-router-dom';
 import { Alert } from "bootstrap";
 import parser from './parser';
-import interpreter from './interpreter';
+import evaluator from './interpreter';
 
 // Define a muted color palette
 const colorPalette = {
@@ -74,7 +74,9 @@ function Play() {
         try {
             // Parse and interpret custom language input
             const parsedInput = parser.parse(textInput);
-            const design = interpreter.evaluate(parsedInput);
+            console.log("PARSER", parsedInput)
+            const design = evaluator(parsedInput);
+            console.log("INTERPRETER", design)
             renderDesign(design); // Render design on canvas
         } catch (error) {
             console.error("Error interpreting code:", error);
@@ -143,9 +145,9 @@ function Play() {
             }}
               />
           
-        </div>
-        <div className="drawing-container">
-          <canvas id="canvas" ref={canvasRef}></canvas>
+//         </div>
+//         <div className="drawing-container">
+//           <canvas id="canvas" ref={canvasRef}></canvas>
 
         </div>
         </div>
@@ -153,9 +155,7 @@ function Play() {
         
     );
     
-
-
   }
 
-
   export default Play;
+
