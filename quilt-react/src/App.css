@@ -88,6 +88,11 @@ color: #283618 !important;
   color: #de6800 !important;
 }
 
+.CodeMirror-cursor {
+  border: 1px solid black !important;
+  opacity: 0.7 !important;
+}
+
 .drawing-container {
   flex-grow: 1;
   display: flex;
