@@ -90,6 +90,10 @@ function Play() {
         handleSubmit();
         event.preventDefault();
       }
+      else if (event.shiftKey && event.key === "Backspace") {
+        handleClear();
+        event.preventDefault();
+      }
     };
     window.addEventListener("keydown", keyPressed);
 
@@ -124,7 +128,7 @@ function Play() {
           <code>Shift + Enter</code> <span>to submit</span>
         </div>
         <div className="btn-action">
-          <code>Ctrl + Backspace</code> <span>to clear</span>
+          <code>Shift + Backspace</code> <span>to clear</span>
         </div>
       </div>  
 
