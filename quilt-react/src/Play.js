@@ -11,16 +11,16 @@ import evaluator from './interpreter';
 
 // Define a muted color palette
 const colorPalette = {
-    Red: '#b57c7c',        // Muted red
-    Orange: '#d9a078',     // Muted orange
-    Yellow: '#c8b77a',     // Muted yellow
-    Green: '#85a586',      // Muted green
-    Blue: '#6a8caf',       // Muted blue
-    Purple: '#9e86a6',     // Muted purple
-    Black: '#4d4d4d',      // Muted black
-    Pink: '#d8a6b8',       // Muted pink
-    Brown: '#a58c72',      // Muted brown
-    Grey: '#b0b0b0'        // Muted grey
+    red: '#b57c7c',        // Muted red
+    orange: '#d9a078',     // Muted orange
+    yellow: '#c8b77a',     // Muted yellow
+    green: '#85a586',      // Muted green
+    blue: '#6a8caf',       // Muted blue
+    purple: '#9e86a6',     // Muted purple
+    black: '#4d4d4d',      // Muted black
+    pink: '#d8a6b8',       // Muted pink
+    brown: '#a58c72',      // Muted brown
+    grey: '#b0b0b0'        // Muted grey
 };
 
 // Function to draw a single rectangle
@@ -47,7 +47,7 @@ function Play() {
                 patch.y * 50,
                 patch.width * 50,    // Scale width for better visibility
                 patch.height * 50,
-                patch.color
+                colorPalette[patch.color]
             );
         });
     };
