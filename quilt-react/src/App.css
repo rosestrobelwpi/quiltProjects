@@ -1,154 +1,166 @@
+import React, { useState, useRef, useEffect } from "react";
+import styles from './example.css';
+import { UnControlled as CodeMirror } from 'react-codemirror2';
+import "codemirror/lib/codemirror.css";
+import "codemirror/theme/material.css";
+import "codemirror/mode/javascript/javascript";
+import { Link } from 'react-router-dom';
+import { Alert } from "bootstrap";
+// import Parser from './autogenparser';
+// import { Patch, Design, evaluator } from './interpreter';
+// import ASTFunction from './parserASTfunction';
 
-html, body {
-  background-color: #2a2a2e;
-  margin: 0;
-  padding: 0;
+// Import custom parser and interpreter
+import parser from '../parser';
+import interpreter from '../interpreter';
+
+// Define a muted color palette
+const colorPalette = {
+    Red: '#b57c7c',        // Muted red
+    Orange: '#d9a078',     // Muted orange
+    Yellow: '#c8b77a',     // Muted yellow
+    Green: '#85a586',      // Muted green
+    Blue: '#6a8caf',       // Muted blue
+    Purple: '#9e86a6',     // Muted purple
+    Black: '#4d4d4d',      // Muted black
+    Pink: '#d8a6b8',       // Muted pink
+    Brown: '#a58c72',      // Muted brown
+    Grey: '#b0b0b0'        // Muted grey
+};
+
+// Function to draw a single rectangle
+function drawRectangle(ctx, x, y, width, height, color) {
+    const mutedColor = colorPalette[color] || color;
+    ctx.fillStyle = mutedColor;
+    ctx.fillRect(x, y, width, height);
 }
 
-.play-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding-top: 100px; 
-  height: 100%;
-  background-color:#2a2a2e;
-}
+function Play() {
+    const [textInput, setTextInput] = useState(""); // Store input for handling submission
+    const canvasRef = useRef(null);
 
-.button-help {
-  z-index: 2;
-  display: flex;                
-  gap: 2em;                     
-  margin-left: 1%;
-  margin-bottom: 18em;           
-}
+    // Render design on the canvas based on input text
+    const renderDesign = (design) => {
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-.btn-action {
-  display: flex;                
-  align-items: center;          
-  gap: 0.5em;                  
-}
-
-.button-help code {
-  background-color: #d9d9e0;
-  border-radius: 5px;
-  padding: 5px;                
-  font-size: 14px;
-  vertical-align: middle;       /* Ensures code element aligns in middle */
-}
-
-.btn-action span {
-  font-size: 14px;
-  color: #d9d9e0;       
-  margin: 0;   
-}
+        design.patches.forEach(patch => {
+            drawRectangle(
+                ctx,
+                patch.x * 50,       // Scale position for better visibility
+                patch.y * 50,
+                patch.width * 50,    // Scale width for better visibility
+                patch.height * 50,
+                patch.color
+            );
+        });
+    };
 
 
-.container2 {
-  display: flex;
-  flex-direction: column;
-  gap: 2%;
-  margin: auto;
-  width: 100%;  
-  align-items: flex-start;  
-}
+  const codeToCanvas = (textInput) => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.font = "16px";
+    ctx.fillText(textInput, 100, 100);
+  }
 
-.react-codemirror2 > .CodeMirror:first-child { display: none; }
 
-.play-header {
-  position: fixed;
-  top: 10%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+    const handleClear = () => {
+        setTextInput("");
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    };
 
-.play-header button {
-  font-size: 15px;
-  padding: 10px 20px;
-  width: 50%;
-}
+    // Only called on Submit button click
+    const handleSubmit = () => {
+        try {
+            // Parse and interpret custom language input
+            const parsedInput = parser.parse(textInput);
+            const design = interpreter.evaluate(parsedInput);
+            renderDesign(design); // Render design on canvas
+        } catch (error) {
+            console.error("Error interpreting code:", error);
+            alert("Error interpreting your code. Please enter a valid design structure.");
+        }
+    };
 
-.parser-container {
-  display: flex;
-  /* justify-content: space-between; */
-  /* width: 100vw; */
-  align-items: flex-start;
-  /* margin: 20px; */
-  height: 100%;
-  width: 100%;
-  background-color: #2a2a2e !important;
-  margin-left: 1%;
-  margin-top: 1%;
-}
+  useEffect(() => {
+    const keyPressed = (event) => {
+      if (event.shiftKey && event.key === "Enter") {
+        handleSubmit();
+        event.preventDefault();
+      }
+    };
+    window.addEventListener("keydown", keyPressed);
 
-.CodeMirror {
-  background-color: #3f3f49 !important;
-  border: none !important;
-}
-
-.CodeMirror-gutter {
-  background-color: #444450 !important;
-}
-
-.drawing-container {
-  flex-grow: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 50vw;
-  height: 100vh !important;
-  margin-top: 1%;
-}
-
-.drawing-container canvas {
-  width: 100%;
-  height: 100%;
-  background-color: #2a2a2e !important;
-}
-
-#canvas {
-  height: 100vh;
-  
-}
+    return() => {
+      window.removeEventListener("keydown", keyPressed);
+    };
+  }, [textInput]);
 
 
 
-/* .quilt-container {
-  display: flex;
-  flex-direction: column;
-} */
+  return (
 
-/* .button-container {
-  position: fixed;
-  top: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100vw;
-  padding: 10px 20px;
-  background-color:#CAE9FF;
-}
+    <div className="play-container">
+   <div className="navbar">
+        <ul>
+          <li><a href="/" id="logo">Quilt Designer</a></li>
+        </ul>
+        <div className="navbar-links">
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/play">Play</a></li>
+            <li><a href="/about">About Us</a></li>
+            <li><a href="/examples">Docs</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div className="container2">
 
-.button-container button {
-  font-family: Arial, sans-serif;
-  padding: 10px 20px;
-  cursor: pointer;
-}
+      <div className="button-help">
+        <div className="btn-action">
+          <code>Shift + Enter</code> <span>to submit</span>
+        </div>
+        <div className="btn-action">
+          <code>Ctrl + Backspace</code> <span>to clear</span>
+        </div>
+      </div>  
 
-.button-container h1 {
-  font-size: 45px;
-  margin: 0;
-  text-align: center;
-  flex: 1;
-  color: #1B4965;
-}
 
-#home-button, #submit-button, #clear-button, #example-button {
-  min-width: 80px;
-}
+        <div className="parser-container">
+          <CodeMirror
+            value=''
+            options={{
+              mode: 'javascript',
+              theme: 'material',
+              lineNumbers: true
+            }}
+            onChange={(editor, data, textInput) => {
+              setTextInput(textInput); 
+              codeToCanvas(textInput);
+                }}
+            onInputRead={(editor, canvasRef) => {
+            }}
+              />
+          
+        </div>
+        <div className="drawing-container">
+          <canvas id="canvas" ref={canvasRef}></canvas>
 
-#home-button a, #example-button a {
-  text-decoration: none;
-  color: black;
-} */
+        </div>
+        </div>
+        </div>
+        
+    );
+    
+
+
+  }
+
+
+  export default Play;
