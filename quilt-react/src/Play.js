@@ -6,11 +6,6 @@ import "codemirror/theme/material.css";
 import "codemirror/mode/javascript/javascript";
 import { Link } from 'react-router-dom';
 import { Alert } from "bootstrap";
-// import Parser from './autogenparser';
-// import { Patch, Design, evaluator } from './interpreter';
-// import ASTFunction from './parserASTfunction';
-
-// Import custom parser and interpreter
 import parser from './parser';
 import interpreter from './interpreter';
 
@@ -57,38 +52,13 @@ function Play() {
         });
     };
 
-  // const visualizer = () => {
-  //   const canvas = canvasRef.current;
-  //   const ctx = canvas.getContext("2d");
 
-  //   if (evaluator instanceof Patch) {
-  //     ctx.fillStyle = evaluator.color;
-  //     ctx.fillRect(evaluator.x, evaluator.y, evaluator.w, evaluator.h);
-  //   }
-  //   else if (evaluator instanceof Design) {
-  //     evaluator.patches.forEach(patch => {
-  //       visualizer(ctx, patch)
-  //     });
-  //   }
-  // }
-
-  // const codeToCanvas = (text) => {
-  //   // const parser = Parser.parse(value);
-  //   // const interpreter = evaluator({}, ASTFunction)
-
-  //   const canvas = canvasRef.current;
-  //   const ctx = canvas.getContext("2D");
-  //   ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  //   // visualizer(ctx, interpreter);
-  // }
-
-  const codeToCanvas = (value) => {
+  const codeToCanvas = (textInput) => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.font = "16px";
-    ctx.fillText(value, 100, 100);
+    ctx.fillText(textInput, 100, 100);
   }
 
 
@@ -112,37 +82,6 @@ function Play() {
         }
     };
 
-    return (
-        <div className="play-container">
-            <div className="button-container">
-                <button id="home-button"><a href="/">Home</a></button>
-                <button id="example-button"><a href="/">Examples</a></button>
-                <h1>Quilt Designer</h1>
-                <button id="submit-button" onClick={handleSubmit}>Submit</button>
-                <button id="clear-button" onClick={handleClear}>Clear</button>
-            </div>
-            <div className="container2">
-                <div className="parser-container">
-                    <CodeMirror
-                        value={textInput}
-                        options={{
-                            mode: 'javascript',
-                            theme: 'material',
-                            lineNumbers: true
-                        }}
-                        onChange={(editor, data, value) => setTextInput(value)}
-                    />
-                </div>
-                <div className="drawing-container">
-                    <canvas id="canvas" ref={canvasRef} width={400} height={400}></canvas>
-                </div>
-            </div>
-
-  const handleSubmit = () => {
-    console.log("Text value: ", value);
-    window.alert("You entered: " + value)
-  };
-
   useEffect(() => {
     const keyPressed = (event) => {
       if (event.shiftKey && event.key === "Enter") {
@@ -155,11 +94,12 @@ function Play() {
     return() => {
       window.removeEventListener("keydown", keyPressed);
     };
-  }, [value]);
+  }, [textInput]);
 
 
 
   return (
+
     <div className="play-container">
    <div className="navbar">
         <ul>
@@ -174,19 +114,6 @@ function Play() {
           </ul>
         </div>
       </div>
-      {/* <div className="play-header">
-        <h1>Quilt Designer</h1>
-       
-      </div> */}
-{/*     
-      <div className="button-container">
-      <button id="home-button"><a href="/">Home</a></button>
-      <button id="example-button"><a href="/">Examples</a></button>
-        <h1>Quilt Designer</h1>
-        
-        <button id="submit-button" onClick={handleSubmit}>Submit</button>
-        <button id="clear-button" onClick={handleClear}>Clear</button>
-      </div> */}
       
       <div className="container2">
 
@@ -208,9 +135,9 @@ function Play() {
               theme: 'material',
               lineNumbers: true
             }}
-            onChange={(editor, data, value) => {
-              setTextareaValue(value); 
-              codeToCanvas(value);
+            onChange={(editor, data, textInput) => {
+              setTextInput(textInput); 
+              codeToCanvas(textInput);
                 }}
             onInputRead={(editor, canvasRef) => {
             }}
@@ -221,7 +148,14 @@ function Play() {
           <canvas id="canvas" ref={canvasRef}></canvas>
 
         </div>
+        </div>
+        </div>
+        
     );
-}
+    
 
-export default Play;
+
+  }
+
+
+  export default Play;
