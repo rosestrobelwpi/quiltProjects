@@ -73,10 +73,19 @@ html, body {
 .CodeMirror {
   background-color: #e3dec3 !important;
   border: none !important;
+  color: #ffd000 !important;
 }
 
 .CodeMirror-gutter {
   background-color: #d3ceb2 !important;
+}
+
+.cm-s-material.CodeMirror { 
+color: #283618 !important;
+}
+
+.cm-s-material .cm-variable {
+  color: #de6800 !important;
 }
 
 .drawing-container {
