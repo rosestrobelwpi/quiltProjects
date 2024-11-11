@@ -12,7 +12,7 @@ import { Alert } from "bootstrap";
 
 // Import custom parser and interpreter
 import parser from './parser';
-import interpreter from './interpreter';
+import evaluator from './interpreter';
 
 // Define a muted color palette
 const colorPalette = {
@@ -104,7 +104,9 @@ function Play() {
         try {
             // Parse and interpret custom language input
             const parsedInput = parser.parse(textInput);
-            const design = interpreter.evaluate(parsedInput);
+            console.log("PARSER", parsedInput)
+            const design = evaluator(parsedInput);
+            console.log("INTERPRETER", design)
             renderDesign(design); // Render design on canvas
         } catch (error) {
             console.error("Error interpreting code:", error);
@@ -137,91 +139,92 @@ function Play() {
                     <canvas id="canvas" ref={canvasRef} width={400} height={400}></canvas>
                 </div>
             </div>
+          </div>)
 
-  const handleSubmit = () => {
-    console.log("Text value: ", value);
-    window.alert("You entered: " + value)
-  };
+//   const handleSubmit = () => {
+//     console.log("Text value: ", value);
+//     window.alert("You entered: " + value)
+//   };
 
-  useEffect(() => {
-    const keyPressed = (event) => {
-      if (event.shiftKey && event.key === "Enter") {
-        handleSubmit();
-        event.preventDefault();
-      }
-    };
-    window.addEventListener("keydown", keyPressed);
+//   useEffect(() => {
+//     const keyPressed = (event) => {
+//       if (event.shiftKey && event.key === "Enter") {
+//         handleSubmit();
+//         event.preventDefault();
+//       }
+//     };
+//     window.addEventListener("keydown", keyPressed);
 
-    return() => {
-      window.removeEventListener("keydown", keyPressed);
-    };
-  }, [value]);
+//     return() => {
+//       window.removeEventListener("keydown", keyPressed);
+//     };
+//   }, [value]);
 
 
 
-  return (
-    <div className="play-container">
-   <div className="navbar">
-        <ul>
-          <li><a href="/" id="logo">Quilt Designer</a></li>
-        </ul>
-        <div className="navbar-links">
-          <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/play">Play</a></li>
-            <li><a href="/about">About Us</a></li>
-            <li><a href="/examples">Docs</a></li>
-          </ul>
-        </div>
-      </div>
-      {/* <div className="play-header">
-        <h1>Quilt Designer</h1>
+//   return (
+//     <div className="play-container">
+//    <div className="navbar">
+//         <ul>
+//           <li><a href="/" id="logo">Quilt Designer</a></li>
+//         </ul>
+//         <div className="navbar-links">
+//           <ul>
+//             <li><a href="/">Home</a></li>
+//             <li><a href="/play">Play</a></li>
+//             <li><a href="/about">About Us</a></li>
+//             <li><a href="/examples">Docs</a></li>
+//           </ul>
+//         </div>
+//       </div>
+//       {/* <div className="play-header">
+//         <h1>Quilt Designer</h1>
        
-      </div> */}
-{/*     
-      <div className="button-container">
-      <button id="home-button"><a href="/">Home</a></button>
-      <button id="example-button"><a href="/">Examples</a></button>
-        <h1>Quilt Designer</h1>
+//       </div> */}
+// {/*     
+//       <div className="button-container">
+//       <button id="home-button"><a href="/">Home</a></button>
+//       <button id="example-button"><a href="/">Examples</a></button>
+//         <h1>Quilt Designer</h1>
         
-        <button id="submit-button" onClick={handleSubmit}>Submit</button>
-        <button id="clear-button" onClick={handleClear}>Clear</button>
-      </div> */}
+//         <button id="submit-button" onClick={handleSubmit}>Submit</button>
+//         <button id="clear-button" onClick={handleClear}>Clear</button>
+//       </div> */}
       
-      <div className="container2">
+//       <div className="container2">
 
-      <div className="button-help">
-        <div className="btn-action">
-          <code>Shift + Enter</code> <span>to submit</span>
-        </div>
-        <div className="btn-action">
-          <code>Ctrl + Backspace</code> <span>to clear</span>
-        </div>
-      </div>  
+//       <div className="button-help">
+//         <div className="btn-action">
+//           <code>Shift + Enter</code> <span>to submit</span>
+//         </div>
+//         <div className="btn-action">
+//           <code>Ctrl + Backspace</code> <span>to clear</span>
+//         </div>
+//       </div>  
 
 
-        <div className="parser-container">
-          <CodeMirror
-            value=''
-            options={{
-              mode: 'javascript',
-              theme: 'material',
-              lineNumbers: true
-            }}
-            onChange={(editor, data, value) => {
-              setTextareaValue(value); 
-              codeToCanvas(value);
-                }}
-            onInputRead={(editor, canvasRef) => {
-            }}
-              />
+//         <div className="parser-container">
+//           <CodeMirror
+//             value=''
+//             options={{
+//               mode: 'javascript',
+//               theme: 'material',
+//               lineNumbers: true
+//             }}
+//             onChange={(editor, data, value) => {
+//               setTextareaValue(value); 
+//               codeToCanvas(value);
+//                 }}
+//             onInputRead={(editor, canvasRef) => {
+//             }}
+//               />
           
-        </div>
-        <div className="drawing-container">
-          <canvas id="canvas" ref={canvasRef}></canvas>
+//         </div>
+//         <div className="drawing-container">
+//           <canvas id="canvas" ref={canvasRef}></canvas>
 
-        </div>
-    );
+//         </div>
+//     );
 }
 
-export default Play;
+export default Play; 

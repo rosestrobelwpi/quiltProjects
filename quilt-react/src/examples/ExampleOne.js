@@ -1,5 +1,4 @@
 
-=======
 import React, { useState, useRef, useEffect } from "react";
 import styles from './example.css';
 import {UnControlled as CodeMirror} from 'react-codemirror2'
