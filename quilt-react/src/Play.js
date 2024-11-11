@@ -139,7 +139,8 @@ function Play() {
             options={{
               mode: 'javascript',
               theme: 'material',
-              lineNumbers: true
+              lineNumbers: true,
+              lineWrapping: true
             }}
             onChange={(editor, data, value) => setTextInput(value)}
         />
