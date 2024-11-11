@@ -43,6 +43,7 @@ function Design(maxWidth, maxHeight, patches) {
 //evaluator(environment, testAST)
 
 export default function evaluator(node) {
+    console.log("NODE:", node)
     return evaluatorLogic(environment, node);
 }
 
@@ -63,16 +64,16 @@ function evaluatorLogic(env, node) {
         
         case TAG_RECT:
             //single patch, initialize to origin, give it the width, height, color
-            let width = evaluator(env, node.width)
-            let height = evaluator(env, node.height)
-            let color = evaluator(env, node.color) 
+            let width = evaluatorLogic(env, node.width)
+            let height = evaluatorLogic(env, node.height)
+            let color = evaluatorLogic(env, node.color) 
             return new Patch(0, 0, width, height, color) //set all patches to be at (0,0) initially, then update when combining into Design (in hor/vert/etc)
             break;
         
         case TAG_ROT:
             //only works for single Patch right now, the Design case is a lot more complicated
-            let angle = evaluator(env, node.angle)
-            let designRot = evaluator(env, node.design)
+            let angle = evaluatorLogic(env, node.angle)
+            let designRot = evaluatorLogic(env, node.design)
             if (designRot instanceof Patch) {
                 switch (angle) { //assuming counterclockwise rotation
                     case 0:
@@ -94,8 +95,8 @@ function evaluatorLogic(env, node) {
             break;
 
         case TAG_REP: //assuming we are repeating in the x direction
-            let original = evaluator(env, node.design)
-            let numRepetitions = evaluator(env, node.value)
+            let original = evaluatorLogic(env, node.design)
+            let numRepetitions = evaluatorLogic(env, node.value)
             let allPatchesRep = []
 
             if (original instanceof Patch) {
@@ -125,7 +126,7 @@ function evaluatorLogic(env, node) {
 
         case TAG_HOR:
            //first one we don't change, it will be positioned at the origin
-           let firstDesignHor = evaluator(env, node.design[0])
+           let firstDesignHor = evaluatorLogic(env, node.design[0])
            let allPatchesHor = [] //keep track of all patches to put in the new Design object
            let prevPatchHor = {} //keep track of the last patch processed for calculating the next coordinates
            let heightHor = null
@@ -146,7 +147,7 @@ function evaluatorLogic(env, node) {
            //now we process all of the rest of the patches/designs
            let sumWidthsHor = firstDesignHor.width //since this is placing horizontally, we add all the widths to get the overall Design width
            for (let i = 1; i < (node.design).length; i++) { //start at index 1 bc already took care of the first one
-                let currentDesign = evaluator(env, node.design[i]) //recursively process the very next Patch/Design
+                let currentDesign = evaluatorLogic(env, node.design[i]) //recursively process the very next Patch/Design
                 if (currentDesign.height != heightHor) { //check to make sure heights are compatable, works regardless of if it's a Design or a Patch
                     console.error("Input Error: Heights need to be the same in order to place Patches horizontally.")
                     return "unsuccessful :( please make sure heights match when using hor()";
@@ -176,7 +177,7 @@ function evaluatorLogic(env, node) {
 
         case TAG_VERT:
            //first one we don't change, it will be positioned at the origin
-           let firstDesignVert = evaluator(env, node.design[0])
+           let firstDesignVert = evaluatorLogic(env, node.design[0])
            let allPatchesVert = [] //keep track of all patches to put in the new Design object
            let prevPatchVert = {} //keep track of the last patch processed for calculating the next coordinates
            let widthVert = null //first Patch will determine the width for the Vert
@@ -196,7 +197,7 @@ function evaluatorLogic(env, node) {
            //now we process all of the rest of the patches/designs
            let sumHeightsVert = firstDesignVert.height //since this is placing vertically, we add all the heights to get the overall Design height
            for (let i = 1; i < (node.design).length; i++) { //start at index 1 bc already took care of the first one
-                let currentDesign = evaluator(env, node.design[i]) //recursively process the very next Patch/Design
+                let currentDesign = evaluatorLogic(env, node.design[i]) //recursively process the very next Patch/Design
                 if (currentDesign.width != widthVert) { //check to make sure widths are compatable, works regardless of if it's a Design or a Patch
                     console.error("Input Error: Widths need to be the same in order to place Patches vertically.")
                     return "unsuccessful :( please make sure widths match when using vert()";
@@ -224,11 +225,11 @@ function evaluatorLogic(env, node) {
             break;
 
         case TAG_PLUS:
-            return evaluator(node.left) + evaluator(node.right)
+            return evaluatorLogic(node.left) + evaluatorLogic(node.right)
             break;
 
         case TAG_TIMES:
-            return evaluator(node.left) * evaluator(node.right)
+            return evaluatorLogic(node.left) * evaluatorLogic(node.right)
             break;
     }
 }
@@ -239,7 +240,7 @@ function evaluatorDefn (env, node) {
     switch (node.tag) {
         case TAG_VARIABLE:
             let keyVar = node.name //key is the name of the variable
-            env[`${keyVar}`] = evaluator(env, node) //value is the value returned after evaluating the value (reword to not use the word value 3 times)
+            env[`${keyVar}`] = evaluatorLogic(env, node) //value is the value returned after evaluating the value (reword to not use the word value 3 times)
             break;
 
         case TAG_DEPENDENT_FUNC:

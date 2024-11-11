@@ -178,10 +178,10 @@ function Over(a, d) {
     this.design = d;
 }
 
-function Rep(l, r) {
+function Rep(v, d) {
     this.tag = TAG_REP;
-    this.left = l;
-    this.right = r;
+    this.value = v;
+    this.design = d;
 }
 
 function Rot(l, r) {
