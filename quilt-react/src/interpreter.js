@@ -43,7 +43,6 @@ function Design(maxWidth, maxHeight, patches) {
 //evaluator(environment, testAST)
 
 export default function evaluator(node) {
-    console.log("NODE:", node)
     return evaluatorLogic(environment, node);
 }
 
@@ -52,15 +51,12 @@ function evaluatorLogic(env, node) {
     switch (node.tag) {
         case TAG_NAT:
             return node.value
-            break;
 
         case TAG_ROTATION:
             return node.value
-            break;
 
         case TAG_COLOR:
             return node.name
-            break;
         
         case TAG_RECT:
             //single patch, initialize to origin, give it the width, height, color
@@ -68,7 +64,6 @@ function evaluatorLogic(env, node) {
             let height = evaluatorLogic(env, node.height)
             let color = evaluatorLogic(env, node.color) 
             return new Patch(0, 0, width, height, color) //set all patches to be at (0,0) initially, then update when combining into Design (in hor/vert/etc)
-            break;
         
         case TAG_ROT:
             //only works for single Patch right now, the Design case is a lot more complicated
@@ -85,6 +80,8 @@ function evaluatorLogic(env, node) {
                         designRot.width = designRot.height;
                         designRot.height = tempWidth
                         break;
+                    default:
+                        console.log("Angle not supported")
                 }
             } else if (designRot instanceof Design) {
                 console.warn("Designs currently cannot be rotated. Evaluating without rotation.")
@@ -92,7 +89,6 @@ function evaluatorLogic(env, node) {
                 console.log("this is not a Patch or Design, something went wrong")
             }
             return designRot;
-            break;
 
         case TAG_REP: //assuming we are repeating in the x direction
             let original = evaluatorLogic(env, node.design)
@@ -110,19 +106,16 @@ function evaluatorLogic(env, node) {
             } else if (original instanceof Design) {
                 allPatchesRep.push(original.patches)
                 allPatchesRep = allPatchesRep.flat() //to ensure 1d array
-                let prevX = original.patches[0].x //base off first patch in design, as all the other patches in that design should be also based off of that first one
                 for (let i = 1; i < numRepetitions; i++) {
                     let newRep = structuredClone(original) //deep copy - doesn't display the word "Patch" when logged to console
                     for (let patch of newRep.patches) {
                         patch.x += (i * original.width) //i represents which repetition we are on, so this calculation will give us the correct offset
                         allPatchesRep.push(patch)
                     }
-                    prevX = newRep.patches[0].x
                 }
             }
 
             return new Design(original.width*numRepetitions, original.height, allPatchesRep)
-            break;
 
         case TAG_HOR:
            //first one we don't change, it will be positioned at the origin
@@ -141,14 +134,13 @@ function evaluatorLogic(env, node) {
                heightHor = firstDesignHor.height //height to match is the overall height of this design
            } else {
                console.log("First element is not a Patch or Design, something went wrong")
-               console.log(firstDesignHor)
            }
            
            //now we process all of the rest of the patches/designs
            let sumWidthsHor = firstDesignHor.width //since this is placing horizontally, we add all the widths to get the overall Design width
            for (let i = 1; i < (node.design).length; i++) { //start at index 1 bc already took care of the first one
                 let currentDesign = evaluatorLogic(env, node.design[i]) //recursively process the very next Patch/Design
-                if (currentDesign.height != heightHor) { //check to make sure heights are compatable, works regardless of if it's a Design or a Patch
+                if (currentDesign.height !== heightHor) { //check to make sure heights are compatable, works regardless of if it's a Design or a Patch
                     console.error("Input Error: Heights need to be the same in order to place Patches horizontally.")
                     return "unsuccessful :( please make sure heights match when using hor()";
                 }
@@ -172,7 +164,6 @@ function evaluatorLogic(env, node) {
             }         
             
             return new Design(sumWidthsHor, heightHor, allPatchesHor)
-            break;
 
 
         case TAG_VERT:
@@ -198,7 +189,7 @@ function evaluatorLogic(env, node) {
            let sumHeightsVert = firstDesignVert.height //since this is placing vertically, we add all the heights to get the overall Design height
            for (let i = 1; i < (node.design).length; i++) { //start at index 1 bc already took care of the first one
                 let currentDesign = evaluatorLogic(env, node.design[i]) //recursively process the very next Patch/Design
-                if (currentDesign.width != widthVert) { //check to make sure widths are compatable, works regardless of if it's a Design or a Patch
+                if (currentDesign.width !== widthVert) { //check to make sure widths are compatable, works regardless of if it's a Design or a Patch
                     console.error("Input Error: Widths need to be the same in order to place Patches vertically.")
                     return "unsuccessful :( please make sure widths match when using vert()";
                 }
@@ -222,15 +213,15 @@ function evaluatorLogic(env, node) {
             }         
 
             return new Design(widthVert, sumHeightsVert, allPatchesVert)
-            break;
 
         case TAG_PLUS:
             return evaluatorLogic(node.left) + evaluatorLogic(node.right)
-            break;
 
         case TAG_TIMES:
             return evaluatorLogic(node.left) * evaluatorLogic(node.right)
-            break;
+
+        default:
+            console.log("Tag does not match any implemented tags")
     }
 }
 
@@ -247,5 +238,8 @@ function evaluatorDefn (env, node) {
             let key = node.name //we should change the name of these
             env[`${key}`] = [node.args, node.body] //is this right idk im so tired
             break;
+        
+        default:
+            console.log("Tag does not match any implemented tags")
     }
 }
