@@ -131,25 +131,19 @@ function Play() {
 
         <div className="parser-container">
           <CodeMirror
-            value=''
+            value={textInput}
             options={{
               mode: 'javascript',
               theme: 'material',
               lineNumbers: true
             }}
-            onChange={(editor, data, textInput) => {
-              setTextInput(textInput); 
-              codeToCanvas(textInput);
-                }}
-            onInputRead={(editor, canvasRef) => {
-            }}
-              />
+            onChange={(editor, data, value) => setTextInput(value)}
+        />
           
-//         </div>
-//         <div className="drawing-container">
-//           <canvas id="canvas" ref={canvasRef}></canvas>
-
-        </div>
+          </div>
+          <div className="drawing-container">
+            <canvas id="canvas" ref={canvasRef} width={400} height={400}></canvas>
+          </div>
         </div>
         </div>
         
