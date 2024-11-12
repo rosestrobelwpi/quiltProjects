@@ -1,5 +1,6 @@
 const {
-    TAG_RECT, TAG_NAT, TAG_COLOR, TAG_HOR, TAG_VERT, TAG_PLUS, TAG_TIMES, TAG_VARIABLE, TAG_DEPENDENT_FUNC, TAG_ROTATION, TAG_ROT, TAG_REP
+    TAG_RECT, TAG_NAT_NUM, TAG_COLOR, TAG_HOR, TAG_VERT, TAG_PLUS, TAG_TIMES, TAG_VARIABLE, TAG_DEPENDENT_FUNC, TAG_ROTATION, TAG_ROT, TAG_REP,
+    TAG_IDENTIFIER, TAG_VAR_CALL
 } = require('./parserASTfunction');
 
 const parser = require("./parser");
@@ -38,8 +39,10 @@ function Design(maxWidth, maxHeight, patches) {
 //testAST = parser.parse("rep 4 rect(1, 2, red)")
 //testAST = parser.parse("rep 4 vert(rect(3, 2, red), rect(3, 3, blue))")
 //let testAST = parser.parse("rot 90 vert(rect(3, 2, red), rect(3, 3, blue))")
+let testAST = parser.parse("int x = ((2+3)*(3+2))")
 
-//console.log(evaluator(environment, testAST))
+console.log(testAST)
+console.log(evaluatorLogic(environment, testAST))
 //evaluator(environment, testAST)
 
 export default function evaluator(node) {
@@ -49,7 +52,7 @@ export default function evaluator(node) {
 //returns Design object, containing information about every patch that is to be displayed
 function evaluatorLogic(env, node) {
     switch (node.tag) {
-        case TAG_NAT:
+        case TAG_NAT_NUM:
             return node.value
 
         case TAG_ROTATION:
@@ -84,7 +87,21 @@ function evaluatorLogic(env, node) {
                         console.log("Angle not supported")
                 }
             } else if (designRot instanceof Design) {
-                console.warn("Designs currently cannot be rotated. Evaluating without rotation.")
+                for (let patch of designRot.patches) {
+                    switch (angle) { //assuming counterclockwise rotation
+                        case 0:
+                        case 180: //no change needed
+                            break; 
+                        case 90:
+                        case 270: //switch width and height
+                            let tempWidth = patch.width
+                            patch.width = patch.height;
+                            patch.height = tempWidth
+                            break;
+                        default:
+                            console.log("Angle not supported")
+                    }
+                }
             } else {
                 console.log("this is not a Patch or Design, something went wrong")
             }
@@ -114,7 +131,6 @@ function evaluatorLogic(env, node) {
                     }
                 }
             }
-
             return new Design(original.width*numRepetitions, original.height, allPatchesRep)
 
         case TAG_HOR:
@@ -215,23 +231,35 @@ function evaluatorLogic(env, node) {
             return new Design(widthVert, sumHeightsVert, allPatchesVert)
 
         case TAG_PLUS:
-            return evaluatorLogic(node.left) + evaluatorLogic(node.right)
+            return evaluatorLogic(env, node.left) + evaluatorLogic(env, node.right)
 
         case TAG_TIMES:
-            return evaluatorLogic(node.left) * evaluatorLogic(node.right)
+            return evaluatorLogic(env, node.left) * evaluatorLogic(env, node.right)
+
+        case TAG_IDENTIFIER:
+            break;
+        
+        case TAG_VARIABLE:
+            evaluatorDefn(env, node)
+            break;
+        
+        case TAG_VAR_CALL:
+            //look up name in environment
+            //return value
+            return env[node.name]
 
         default:
-            console.log("Tag does not match any implemented tags")
+            console.log(node.tag, "Tag does not match any implemented tags - evaluatorLogic()")
     }
 }
 
 
-//shallow copy
 function evaluatorDefn (env, node) {
     switch (node.tag) {
         case TAG_VARIABLE:
-            let keyVar = node.name //key is the name of the variable
-            env[`${keyVar}`] = evaluatorLogic(env, node) //value is the value returned after evaluating the value (reword to not use the word value 3 times)
+            //console.log("BEFORE", env)
+            env[node.name] = evaluatorLogic(env, node.value) //store evaluated value in environment 
+            //console.log("AFTER", env)
             break;
 
         case TAG_DEPENDENT_FUNC:
@@ -240,6 +268,6 @@ function evaluatorDefn (env, node) {
             break;
         
         default:
-            console.log("Tag does not match any implemented tags")
+            console.log("Tag does not match any implemented tags - evaluatorDefn")
     }
 }
