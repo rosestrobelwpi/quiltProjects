@@ -53,6 +53,7 @@ export default function evaluator(node) {
 function evaluatorLogic(env, node) {
     switch (node.tag) {
         case TAG_NAT_NUM:
+        case "NAT": //FIXME remove later when parser stuff is updated
             return node.value
 
         case TAG_ROTATION:
@@ -73,7 +74,7 @@ function evaluatorLogic(env, node) {
             let angle = evaluatorLogic(env, node.angle)
             let designRot = evaluatorLogic(env, node.design)
             if (designRot instanceof Patch) {
-                switch (angle) { //assuming counterclockwise rotation
+                switch (angle) { 
                     case 0:
                     case 180: //no change needed
                         break; 
@@ -87,16 +88,63 @@ function evaluatorLogic(env, node) {
                         console.log("Angle not supported")
                 }
             } else if (designRot instanceof Design) {
+                //height and width of overall Design need to be switched if rotation is 90 or 270
+                if (angle === 90 || angle === 270) {
+                    let tempWidth = designRot.width
+                    designRot.width = designRot.height;
+                    designRot.height = tempWidth
+                }
                 for (let patch of designRot.patches) {
-                    switch (angle) { //assuming counterclockwise rotation
-                        case 0:
-                        case 180: //no change needed
+                    let x;
+                    let y;
+                    let tempWidth;
+                    switch (angle) { //assuming clockwise rotation
+                        case 0: //no change needed
+                            // | | |
+                            // | |*|
                             break; 
                         case 90:
-                        case 270: //switch width and height
-                            let tempWidth = patch.width
+                            // | | |
+                            // |*| |
+                            patch.y += patch.height //moving to what the reference corner should be after the rotation
+                            x = patch.x
+                            y = patch.y
+                            patch.x = Math.cos(angle*(Math.PI/180))*x - Math.sin(angle*(Math.PI/180))*y //equations to rotating round origin
+                            patch.y = Math.sin(angle*(Math.PI/180))*x + Math.cos(angle*(Math.PI/180))*y //will result in clockwise movement
+                            
+                            tempWidth = patch.width //since 90 degrees, the widths and the heights will be switched
                             patch.width = patch.height;
                             patch.height = tempWidth
+                            
+                            patch.x += designRot.width //in order to display in the correct position on canvas, have to perform translation
+                            break;
+                        case 180: 
+                            // |*| |
+                            // | | |
+                            patch.x += patch.width //appropriate reference corner
+                            patch.y += patch.height
+                            x = patch.x
+                            y = patch.y
+                            patch.x = Math.cos(angle*(Math.PI/180))*x - Math.sin(angle*(Math.PI/180))*y //equations to rotating round origin
+                            patch.y = Math.sin(angle*(Math.PI/180))*x + Math.cos(angle*(Math.PI/180))*y //will result in clockwise movement
+                            
+                            patch.x += designRot.width //have to move horizontally and vertically 
+                            patch.y += designRot.height 
+                            break;
+                        case 270: 
+                            // | |*|
+                            // | | |
+                            patch.x += patch.width //appropriate reference corner
+                            x = patch.x
+                            y = patch.y
+                            patch.x = Math.cos(angle*(Math.PI/180))*x - Math.sin(angle*(Math.PI/180))*y //equations to rotating round origin
+                            patch.y = Math.sin(angle*(Math.PI/180))*x + Math.cos(angle*(Math.PI/180))*y //will result in clockwise movement
+                            
+                            tempWidth = patch.width //since 180 degrees, the widths and the heights will be switched
+                            patch.width = patch.height;
+                            patch.height = tempWidth
+                            
+                            patch.y += designRot.height //this has to just move vertically since it's above (below) the x-axis (screen coordingates upside down)
                             break;
                         default:
                             console.log("Angle not supported")
