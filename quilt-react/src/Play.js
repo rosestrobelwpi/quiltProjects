@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import styles from './App.css';
-import { UnControlled as CodeMirror } from 'react-codemirror2';
+import { Controlled as CodeMirror } from 'react-codemirror2';
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/material.css";
 import "codemirror/mode/javascript/javascript";
@@ -142,7 +142,7 @@ function Play() {
               lineNumbers: true,
               lineWrapping: true
             }}
-            onChange={(editor, data, value) => setTextInput(value)}
+            onBeforeChange={(editor, data, value) => setTextInput(value)}
         />
           
           </div>

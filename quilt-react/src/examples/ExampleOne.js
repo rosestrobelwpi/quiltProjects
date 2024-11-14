@@ -146,7 +146,9 @@ function Play() {
                 }}
             onInputRead={(editor, canvasRef) => {
             }}
+            
               />
+              
           
         </div>
         <div className="drawing-container">
