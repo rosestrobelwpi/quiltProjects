@@ -243,6 +243,7 @@ function evaluatorLogic(env, node) {
                 let currentDesign = evaluatorLogic(env, node.design[i]) //recursively process the very next Patch/Design
                 if (currentDesign.height !== heightHor) { //check to make sure heights are compatable, works regardless of if it's a Design or a Patch
                     console.error("Input Error: Heights need to be the same in order to place Patches horizontally.")
+                    throw new IncompatableError("Incompatable Height");
                     return "unsuccessful :( please make sure heights match when using hor()";
                 }
                 if (currentDesign instanceof Patch) { //Patch case is easier since we only have to worry about a single Patch
