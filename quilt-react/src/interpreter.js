@@ -1,9 +1,9 @@
 const {
     TAG_RECT, TAG_NAT_NUM, TAG_COLOR, TAG_HOR, TAG_VERT, TAG_PLUS, TAG_TIMES, TAG_VARIABLE, TAG_DEPENDENT_FUNC, TAG_ROTATION, TAG_ROT, TAG_REP,
-    TAG_IDENTIFIER, TAG_VAR_CALL
-} = require('./parserASTfunction');
+    TAG_IDENTIFIER, TAG_VAR_CALL, TAG_OVER
+} = require('./parserASTfunction.js');
 
-const parser = require("./parser");
+const parser = require("./parser.js");
 
 //our environment is a javascript object
 const environment = {};
@@ -69,8 +69,44 @@ function evaluatorLogic(env, node) {
             let color = evaluatorLogic(env, node.color) 
             return new Patch(0, 0, width, height, color) //set all patches to be at (0,0) initially, then update when combining into Design (in hor/vert/etc)
         
+        case TAG_OVER:
+            //Starting with simple case of having just two Patches 
+            let anchor = node.anchor
+            let firstDesignOver = evaluatorLogic(env, node.design[0])
+            let allPatchesOver = [firstDesignOver]
+            for (let i = 1; i < (node.design).length; i++) {
+                let currentDesign = evaluatorLogic(env, node.design[i])
+                switch(anchor) {
+                    case "TL":
+                        currentDesign.x = firstDesignOver.x
+                        currentDesign.y = firstDesignOver.y
+                        break;
+                    case "TR":
+                        currentDesign.x = (firstDesignOver.x + firstDesignOver.width) - currentDesign.width
+                        currentDesign.y = firstDesignOver.y
+                        break;
+                    case "BL":
+                        currentDesign.x = firstDesignOver.x
+                        currentDesign.y = (firstDesignOver.y + firstDesignOver.height) - currentDesign.height
+                        break;
+                    case "BR":
+                        currentDesign.x = (firstDesignOver.x + firstDesignOver.width) - currentDesign.width
+                        currentDesign.y = (firstDesignOver.y + firstDesignOver.height) - currentDesign.height
+                        break;
+                    case "C":
+                        currentDesign.x = firstDesignOver.width/2.0 - currentDesign.width/2.0
+                        currentDesign.y = firstDesignOver.height/2.0 - currentDesign.height/2.0
+                        break;
+                    default:
+                        console.log("Unsupported Anchor Tag")
+                }
+                allPatchesOver.push(currentDesign)
+            }
+
+            //FIXME height and width
+            return new Design(firstDesignOver.width, firstDesignOver.height, allPatchesOver)
+
         case TAG_ROT:
-            //only works for single Patch right now, the Design case is a lot more complicated
             let angle = evaluatorLogic(env, node.angle)
             let designRot = evaluatorLogic(env, node.design)
             if (designRot instanceof Patch) {
@@ -181,6 +217,7 @@ function evaluatorLogic(env, node) {
             }
             return new Design(original.width*numRepetitions, original.height, allPatchesRep)
 
+
         case TAG_HOR:
            //first one we don't change, it will be positioned at the origin
            let firstDesignHor = evaluatorLogic(env, node.design[0])
@@ -216,7 +253,7 @@ function evaluatorLogic(env, node) {
                 } else if (currentDesign instanceof Design) { //Design case more complicated since we have to loop through all the Patches inside
                     let lastPatch = {}
                     for (let patch of currentDesign.patches) {
-                        patch.x += (prevPatchHor.width + prevPatchHor.x)
+                        patch.x += (prevPatchHor.width + prevPatchHor.x) //FIXME this doesn't work for overlay
                         allPatchesHor.push(patch) //add updated Patches as we modify each
                         lastPatch = patch 
                     }
