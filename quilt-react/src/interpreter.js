@@ -1,8 +1,9 @@
 const {
-    TAG_RECT, TAG_NAT, TAG_COLOR, TAG_HOR, TAG_VERT, TAG_PLUS, TAG_TIMES, TAG_VARIABLE, TAG_DEPENDENT_FUNC, TAG_ROTATION, TAG_ROT, TAG_REP
-} = require('./parserASTfunction');
+    TAG_RECT, TAG_NAT_NUM, TAG_COLOR, TAG_HOR, TAG_VERT, TAG_PLUS, TAG_TIMES, TAG_VARIABLE, TAG_DEPENDENT_FUNC, TAG_ROTATION, TAG_ROT, TAG_REP,
+    TAG_IDENTIFIER, TAG_VAR_CALL, TAG_OVER
+} = require('./parserASTfunction.js');
 
-const parser = require("./parser");
+const parser = require("./parser.js");
 
 //our environment is a javascript object
 const environment = {};
@@ -38,8 +39,10 @@ function Design(maxWidth, maxHeight, patches) {
 //testAST = parser.parse("rep 4 rect(1, 2, red)")
 //testAST = parser.parse("rep 4 vert(rect(3, 2, red), rect(3, 3, blue))")
 //let testAST = parser.parse("rot 90 vert(rect(3, 2, red), rect(3, 3, blue))")
+let testAST = parser.parse("int x = ((2+3)*(3+2))")
 
-//console.log(evaluator(environment, testAST))
+console.log(testAST)
+console.log(evaluatorLogic(environment, testAST))
 //evaluator(environment, testAST)
 
 export default function evaluator(node) {
@@ -49,7 +52,8 @@ export default function evaluator(node) {
 //returns Design object, containing information about every patch that is to be displayed
 function evaluatorLogic(env, node) {
     switch (node.tag) {
-        case TAG_NAT:
+        case TAG_NAT_NUM:
+        case "NAT": //FIXME remove later when parser stuff is updated
             return node.value
 
         case TAG_ROTATION:
@@ -65,12 +69,48 @@ function evaluatorLogic(env, node) {
             let color = evaluatorLogic(env, node.color) 
             return new Patch(0, 0, width, height, color) //set all patches to be at (0,0) initially, then update when combining into Design (in hor/vert/etc)
         
+        case TAG_OVER:
+            //Starting with simple case of having just two Patches 
+            let anchor = node.anchor
+            let firstDesignOver = evaluatorLogic(env, node.design[0])
+            let allPatchesOver = [firstDesignOver]
+            for (let i = 1; i < (node.design).length; i++) {
+                let currentDesign = evaluatorLogic(env, node.design[i])
+                switch(anchor) {
+                    case "TL":
+                        currentDesign.x = firstDesignOver.x
+                        currentDesign.y = firstDesignOver.y
+                        break;
+                    case "TR":
+                        currentDesign.x = (firstDesignOver.x + firstDesignOver.width) - currentDesign.width
+                        currentDesign.y = firstDesignOver.y
+                        break;
+                    case "BL":
+                        currentDesign.x = firstDesignOver.x
+                        currentDesign.y = (firstDesignOver.y + firstDesignOver.height) - currentDesign.height
+                        break;
+                    case "BR":
+                        currentDesign.x = (firstDesignOver.x + firstDesignOver.width) - currentDesign.width
+                        currentDesign.y = (firstDesignOver.y + firstDesignOver.height) - currentDesign.height
+                        break;
+                    case "C":
+                        currentDesign.x = firstDesignOver.width/2.0 - currentDesign.width/2.0
+                        currentDesign.y = firstDesignOver.height/2.0 - currentDesign.height/2.0
+                        break;
+                    default:
+                        console.log("Unsupported Anchor Tag")
+                }
+                allPatchesOver.push(currentDesign)
+            }
+
+            //FIXME height and width
+            return new Design(firstDesignOver.width, firstDesignOver.height, allPatchesOver)
+
         case TAG_ROT:
-            //only works for single Patch right now, the Design case is a lot more complicated
             let angle = evaluatorLogic(env, node.angle)
             let designRot = evaluatorLogic(env, node.design)
             if (designRot instanceof Patch) {
-                switch (angle) { //assuming counterclockwise rotation
+                switch (angle) { 
                     case 0:
                     case 180: //no change needed
                         break; 
@@ -84,7 +124,68 @@ function evaluatorLogic(env, node) {
                         console.log("Angle not supported")
                 }
             } else if (designRot instanceof Design) {
-                console.warn("Designs currently cannot be rotated. Evaluating without rotation.")
+                //height and width of overall Design need to be switched if rotation is 90 or 270
+                if (angle === 90 || angle === 270) {
+                    let tempWidth = designRot.width
+                    designRot.width = designRot.height;
+                    designRot.height = tempWidth
+                }
+                for (let patch of designRot.patches) {
+                    let x;
+                    let y;
+                    let tempWidth;
+                    switch (angle) { //assuming clockwise rotation
+                        case 0: //no change needed
+                            // | | |
+                            // | |*|
+                            break; 
+                        case 90:
+                            // | | |
+                            // |*| |
+                            patch.y += patch.height //moving to what the reference corner should be after the rotation
+                            x = patch.x
+                            y = patch.y
+                            patch.x = Math.cos(angle*(Math.PI/180))*x - Math.sin(angle*(Math.PI/180))*y //equations to rotating round origin
+                            patch.y = Math.sin(angle*(Math.PI/180))*x + Math.cos(angle*(Math.PI/180))*y //will result in clockwise movement
+                            
+                            tempWidth = patch.width //since 90 degrees, the widths and the heights will be switched
+                            patch.width = patch.height;
+                            patch.height = tempWidth
+                            
+                            patch.x += designRot.width //in order to display in the correct position on canvas, have to perform translation
+                            break;
+                        case 180: 
+                            // |*| |
+                            // | | |
+                            patch.x += patch.width //appropriate reference corner
+                            patch.y += patch.height
+                            x = patch.x
+                            y = patch.y
+                            patch.x = Math.cos(angle*(Math.PI/180))*x - Math.sin(angle*(Math.PI/180))*y //equations to rotating round origin
+                            patch.y = Math.sin(angle*(Math.PI/180))*x + Math.cos(angle*(Math.PI/180))*y //will result in clockwise movement
+                            
+                            patch.x += designRot.width //have to move horizontally and vertically 
+                            patch.y += designRot.height 
+                            break;
+                        case 270: 
+                            // | |*|
+                            // | | |
+                            patch.x += patch.width //appropriate reference corner
+                            x = patch.x
+                            y = patch.y
+                            patch.x = Math.cos(angle*(Math.PI/180))*x - Math.sin(angle*(Math.PI/180))*y //equations to rotating round origin
+                            patch.y = Math.sin(angle*(Math.PI/180))*x + Math.cos(angle*(Math.PI/180))*y //will result in clockwise movement
+                            
+                            tempWidth = patch.width //since 180 degrees, the widths and the heights will be switched
+                            patch.width = patch.height;
+                            patch.height = tempWidth
+                            
+                            patch.y += designRot.height //this has to just move vertically since it's above (below) the x-axis (screen coordingates upside down)
+                            break;
+                        default:
+                            console.log("Angle not supported")
+                    }
+                }
             } else {
                 console.log("this is not a Patch or Design, something went wrong")
             }
@@ -114,8 +215,8 @@ function evaluatorLogic(env, node) {
                     }
                 }
             }
-
             return new Design(original.width*numRepetitions, original.height, allPatchesRep)
+
 
         case TAG_HOR:
            //first one we don't change, it will be positioned at the origin
@@ -142,7 +243,8 @@ function evaluatorLogic(env, node) {
                 let currentDesign = evaluatorLogic(env, node.design[i]) //recursively process the very next Patch/Design
                 if (currentDesign.height !== heightHor) { //check to make sure heights are compatable, works regardless of if it's a Design or a Patch
                     console.error("Input Error: Heights need to be the same in order to place Patches horizontally.")
-                    return "unsuccessful :( please make sure heights match when using hor()";
+                    throw new Error("Incompatable Height");
+                    //return "unsuccessful :( please make sure heights match when using hor()";
                 }
                 if (currentDesign instanceof Patch) { //Patch case is easier since we only have to worry about a single Patch
                     currentDesign.x = (prevPatchHor.width + prevPatchHor.x) //since hor, this calculation will give us the correct x-value
@@ -152,7 +254,7 @@ function evaluatorLogic(env, node) {
                 } else if (currentDesign instanceof Design) { //Design case more complicated since we have to loop through all the Patches inside
                     let lastPatch = {}
                     for (let patch of currentDesign.patches) {
-                        patch.x += (prevPatchHor.width + prevPatchHor.x)
+                        patch.x += (prevPatchHor.width + prevPatchHor.x) //FIXME this doesn't work for overlay
                         allPatchesHor.push(patch) //add updated Patches as we modify each
                         lastPatch = patch 
                     }
@@ -215,23 +317,35 @@ function evaluatorLogic(env, node) {
             return new Design(widthVert, sumHeightsVert, allPatchesVert)
 
         case TAG_PLUS:
-            return evaluatorLogic(node.left) + evaluatorLogic(node.right)
+            return evaluatorLogic(env, node.left) + evaluatorLogic(env, node.right)
 
         case TAG_TIMES:
-            return evaluatorLogic(node.left) * evaluatorLogic(node.right)
+            return evaluatorLogic(env, node.left) * evaluatorLogic(env, node.right)
+
+        case TAG_IDENTIFIER:
+            break;
+        
+        case TAG_VARIABLE:
+            evaluatorDefn(env, node)
+            break;
+        
+        case TAG_VAR_CALL:
+            //look up name in environment
+            //return value
+            return env[node.name]
 
         default:
-            console.log("Tag does not match any implemented tags")
+            console.log(node.tag, "Tag does not match any implemented tags - evaluatorLogic()")
     }
 }
 
 
-//shallow copy
 function evaluatorDefn (env, node) {
     switch (node.tag) {
         case TAG_VARIABLE:
-            let keyVar = node.name //key is the name of the variable
-            env[`${keyVar}`] = evaluatorLogic(env, node) //value is the value returned after evaluating the value (reword to not use the word value 3 times)
+            //console.log("BEFORE", env)
+            env[node.name] = evaluatorLogic(env, node.value) //store evaluated value in environment 
+            //console.log("AFTER", env)
             break;
 
         case TAG_DEPENDENT_FUNC:
@@ -240,6 +354,6 @@ function evaluatorDefn (env, node) {
             break;
         
         default:
-            console.log("Tag does not match any implemented tags")
+            console.log("Tag does not match any implemented tags - evaluatorDefn")
     }
 }

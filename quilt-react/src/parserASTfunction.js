@@ -184,10 +184,10 @@ function Rep(v, d) {
     this.design = d;
 }
 
-function Rot(l, r) {
+function Rot(a, d) {
     this.tag = TAG_ROT;
-    this.left = l;
-    this.right = r;
+    this.angle = a;
+    this.design = d;
 }
 
 function Plus(l, r) {
