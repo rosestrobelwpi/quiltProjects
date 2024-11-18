@@ -73,10 +73,11 @@
     line-height: 2;
     text-align: left;
     display: block;
+    padding-top: 2%;
   }
   
   pre {
-    background-color: #e3dec3;
+    /* background-color: #e3dec3; */
     padding: 15px;
     border-radius: 5px;
     margin-bottom: 2em;
