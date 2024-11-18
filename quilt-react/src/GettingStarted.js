@@ -17,20 +17,42 @@ const Document = () => {
           </ul>
         </div>
       </div>
-      <h1>Example Document</h1>
-      <div className="text-container">
+      <h1>Getting Started</h1>
+      <div className="getting-started-text-container">
         <p>
-          CodeMirror is distributed as a collection of modules. These aren't directly loadable by the browser—though modern browsers can load EcmaScript modules, at the time of writing their mechanism for resolving further dependencies is still too primitive to load collections of NPM-distributed modules.
+          Quilt Designer is a student project designed to help programmers express themselves creatively. To create your first shape, we have to go over a few main definitions and variables:
         </p>
         <p>
-          (That being said, there are solutions that work around that by rewriting dependencies on the server side, like Snowpack or esmoduleserve. I definitely recommend a solution like this during development, since it tends to introduce less indirection and delay when changing files, but for actual deployment, you'll want to do classical bundling for the time being.)
-          Bundlers are tools that take a given main script (or in some cases multiple scripts), and produce a new, generally bigger, script that has all (or some) of the script's dependencies (and their dependencies, and so on) included. This makes it easier to run modern JavaScript systems, which tend to consist of a whole graph of dependencies, in the browser. (But also, for example, to combine a library package written as a group of files into a single file before uploading it to NPM.)
-        </p>
-        <p>
-          As far as bundler software goes, I'm a big fan of Rollup. But there are also other systems, like Webpack and Parcel, that work well and have their own advantages.
-          To use Rollup to create a bundle that loads CodeMirror, you must first write a main script (say, editor.mjs) that imports the library and creates the editor view.
+          <h3>rect(width, height, color)</h3>
+          Rect creates a simple rectangle. We define the dimensions of this rectangle with its parameters, width, height, and color.
         </p>
 
+        <p>
+        <h3>hor(Patch, Patch, ...)</h3>
+          Hor places your designs horizontally. You can nest directional patterns inside of each other. <br />
+          <pre>
+          <code>
+          (<span className="keyword">vert</span> (<span className="keyword">hor</span> (<span className="variable">rect</span> 2 2 blue) (<span className="variable">rect</span> 2 3 red)) (<span className="variable">rect</span> 2 3 yellow))<br />
+          (<span className="keyword">vert</span> (<span className="variable">rect</span> 2 2) (<span className="keyword">hor</span> (<span className="variable">rect</span> 1 2) (<span className="variable">rect</span> 2 2)))
+          </code>
+        </pre>
+        </p>
+        <p>
+        <h3>vert(Patch, Patch, ...)</h3>
+          Vert is similar to hor, but rather than placing your designs horizontally, it places it vertically. Similarly, you can also nest directional patterns inside each of each other with vert.
+        </p>
+        <p>
+        <h3>rep(Number, Patch)</h3>
+          Rep allows you to repeat a design. It takes in a number of how many times you want to repeat, and the patch.
+        </p>
+        <p>
+          <h3>rot(Angle, Patch)</h3>
+          Rot rotates your design. It takes in an angle number (0, 90, 190, 270), as well a patch.
+        </p>
+        <p>
+          <h3>over(topLeft, topRight, bottomLeft, bottomRight, Center)</h3>
+          Uhhhh
+        </p>
         <pre>
           <code>
             This is code<br />
