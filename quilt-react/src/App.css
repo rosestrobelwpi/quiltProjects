@@ -100,7 +100,8 @@ color: #283618 !important;
   align-items: center;
   width: 50vw;
   height: 100vh !important;
-  margin-top: 1%;
+  margin-top: 2%;
+  background-color: #FEFAE0 !important;
 }
 
 .drawing-container canvas {
@@ -111,46 +112,8 @@ color: #283618 !important;
 
 #canvas {
   height: 100vh;
+  margin-left: 5%;
+  margin-right: 5%;
+
   
 }
-
-
-
-/* .quilt-container {
-  display: flex;
-  flex-direction: column;
-} */
-
-/* .button-container {
-  position: fixed;
-  top: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100vw;
-  padding: 10px 20px;
-  background-color:#CAE9FF;
-}
-
-.button-container button {
-  font-family: Arial, sans-serif;
-  padding: 10px 20px;
-  cursor: pointer;
-}
-
-.button-container h1 {
-  font-size: 45px;
-  margin: 0;
-  text-align: center;
-  flex: 1;
-  color: #1B4965;
-}
-
-#home-button, #submit-button, #clear-button, #example-button {
-  min-width: 80px;
-}
-
-#home-button a, #example-button a {
-  text-decoration: none;
-  color: black;
-} */
