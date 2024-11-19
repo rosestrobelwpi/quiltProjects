@@ -1,6 +1,6 @@
 const {
     TAG_RECT, TAG_NAT_NUM, TAG_COLOR, TAG_HOR, TAG_VERT, TAG_PLUS, TAG_TIMES, TAG_VARIABLE, TAG_DEPENDENT_FUNC, TAG_ROTATION, TAG_ROT, TAG_REP,
-    TAG_IDENTIFIER, TAG_VAR_CALL, TAG_OVER
+    TAG_IDENTIFIER, TAG_VAR_CALL, TAG_OVER, TAG_PROGRAM, TAG_ASSIGNMENT
 } = require('./parserASTfunction.js');
 
 const parser = require("./parser.js");
@@ -39,10 +39,10 @@ function Design(maxWidth, maxHeight, patches) {
 //testAST = parser.parse("rep 4 rect(1, 2, red)")
 //testAST = parser.parse("rep 4 vert(rect(3, 2, red), rect(3, 3, blue))")
 //let testAST = parser.parse("rot 90 vert(rect(3, 2, red), rect(3, 3, blue))")
-let testAST = parser.parse("int x = ((2+3)*(3+2))")
+//let testAST = parser.parse("rect x = rect(3,2,blue);rect y = rect(3,2,red);vert(x, y);")
 
-console.log(testAST)
-console.log(evaluatorLogic(environment, testAST))
+//console.log(testAST)
+//console.log(evaluatorLogic(environment, testAST))
 //evaluator(environment, testAST)
 
 export default function evaluator(node) {
@@ -52,6 +52,26 @@ export default function evaluator(node) {
 //returns Design object, containing information about every patch that is to be displayed
 function evaluatorLogic(env, node) {
     switch (node.tag) {
+        case TAG_PROGRAM:
+            for (let defn of node.definitions) {
+                //Add everything to environment that needs to be there
+                evaluatorLogic(env, defn) //FIXME would it be better to directly call evaluatorDefn?
+            }
+            return evaluatorLogic(env, node.quilt)
+
+        case TAG_VARIABLE:
+        case TAG_ASSIGNMENT://this is actually re-assignment, the initial assignment happens in Variable - but essentially doing the same thing as Variable
+            evaluatorDefn(env, node)
+            break;
+        
+        case TAG_VAR_CALL:
+            //look up name in environment
+            //return value
+            return env[node.name]
+
+        case TAG_IDENTIFIER:
+            break;
+       
         case TAG_NAT_NUM:
         case "NAT": //FIXME remove later when parser stuff is updated
             return node.value
@@ -192,7 +212,9 @@ function evaluatorLogic(env, node) {
             return designRot;
 
         case TAG_REP: //assuming we are repeating in the x direction
+            console.log("NODE.DESIGN", node.design)
             let original = evaluatorLogic(env, node.design)
+            console.log('ORIGINAL:', original)
             let numRepetitions = evaluatorLogic(env, node.value)
             let allPatchesRep = []
 
@@ -239,6 +261,7 @@ function evaluatorLogic(env, node) {
            
            //now we process all of the rest of the patches/designs
            let sumWidthsHor = firstDesignHor.width //since this is placing horizontally, we add all the widths to get the overall Design width
+           let cumulativeWidths = firstDesignHor.width //need to keep track of where to place designs after the first two
            for (let i = 1; i < (node.design).length; i++) { //start at index 1 bc already took care of the first one
                 let currentDesign = evaluatorLogic(env, node.design[i]) //recursively process the very next Patch/Design
                 if (currentDesign.height !== heightHor) { //check to make sure heights are compatable, works regardless of if it's a Design or a Patch
@@ -246,6 +269,7 @@ function evaluatorLogic(env, node) {
                     throw new Error("Incompatable Height");
                     //return "unsuccessful :( please make sure heights match when using hor()";
                 }
+
                 if (currentDesign instanceof Patch) { //Patch case is easier since we only have to worry about a single Patch
                     currentDesign.x = (prevPatchHor.width + prevPatchHor.x) //since hor, this calculation will give us the correct x-value
                     sumWidthsHor += currentDesign.width //width bookkeeping
@@ -254,10 +278,12 @@ function evaluatorLogic(env, node) {
                 } else if (currentDesign instanceof Design) { //Design case more complicated since we have to loop through all the Patches inside
                     let lastPatch = {}
                     for (let patch of currentDesign.patches) {
-                        patch.x += (prevPatchHor.width + prevPatchHor.x) //FIXME this doesn't work for overlay
+                        //patch.x += (prevPatchHor.width + prevPatchHor.x) //FIXME this doesn't work for overlay
+                        patch.x += cumulativeWidths
                         allPatchesHor.push(patch) //add updated Patches as we modify each
                         lastPatch = patch 
                     }
+                    cumulativeWidths += currentDesign.width
                     prevPatchHor = lastPatch
                     sumWidthsHor += currentDesign.width //width bookkeeping
                 } else {
@@ -289,6 +315,7 @@ function evaluatorLogic(env, node) {
            
            //now we process all of the rest of the patches/designs
            let sumHeightsVert = firstDesignVert.height //since this is placing vertically, we add all the heights to get the overall Design height
+           let cumulativeHeights = firstDesignVert.height
            for (let i = 1; i < (node.design).length; i++) { //start at index 1 bc already took care of the first one
                 let currentDesign = evaluatorLogic(env, node.design[i]) //recursively process the very next Patch/Design
                 if (currentDesign.width !== widthVert) { //check to make sure widths are compatable, works regardless of if it's a Design or a Patch
@@ -303,10 +330,12 @@ function evaluatorLogic(env, node) {
                 } else if (currentDesign instanceof Design) { //Design case more complicated since we have to loop through all the Patches inside
                     let lastPatch = {} //eventually will want to set prevPatchVert to be the last Patch in the Design
                     for (let patch of currentDesign.patches) {
-                        patch.y += (prevPatchVert.height + prevPatchVert.y)
+                        //patch.y += (prevPatchVert.height + prevPatchVert.y) //doesn't work with overlay
+                        patch.y += cumulativeHeights
                         allPatchesVert.push(patch) //add updated Patches as we modify each
                         lastPatch = patch //when for loop terminates, lastPatch will contain the very last patch in the Design
                     }
+                    cumulativeHeights += currentDesign.height //incrementing to prepare for next design
                     prevPatchVert = lastPatch //make sure to update for next Patch/Design
                     sumHeightsVert += currentDesign.height //height bookkeeping, design should already know its overall height
                 } else {
@@ -321,19 +350,7 @@ function evaluatorLogic(env, node) {
 
         case TAG_TIMES:
             return evaluatorLogic(env, node.left) * evaluatorLogic(env, node.right)
-
-        case TAG_IDENTIFIER:
-            break;
         
-        case TAG_VARIABLE:
-            evaluatorDefn(env, node)
-            break;
-        
-        case TAG_VAR_CALL:
-            //look up name in environment
-            //return value
-            return env[node.name]
-
         default:
             console.log(node.tag, "Tag does not match any implemented tags - evaluatorLogic()")
     }
@@ -343,6 +360,7 @@ function evaluatorLogic(env, node) {
 function evaluatorDefn (env, node) {
     switch (node.tag) {
         case TAG_VARIABLE:
+        case TAG_ASSIGNMENT:
             //console.log("BEFORE", env)
             env[node.name] = evaluatorLogic(env, node.value) //store evaluated value in environment 
             //console.log("AFTER", env)
