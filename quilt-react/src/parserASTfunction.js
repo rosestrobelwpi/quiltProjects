@@ -33,10 +33,19 @@ const TAG_ROT = "ROT";
 const TAG_PLUS = "PLUS";
 const TAG_TIMES = "TIMES";
 const TAG_BUG = "BUG";
+
 const TAG_VAR_CALL = "VAR_CALL";
 const TAG_ARG = "ARG";
 const TAG_IDENTIFIER = "IDENTIFIER";
 const TAG_COLOR = "COLOR";
+const TAG_PROGRAM = "PROGRAM"
+const TAG_ASSIGNMENT = "ASSIGNMENT"
+
+
+// class ASTNode {
+// //abstract class for js?
+//     tag = TAG_BUG;
+// }
 
 // Types
 function Rect(w, h, c) {
@@ -143,8 +152,9 @@ function Value(v) {
     this.value = v;
 }
 
-function Variable(n, v) {
+function Variable(t, n, v) {
     this.tag = TAG_VARIABLE;
+    this.type = t;
     this.name = n;
     this.value = v;
 }
@@ -224,18 +234,33 @@ function Color(n) {
     this.name = n;
 }
 
-function expr_size(expr) {
+function Program(d, q) {
+    this.tag = TAG_PROGRAM;
+    this.definitions = d;
+    this.quilt = q;
+}
+
+function Assignment(n, v) {
+    this.tag = TAG_ASSIGNMENT;
+    this.name = n;
+    this.value = v;
+}
+
+function expr_size (expr) {
     switch (expr.tag) {
+        //TYPES
         case TAG_RECT:
             return expr_size(expr.width) + expr_size(expr.height) + expr_size(this.color) + 1;
         case TAG_NAT:
             return 1;
-        case TAG_ROT:
+        case TAG_ROTATION:
             return 1;
         case TAG_PIXEL:
             return expr_size(expr.red) + expr_size(expr.green) + expr_size(expr.blue) + expr_size(expr.alpha) + 1;
+
+        //declaration?
         case TAG_DEPENDENT_FUNC:
-            return expr_size(expr.name) + expr_size(expr.args) + expr_size(expr.body) + 1;
+            return expr_size(expr.name) + expr_size(expr.args) + expr_size(expr.body) + 1; 
         case TAG_IDENTITY:
             return expr_size(expr.left) + expr_size(expr.right) + 1;
         case TAG_TYPE_EQUALITY:
@@ -243,32 +268,43 @@ function expr_size(expr) {
         case TAG_LAMBDA:
             return expr_size(expr.x) + expr_size(expr.t) + expr_size(expr.e) + 1;
         case TAG_PIX:
+            return expr_size(expr.red) + expr_size(expr.green) + expr_size(expr.blue) + expr_size(expr.alpha) + 1;
         case TAG_COLORS:
             return expr_size(expr.red) + expr_size(expr.green) + expr_size(expr.blue) + expr_size(expr.alpha) + 1;
         case TAG_NAT_NUM:
+            return 1;
         case TAG_ZERO:
+            return 1;
         case TAG_NINETY:
+            return 1;
         case TAG_ONE_EIGHTY:
+            return 1;
         case TAG_TWO_SEVENTY:
             return 1;
         case TAG_REFL:
             return expr_size(expr.value) + 1;
         case TAG_VALUE:
             return 1;
+
+        //declaration??
         case TAG_VARIABLE:
-            return expr_size(expr.name) + expr_size(expr.value);
+            return expr_size(expr.type) + expr_size(expr.name) + expr_size(expr.value) + 1;
         case TAG_SIDE_BY_SIDE:
             return expr_size(expr.left) + expr_size(expr.right) + 1;
         case TAG_SOLID:
             return expr_size(expr.width) + expr_size(expr.height) + expr_size(expr.color) + 1;
         case TAG_HOR:
+            return expr_size(expr.design) + 1;
         case TAG_VERT:
             return expr_size(expr.design) + 1;
         case TAG_OVER:
             return expr_size(expr.anchor) + expr_size(expr.design) + 1;
         case TAG_REP:
+            return expr_size(expr.left) + expr_size(expr.right) + 1;
         case TAG_ROT:
+            return expr_size(expr.left) + expr_size(expr.right) + 1;
         case TAG_PLUS:
+            return expr_size(expr.left) + expr_size(expr.right) + 1;
         case TAG_TIMES:
             return expr_size(expr.left) + expr_size(expr.right) + 1;
         case TAG_VAR_CALL:
@@ -276,8 +312,15 @@ function expr_size(expr) {
         case TAG_ARG:
             return expr_size(expr.name) + expr_size(expr.type) + 1;
         case TAG_IDENTIFIER:
+            return expr_size(expr.name) + 1;
         case TAG_COLOR:
             return expr_size(expr.name) + 1;
+        case TAG_PROGRAM:
+            return expr_size(expr.definitions) + expr_size(expr.quilt) + 1;
+        case TAG_ASSIGNMENT:
+            return expr_size(expr.name) + expr_size(expr.ex) + 1;
+        default:
+            return "tag not found"
     }
 }
 
@@ -286,8 +329,9 @@ module.exports = {
     TAG_RECT, TAG_NAT, TAG_ROTATION, TAG_PIXEL, TAG_DEPENDENT_FUNC, TAG_IDENTITY, TAG_TYPE_EQUALITY,
     TAG_LAMBDA, TAG_PIX, TAG_COLORS, TAG_NAT_NUM, TAG_ZERO, TAG_NINETY, TAG_ONE_EIGHTY, TAG_TWO_SEVENTY, TAG_REFL,
     TAG_VALUE, TAG_VARIABLE, TAG_SIDE_BY_SIDE, TAG_SOLID, TAG_HOR, TAG_VERT, TAG_OVER, TAG_REP, TAG_ROT, TAG_PLUS,
-    TAG_TIMES, TAG_BUG, TAG_VAR_CALL, TAG_ARG, TAG_IDENTIFIER, TAG_COLOR,
+    TAG_TIMES, TAG_BUG, TAG_VAR_CALL, TAG_ARG, TAG_IDENTIFIER, TAG_COLOR, TAG_ASSIGNMENT, TAG_PROGRAM,
     Rect, Nat, Rotation, Pixel, DependentFunc, Identity, TypeEquality,
     Lambda, Pix, Colors, NatNum, Zero, Ninety, OneEighty, TwoSeventy, Refl,
-    Value, Variable, SideBySide, Solid, Hor, Vert, Over, Rep, Rot, Plus, Times, VarCall, Arg, Identifier, Color
+    Value, Variable, SideBySide, Solid, Hor, Vert, Over, Rep, Rot, Plus, Times, VarCall, Arg, Identifier, Color,
+    Program, Assignment
 };
