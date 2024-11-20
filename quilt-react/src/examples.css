@@ -23,6 +23,7 @@
     height: 6%;
     width: 100%;
     font-family: "Roboto", serif;
+    z-index: 50;
 }
   
   .navbar-links {
