@@ -6,6 +6,7 @@ import "codemirror/theme/material.css";
 import "codemirror/mode/javascript/javascript";
 import { Link } from 'react-router-dom';
 import { Alert } from "bootstrap";
+import { useParams } from 'react-router-dom';
 import parser from './parser';
 import evaluator from './interpreter';
 
@@ -159,8 +160,17 @@ function debugInput(input) {
 }
 
 function Play() {
+    const { code } = useParams(); // Get the code from the URL
+
     const [textInput, setTextInput] = useState(""); // Store input for handling submission
     const canvasRef = useRef(null);
+
+    useEffect(() => {
+      if (code) {
+          const decodedCode = decodeURIComponent(code);
+          setTextInput(decodedCode);
+      }
+    }, [code]);
 
     // Render design on the canvas based on input text
     const renderDesign = (design) => {
@@ -168,26 +178,28 @@ function Play() {
         const ctx = canvas.getContext("2d");
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        design.patches.forEach(patch => {
-            drawRectangle(
-                ctx,
-                patch.x * 50,       // Scale position for better visibility
-                patch.y * 50,
-                patch.width * 50,    // Scale width for better visibility
-                patch.height * 50,
-                patch.color
-            );
-        });
+        if (design.patches && Array.isArray(design.patches)) {
+          design.patches.forEach(patch => {
+              drawRectangle(
+                  ctx,
+                  patch.x * 50,
+                  patch.y * 50,
+                  patch.width * 50,
+                  patch.height * 50,
+                  patch.color
+              );
+          });
+      } else if (design.x !== undefined && design.y !== undefined) {
+          drawRectangle(
+              ctx,
+              design.x * 50,
+              design.y * 50,
+              design.width * 50,
+              design.height * 50,
+              design.color
+          );
+      }
     };
-
-
-  const codeToCanvas = (textInput) => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.font = "16px";
-    ctx.fillText(textInput, 100, 100);
-  }
 
 
     const handleClear = () => {
@@ -200,21 +212,21 @@ function Play() {
     // Only called on Submit button click
     const handleSubmit = () => {
       try {
-          const debugErrors = debugInput(textInput);
-          if (debugErrors.length && debugErrors[0] !== "No errors detected.") {
-              const formattedErrors = debugErrors
-                  .map(error => `Line ${error.line}, Column ${error.column}: ${error.message}`)
-                  .join("\n");
-              alert(`Debugging issues:\n${formattedErrors}`);
-              return;
-          }
+          // const debugErrors = debugInput(textInput);
+          // if (debugErrors.length && debugErrors[0] !== "No errors detected.") {
+          //     const formattedErrors = debugErrors
+          //         .map(error => `Line ${error.line}, Column ${error.column}: ${error.message}`)
+          //         .join("\n");
+          //     alert(`Debugging issues:\n${formattedErrors}`);
+          //     return;
+          // }
   
           const parsedInput = parser.parse(textInput);
           const design = evaluator(parsedInput);
           renderDesign(design);
       } catch (error) {
           console.error("Error interpreting code:", error);
-          alert(`[line ${error.location.start.line}, column ${error.location.start.column}] ${error.message}`)
+          //alert(`[line ${error.location.start.line}, column ${error.location.start.column}] ${error.message}`)
       }
     };
     useEffect(() => {
