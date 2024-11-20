@@ -71,12 +71,17 @@ function evaluatorLogic(env, node) {
             evaluatorDefn(env, node)
             break;
         
-        case TAG_VAR_CALL:
-            let lookUp = env[node.name]
-            let clone = structuredClone(lookUp) //don't want to directly change the original in case we are reusing a rectangle in a Design (ex. hor(x, x))
-            Object.setPrototypeOf(clone, Design.prototype) //because JS is STUPID and has to be reminded that it is a DESIGN object 
-            return clone 
-
+        case TAG_VAR_CALL: 
+            let lookup = env[node.name];
+            let clone = structuredClone(lookup); // don't want to directly change the original in case we are reusing a rectangle in multiple places
+            if (lookup instanceof Patch) {
+                Object.setPrototypeOf(clone, Patch.prototype); // because JS is STUPID and has to be reminded that it is a Patch object
+            } else if (lookup instanceof Design) {
+                Object.setPrototypeOf(clone, Design.prototype); // because JS is STUPID and has to be reminded that it is a Design object
+            } else {
+                console.log("bad environment lookup");
+            }
+            return clone;
         case TAG_IDENTIFIER:
             break;
        
@@ -284,7 +289,9 @@ function evaluatorLogic(env, node) {
             return designRot;
 
         case TAG_REP: //assuming we are repeating in the x direction
+            console.log("NODE.DESIGN", node.design)
             let original = evaluatorLogic(env, node.design)
+            console.log('ORIGINAL:', original)
             let numRepetitions = evaluatorLogic(env, node.value)
             let allPatchesRep = []
 
