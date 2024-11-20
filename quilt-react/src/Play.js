@@ -199,28 +199,23 @@ function Play() {
 
     // Only called on Submit button click
     const handleSubmit = () => {
-        try {
-            // Parse and interpret custom language input
-            const parsedInput = parser.parse(textInput);
-            console.log("PARSER", parsedInput)
-            const design = evaluator(parsedInput);
-            console.log("INTERPRETER", design)
-            renderDesign(design); // Render design on canvas
-        } catch (error) {
-            console.error("Error interpreting code:", error);
-            alert("Error interpreting your code. Please enter a valid design structure.");
-        }
-    };
+      try {
+          const debugErrors = debugInput(textInput);
+          if (debugErrors.length && debugErrors[0] !== "No errors detected.") {
+              const formattedErrors = debugErrors
+                  .map(error => `Line ${error.line}, Column ${error.column}: ${error.message}`)
+                  .join("\n");
+              alert(`Debugging issues:\n${formattedErrors}`);
+              return;
+          }
+  
+          const parsedInput = parser.parse(textInput);
+          const design = evaluator(parsedInput);
+          renderDesign(design);
+      } catch (error) {
+          console.error("Error interpreting code:", error);
+          alert(`[line ${error.location.start.line}, column ${error.location.start.column}] ${error.message}`)
 
-  useEffect(() => {
-    const keyPressed = (event) => {
-      if (event.shiftKey && event.key === "Enter") {
-        handleSubmit();
-        event.preventDefault();
-      }
-      else if (event.shiftKey && event.key === "Backspace") {
-        handleClear();
-        event.preventDefault();
       }
     };
     window.addEventListener("keydown", keyPressed);

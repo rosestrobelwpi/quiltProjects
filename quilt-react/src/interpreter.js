@@ -1,6 +1,6 @@
 const {
     TAG_RECT, TAG_NAT_NUM, TAG_COLOR, TAG_HOR, TAG_VERT, TAG_PLUS, TAG_TIMES, TAG_VARIABLE, TAG_DEPENDENT_FUNC, TAG_ROTATION, TAG_ROT, TAG_REP,
-    TAG_IDENTIFIER, TAG_VAR_CALL, TAG_OVER
+    TAG_IDENTIFIER, TAG_VAR_CALL, TAG_OVER, TAG_PROGRAM, TAG_ASSIGNMENT
 } = require('./parserASTfunction.js');
 
 const parser = require("./parser.js");
@@ -39,11 +39,18 @@ function Design(maxWidth, maxHeight, patches) {
 //testAST = parser.parse("rep 4 rect(1, 2, red)")
 //testAST = parser.parse("rep 4 vert(rect(3, 2, red), rect(3, 3, blue))")
 //let testAST = parser.parse("rot 90 vert(rect(3, 2, red), rect(3, 3, blue))")
-let testAST = parser.parse("int x = ((2+3)*(3+2))")
+//let testAST = parser.parse("rect x = rect(3,2,blue);rect y = rect(3,2,red);vert(x, y);")
 
-console.log(testAST)
-console.log(evaluatorLogic(environment, testAST))
+// define (rect x, rect y) {
+//     expression
+//     (optional) return
+// }
+
+//console.log(testAST)
+//console.log(evaluatorLogic(environment, testAST))
 //evaluator(environment, testAST)
+
+//ERRORS TO ADD: at least 2 rectangles for hor,vert,etc
 
 export default function evaluator(node) {
     return evaluatorLogic(environment, node);
@@ -52,6 +59,27 @@ export default function evaluator(node) {
 //returns Design object, containing information about every patch that is to be displayed
 function evaluatorLogic(env, node) {
     switch (node.tag) {
+        case TAG_PROGRAM:
+            for (let defn of node.definitions) {
+                //Add everything to environment that needs to be there
+                evaluatorLogic(env, defn) //FIXME would it be better to directly call evaluatorDefn?
+            }
+            return evaluatorLogic(env, node.quilt)
+
+        case TAG_VARIABLE:
+        case TAG_ASSIGNMENT://this is actually re-assignment, the initial assignment happens in Variable - but essentially doing the same thing as Variable
+            evaluatorDefn(env, node)
+            break;
+        
+        case TAG_VAR_CALL:
+            let lookUp = env[node.name]
+            let clone = structuredClone(lookUp) //don't want to directly change the original in case we are reusing a rectangle in a Design (ex. hor(x, x))
+            Object.setPrototypeOf(clone, Design.prototype) //because JS is STUPID and has to be reminded that it is a DESIGN object 
+            return clone 
+
+        case TAG_IDENTIFIER:
+            break;
+       
         case TAG_NAT_NUM:
         case "NAT": //FIXME remove later when parser stuff is updated
             return node.value
@@ -70,37 +98,101 @@ function evaluatorLogic(env, node) {
             return new Patch(0, 0, width, height, color) //set all patches to be at (0,0) initially, then update when combining into Design (in hor/vert/etc)
         
         case TAG_OVER:
-            //Starting with simple case of having just two Patches 
             let anchor = node.anchor
-            let firstDesignOver = evaluatorLogic(env, node.design[0])
-            let allPatchesOver = [firstDesignOver]
+            let firstDesignOver = evaluatorLogic(env, node.design[0]) //can be a Patch or Design
+            let allPatchesOver = []
+            let x;
+            let y;
+            if (firstDesignOver instanceof Patch) {
+                allPatchesOver.push(firstDesignOver)
+                x = firstDesignOver.x
+                y = firstDesignOver.y
+            } else if (firstDesignOver instanceof Design) {
+                allPatchesOver.push(firstDesignOver.patches)
+                allPatchesOver = allPatchesOver.flat()
+                x = firstDesignOver.patches[0].x //taking first patch in design's coordinates, should always be in the correct order
+                y = firstDesignOver.patches[0].y
+            } else {
+                console.log("this is not a Patch or Design, something went wrong")
+            }
             for (let i = 1; i < (node.design).length; i++) {
                 let currentDesign = evaluatorLogic(env, node.design[i])
-                switch(anchor) {
-                    case "TL":
-                        currentDesign.x = firstDesignOver.x
-                        currentDesign.y = firstDesignOver.y
-                        break;
-                    case "TR":
-                        currentDesign.x = (firstDesignOver.x + firstDesignOver.width) - currentDesign.width
-                        currentDesign.y = firstDesignOver.y
-                        break;
-                    case "BL":
-                        currentDesign.x = firstDesignOver.x
-                        currentDesign.y = (firstDesignOver.y + firstDesignOver.height) - currentDesign.height
-                        break;
-                    case "BR":
-                        currentDesign.x = (firstDesignOver.x + firstDesignOver.width) - currentDesign.width
-                        currentDesign.y = (firstDesignOver.y + firstDesignOver.height) - currentDesign.height
-                        break;
-                    case "C":
-                        currentDesign.x = firstDesignOver.width/2.0 - currentDesign.width/2.0
-                        currentDesign.y = firstDesignOver.height/2.0 - currentDesign.height/2.0
-                        break;
-                    default:
-                        console.log("Unsupported Anchor Tag")
+                if (currentDesign instanceof Patch) {
+                    if (currentDesign.width >  firstDesignOver.width && currentDesign.height > firstDesignOver.height) {
+                        throw new Error("Patch #" + (i+1) + " is wider AND taller than the Design it is being placed over. Please put the largest Design first.")
+                    } else if(currentDesign.width >  firstDesignOver.width) {
+                        throw new Error("Patch #" + (i+1) + " is wider than the Design it is being placed over. Please put the largest Design first.")
+                    } else if (currentDesign.height > firstDesignOver.height) {
+                        throw new Error("Patch #" + (i+1) + " is taller than the Design it is being placed over. Please put the largest Design first.")
+                    }
+                    switch(anchor) {
+                        case "TL":
+                            currentDesign.x = x
+                            currentDesign.y = y
+                            break;
+                        case "TR":
+                            currentDesign.x = (x + firstDesignOver.width) - currentDesign.width
+                            currentDesign.y = y
+                            break;
+                        case "BL":
+                            currentDesign.x = x
+                            currentDesign.y = (y + firstDesignOver.height) - currentDesign.height
+                            break;
+                        case "BR":
+                            currentDesign.x = (x + firstDesignOver.width) - currentDesign.width
+                            currentDesign.y = (y + firstDesignOver.height) - currentDesign.height
+                            break;
+                        case "C":
+                            currentDesign.x = firstDesignOver.width/2.0 - currentDesign.width/2.0
+                            currentDesign.y = firstDesignOver.height/2.0 - currentDesign.height/2.0
+                            break;
+                        default:
+                            console.log("Unsupported Anchor Tag")
+                    }
+                    allPatchesOver.push(currentDesign)
+
+                } else if (currentDesign instanceof Design) {
+                    //calculate change in location using first patch in the Design patches array
+                    let xOffset = currentDesign.patches[0].x - x
+                    let yOffset = currentDesign.patches[0].y - y
+                    for (let patch of currentDesign.patches) {
+                        if (patch.width >  firstDesignOver.width && patch.height > firstDesignOver.height) {
+                            throw new Error("Patch #" + (i+1) + " is wider AND taller than the Design it is being placed over. Please put the largest Design first.")
+                        } else if(patch.width >  firstDesignOver.width) {
+                            throw new Error("Patch #" + (i+1) + " is wider than the Design it is being placed over. Please put the largest Design first.")
+                        } else if (patch.height > firstDesignOver.height) {
+                            throw new Error("Patch #" + (i+1) + " is taller than the Design it is being placed over. Please put the largest Design first.")
+                        }
+                        switch(anchor) {
+                            case "TL":
+                                patch.x -= xOffset
+                                patch.y -= yOffset
+                                break;
+                            //FIXME math from here on quick (not fully thought out) so may have bugs (tested with just 2 examples)
+                            case "TR":
+                                patch.x += (x + firstDesignOver.width) - currentDesign.width
+                                patch.y -= yOffset
+                                break;
+                            case "BL":
+                                patch.x -= xOffset 
+                                patch.y += (y + firstDesignOver.height) - currentDesign.height
+                                break;
+                            case "BR":
+                                patch.x += (x + firstDesignOver.width) - currentDesign.width
+                                patch.y += (y + firstDesignOver.height) - currentDesign.height
+                                break;
+                            case "C":
+                                patch.x += firstDesignOver.width/2.0 - currentDesign.width/2.0
+                                patch.y += firstDesignOver.height/2.0 - currentDesign.height/2.0
+                                break;
+                            default:
+                                console.log("Unsupported Anchor Tag")
+                        }
+                        allPatchesOver.push(patch)   
+                    }
+                } else {
+                    console.log("this is not a Patch or Design, something went wrong")
                 }
-                allPatchesOver.push(currentDesign)
             }
 
             //FIXME height and width
@@ -208,7 +300,8 @@ function evaluatorLogic(env, node) {
                 allPatchesRep.push(original.patches)
                 allPatchesRep = allPatchesRep.flat() //to ensure 1d array
                 for (let i = 1; i < numRepetitions; i++) {
-                    let newRep = structuredClone(original) //deep copy - doesn't display the word "Patch" when logged to console
+                    let newRep = structuredClone(original) //deep copy - doesn't display the word "Patch" when logged to console, fix on next line
+                    Object.setPrototypeOf(newRep, Design.prototype) //it seemed to be working without this, but just for consistancy, give it its prototype back (because JS is STUPID)
                     for (let patch of newRep.patches) {
                         patch.x += (i * original.width) //i represents which repetition we are on, so this calculation will give us the correct offset
                         allPatchesRep.push(patch)
@@ -239,13 +332,14 @@ function evaluatorLogic(env, node) {
            
            //now we process all of the rest of the patches/designs
            let sumWidthsHor = firstDesignHor.width //since this is placing horizontally, we add all the widths to get the overall Design width
+           let cumulativeWidths = firstDesignHor.width //need to keep track of where to place designs after the first two
            for (let i = 1; i < (node.design).length; i++) { //start at index 1 bc already took care of the first one
                 let currentDesign = evaluatorLogic(env, node.design[i]) //recursively process the very next Patch/Design
                 if (currentDesign.height !== heightHor) { //check to make sure heights are compatable, works regardless of if it's a Design or a Patch
-                    console.error("Input Error: Heights need to be the same in order to place Patches horizontally.")
-                    throw new Error("Incompatable Height");
+                    throw new Error("Heights need to be the same in order to place Patches horizontally.");
                     //return "unsuccessful :( please make sure heights match when using hor()";
                 }
+
                 if (currentDesign instanceof Patch) { //Patch case is easier since we only have to worry about a single Patch
                     currentDesign.x = (prevPatchHor.width + prevPatchHor.x) //since hor, this calculation will give us the correct x-value
                     sumWidthsHor += currentDesign.width //width bookkeeping
@@ -254,10 +348,12 @@ function evaluatorLogic(env, node) {
                 } else if (currentDesign instanceof Design) { //Design case more complicated since we have to loop through all the Patches inside
                     let lastPatch = {}
                     for (let patch of currentDesign.patches) {
-                        patch.x += (prevPatchHor.width + prevPatchHor.x) //FIXME this doesn't work for overlay
+                        //patch.x += (prevPatchHor.width + prevPatchHor.x) //FIXME this doesn't work for overlay
+                        patch.x += cumulativeWidths
                         allPatchesHor.push(patch) //add updated Patches as we modify each
                         lastPatch = patch 
                     }
+                    cumulativeWidths += currentDesign.width
                     prevPatchHor = lastPatch
                     sumWidthsHor += currentDesign.width //width bookkeeping
                 } else {
@@ -289,11 +385,11 @@ function evaluatorLogic(env, node) {
            
            //now we process all of the rest of the patches/designs
            let sumHeightsVert = firstDesignVert.height //since this is placing vertically, we add all the heights to get the overall Design height
+           let cumulativeHeights = firstDesignVert.height
            for (let i = 1; i < (node.design).length; i++) { //start at index 1 bc already took care of the first one
                 let currentDesign = evaluatorLogic(env, node.design[i]) //recursively process the very next Patch/Design
                 if (currentDesign.width !== widthVert) { //check to make sure widths are compatable, works regardless of if it's a Design or a Patch
-                    console.error("Input Error: Widths need to be the same in order to place Patches vertically.")
-                    return "unsuccessful :( please make sure widths match when using vert()";
+                    throw new Error("Widths need to be the same in order to place Patches vertically.")
                 }
                 if (currentDesign instanceof Patch) { //Patch case is easier since we only have to worry about a single Patch
                     currentDesign.y = (prevPatchVert.height + prevPatchVert.y) //since vert, this calculation will give us the correct y-value
@@ -303,10 +399,12 @@ function evaluatorLogic(env, node) {
                 } else if (currentDesign instanceof Design) { //Design case more complicated since we have to loop through all the Patches inside
                     let lastPatch = {} //eventually will want to set prevPatchVert to be the last Patch in the Design
                     for (let patch of currentDesign.patches) {
-                        patch.y += (prevPatchVert.height + prevPatchVert.y)
+                        //patch.y += (prevPatchVert.height + prevPatchVert.y) //doesn't work with overlay
+                        patch.y += cumulativeHeights
                         allPatchesVert.push(patch) //add updated Patches as we modify each
                         lastPatch = patch //when for loop terminates, lastPatch will contain the very last patch in the Design
                     }
+                    cumulativeHeights += currentDesign.height //incrementing to prepare for next design
                     prevPatchVert = lastPatch //make sure to update for next Patch/Design
                     sumHeightsVert += currentDesign.height //height bookkeeping, design should already know its overall height
                 } else {
@@ -321,19 +419,7 @@ function evaluatorLogic(env, node) {
 
         case TAG_TIMES:
             return evaluatorLogic(env, node.left) * evaluatorLogic(env, node.right)
-
-        case TAG_IDENTIFIER:
-            break;
         
-        case TAG_VARIABLE:
-            evaluatorDefn(env, node)
-            break;
-        
-        case TAG_VAR_CALL:
-            //look up name in environment
-            //return value
-            return env[node.name]
-
         default:
             console.log(node.tag, "Tag does not match any implemented tags - evaluatorLogic()")
     }
@@ -343,14 +429,15 @@ function evaluatorLogic(env, node) {
 function evaluatorDefn (env, node) {
     switch (node.tag) {
         case TAG_VARIABLE:
+        case TAG_ASSIGNMENT:
             //console.log("BEFORE", env)
             env[node.name] = evaluatorLogic(env, node.value) //store evaluated value in environment 
             //console.log("AFTER", env)
             break;
 
         case TAG_DEPENDENT_FUNC:
-            let key = node.name //we should change the name of these
-            env[`${key}`] = [node.args, node.body] //is this right idk im so tired
+            //make a structure (function record) that has both args and body ?
+            //env[node.name] = [node.args, node.body] c
             break;
         
         default:
