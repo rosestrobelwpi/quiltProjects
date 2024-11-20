@@ -54,17 +54,17 @@
     background-color: #FEFAE0;
 }
   
-.getting-started-h1 {
+.getting-started-container h1 {
     text-align: center;
     margin-bottom: 1em;
     font-size: 55px;
-    color: black;
+    color: #2d1907;
   }
 
   .getting-started-text-container p {
     margin-bottom: 30px;
     line-height: 1.5;
-    color: black;
+    color: #2d1907;
   }
   
   .getting-started-text-container {

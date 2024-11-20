@@ -29,13 +29,13 @@ html, body {
 .btn-action {
   display: flex;                
   align-items: center;          
-  gap: 0.5em;                  
+  gap: 0.5em;              
 }
 
 .button-help code {
   background-color: #DDA15E;
-  border-radius: 5px;
-  padding: 5px;          
+  border-radius: 10px;
+  padding: 5px 15px;          
   color: #FEFAE0;      
   font-size: 14px;
   vertical-align: middle;       /* Ensures code element aligns in middle */
@@ -66,7 +66,7 @@ html, body {
   /* width: 100vw; */
   align-items: flex-start;
   /* margin: 20px; */
-  height: 100%;
+  max-height: 70vh !important;
   width: 100%;
   margin-left: 1%;
   margin-top: 2%;
@@ -76,10 +76,12 @@ html, body {
   background-color: #e3dec3 !important;
   border: none !important;
   color: #ffd000 !important;
+  min-height: 70vh !important;
 }
 
 .CodeMirror-gutter {
   background-color: #d3ceb2 !important;
+  
 }
 
 .cm-s-material.CodeMirror { 
@@ -94,6 +96,7 @@ color: #283618 !important;
   border: 1px solid black !important;
   opacity: 0.7 !important;
 }
+
 
 .drawing-container {
   flex-grow: 1;

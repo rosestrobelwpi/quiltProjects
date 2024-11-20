@@ -32,8 +32,8 @@ const Document = () => {
           Hor places your designs horizontally. You can nest directional patterns inside of each other. <br />
           <pre>
           <code>
-          (<span className="keyword">vert</span> (<span className="keyword">hor</span> (<span className="variable">rect</span> 2 2 blue) (<span className="variable">rect</span> 2 3 red)) (<span className="variable">rect</span> 2 3 yellow))<br />
-          (<span className="keyword">vert</span> (<span className="variable">rect</span> 2 2) (<span className="keyword">hor</span> (<span className="variable">rect</span> 1 2) (<span className="variable">rect</span> 2 2)))
+          <span className="keyword">hor</span> (<span className="keyword"></span><span className="variable">rect</span> (1, 1, blue), <span className="variable">rect</span>(1, 1, red), <span className="variable">rect</span>(1, 1, yellow))<br />
+          <span className="keyword">hor</span> (<span className="keyword">vert</span> (<span className="variable">rect</span>(1, 2, green), <span className="variable">rect</span>(2, 2, green))
           </code>
         </pre>
         </p>
@@ -44,6 +44,12 @@ const Document = () => {
         <p>
         <h3>rep(Number, Patch)</h3>
           Rep allows you to repeat a design. It takes in a number of how many times you want to repeat, and the patch.
+          <pre>
+          <code>
+          <span className="keyword">rep</span> (3, <span className="variable">rect</span>(1, 1, green), <span className="variable">rect</span>(1, 1, red))<br />
+          <span className="keyword">hor</span> (<span className="keyword">vert</span> (<span className="variable">rect</span>(1, 2, green), <span className="variable">rect</span>(2, 2, green))
+          </code>
+        </pre>
         </p>
         <p>
           <h3>rot(Angle, Patch)</h3>
