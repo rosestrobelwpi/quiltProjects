@@ -50,6 +50,8 @@ function Design(maxWidth, maxHeight, patches) {
 //console.log(evaluatorLogic(environment, testAST))
 //evaluator(environment, testAST)
 
+//ERRORS TO ADD: at least 2 rectangles for hor,vert,etc
+
 export default function evaluator(node) {
     return evaluatorLogic(environment, node);
 }
