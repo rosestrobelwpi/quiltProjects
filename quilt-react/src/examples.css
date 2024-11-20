@@ -78,12 +78,15 @@ h1 {
 }
 
 .picture-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Responsive columns */
-    gap: 5px; /* Minimized spacing between canvases */
-    margin-top: 10em;
-    padding: 10px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* 4 columns */
+  grid-auto-rows: auto; /* Automatically add new rows as needed */
+  gap: 5px; /* Space between items */
+  margin-top: 10em;
+  justify-items: center; /* Center each canvas horizontally */
+  align-items: center; /* Center each canvas vertically */
 }
+
 
 .picture-container canvas {
     width: 100%; /* Auto-fit to container */

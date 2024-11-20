@@ -70,18 +70,7 @@ function debugInput(input) {
                 } else {
                     context[name] = parseInt(value.trim(), 10); // Store variable
                 }
-            } else if (type === "rect") {
-                const rectRegex = /^rect\(\d+,\d+,[a-z]+\)$/;
-                if (!rectRegex.test(value.trim())) {
-                    errors.push({
-                        message: `Invalid rect value '${value}'. Ensure it matches 'rect(int, int, color)'.`,
-                        line: lineNumber,
-                        column: trimmedLine.indexOf(value) + 1,
-                    });
-                } else {
-                    context[name] = value.trim(); // Store variable
-                }
-            }
+            } 
             return; // Skip further validation for this line
         }
 

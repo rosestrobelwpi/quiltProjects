@@ -61,85 +61,170 @@ const renderDesign = (canvas, code) => {
 
 function Examples() {
   const exampleDesigns = [
-    // Design 1: Perfect Checkerboard
-    {
-      id: 1,
-      code: `rect x = rect(1,1,red);
-  rect y = rect(1,1,blue);
-  vert(hor(rep(4,hor(x,y))),hor(rep(4,hor(y,x))),hor(rep(4,hor(x,y))),hor(rep(4,hor(y,x))));`
-    },
-  
-    // Design 2: Target (Updated from "white" to "yellow")
-    {
-      id: 2,
-      code: `over(C,rect(4,4,red),rect(3,3,yellow),rect(2,2,red));`
-    },
-  
-    // Design 3: Framed Square
-    {
-      id: 3,
-      code: `rect outer = rect(5,5,blue);
-  rect inner = rect(3,3,green);
-  over(C,outer,inner);`
-    },
-  
-    // Design 4: Alternating Layers
-    {
-      id: 4,
-      code: `rect a = rect(1,1,orange);
-  rect b = rect(1,1,purple);
-  vert(rep(4,hor(rep(4,hor(a,b)))),rep(4,hor(rep(4,hor(b,a)))));`
-    },
-  
-    // Design 5: Diamond Overlay
-    {
-      id: 5,
-      code: `over(C,rect(5,5,yellow),rect(3,3,blue),rect(1,1,green));`
-    },
-  
-    // Design 6: Spiral-Inspired
-    {
-      id: 6,
-      code: `rect big = rect(5,5,red);
-  rect mid = rect(3,3,blue);
-  rect small = rect(1,1,green);
-  over(C,big,mid,small);`
-    },
-  
-    // Design 7: Gradient Rows
-    {
-      id: 7,
-      code: `rect r1 = rect(1,1,red);
-  rect r2 = rect(1,1,orange);
-  rect r3 = rect(1,1,yellow);
-  rect r4 = rect(1,1,green);
-  rect r5 = rect(1,1,blue);
-  vert(hor(r1,r2,r3,r4,r5),hor(r2,r3,r4,r5,r1),hor(r3,r4,r5,r1,r2),hor(r4,r5,r1,r2,r3),hor(r5,r1,r2,r3,r4));`
-    },
-  
-    // Design 8: Multi-Layer Checkerboard
-    {
-      id: 8,
-      code: `rect x = rect(1,1,red);
-  rect y = rect(1,1,blue);
-  vert(hor(rep(5,hor(x,y))),hor(rep(5,hor(y,x))),hor(rep(5,hor(x,y))),hor(rep(5,hor(y,x))),hor(rep(5,hor(x,y))));`
-    },
-  
-    // Design 9: Full Grid
+    // 1. Rotated Mirror
     {
       id: 9,
-      code: `rect cell = rect(1,1,green);
-  vert(rep(5,hor(rep(5,hor(cell)))));`
+      code: `
+  rect base = rect(2,2,green);
+  rot(90,base);
+  vert(base,rot(90,base));`,
     },
-  
-    // Design 10: Stacked Rectangles
+    // 2. Four Quadrants Mirror
     {
       id: 10,
-      code: `rect x = rect(1,5,blue);
-  rect y = rect(1,5,orange);
-  hor(x,y,x,y,x);`
-    }
+      code: `
+  rect a = rect(2,2,red);
+  rect b = rot(90,a);
+  rect c = rot(180,a);
+  rect d = rot(270,a);
+  vert(hor(a,b),hor(d,c));`,
+    },
+    // 3. Simple Checkerboard
+    {
+      id: 11,
+      code: `
+  rect x = rect(1,1,black);
+  rect y = rect(1,1,white);
+  rect line = hor(rep(5,hor(x,y)));
+  vert(line,line,line,line,line);`,
+    },
+    // 4. Centered Circle Design
+    {
+      id: 12,
+      code: `
+  over(C,rect(4,4,blue),rect(2,2,white),rect(1,1,red));`,
+    },
+    // 5. Nested Squares
+    {
+      id: 13,
+      code: `
+  over(C,rect(4,4,yellow),rect(3,3,red),rect(2,2,blue),rect(1,1,green));`,
+    },
+    // 6. Rotated Pattern with Rep
+    {
+      id: 14,
+      code: `
+  rect base = rect(1,1,red);
+  rect line = hor(rep(4,base));
+  rot(90,line);
+  vert(line,rot(90,line));`,
+    },
+    // 7. Smiley Face
+    {
+      id: 15,
+      code: `
+  rect face = rect(6,6,yellow);
+  rect eyeL = rect(1,1,black);
+  rect eyeR = rect(1,1,black);
+  rect smile = hor(rep(4,rect(1,1,black)));
+  over(C,face,over(TL,eyeL),over(TR,eyeR),over(BL,smile));`,
+    },
+    // 8. Horizontal Repetition
+    {
+      id: 16,
+      code: `
+  rect block = rect(1,1,red);
+  rep(10,block);`,
+    },
+    // 9. Vertical Repetition
+    {
+      id: 17,
+      code: `
+  rect block = rect(1,1,blue);
+  rot(90,rep(10,block));`,
+    },
+    // 10. Concentric Rectangles
+    {
+      id: 18,
+      code: `
+  over(C,rect(5,5,green),rect(4,4,blue),rect(3,3,red),rect(2,2,yellow));`,
+    },
+    // 11. Zig-Zag Design
+    {
+      id: 19,
+      code: `
+  rect a = rect(1,1,red);
+  rect b = rect(1,1,blue);
+  vert(hor(a,b),hor(b,a),hor(a,b));`,
+    },
+    // 12. Vertical Gradient
+    {
+      id: 20,
+      code: `
+  rect top = rect(4,1,red);
+  rect mid = rect(4,1,orange);
+  rect bot = rect(4,1,yellow);
+  vert(top,mid,bot);`,
+    },
+    // 13. Spiral
+    {
+      id: 21,
+      code: `
+  rect small = rect(1,1,blue);
+  rot(90,small);
+  rot(180,small);
+  rot(270,small);
+  over(C,small,rot(90,small),rot(180,small),rot(270,small));`,
+    },
+    // 14. Diamond Design
+    {
+      id: 22,
+      code: `
+  rect base = rect(2,2,red);
+  rot(45,base);
+  vert(base,rot(45,base));`,
+    },
+    // 15. Crossed Stripes
+    {
+      id: 23,
+      code: `
+  rect stripeH = rect(5,1,blue);
+  rect stripeV = rot(90,rect(5,1,green));
+  over(C,stripeH,stripeV);`,
+    },
+    // 16. Concentric Gradient
+    {
+      id: 24,
+      code: `
+  over(C,rect(5,5,red),rect(4,4,orange),rect(3,3,yellow),rect(2,2,green));`,
+    },
+    // 17. Symmetrical Reflection
+    {
+      id: 25,
+      code: `
+  rect a = rect(2,2,blue);
+  rect b = rot(90,a);
+  rect c = rot(180,a);
+  rect d = rot(270,a);
+  vert(hor(a,b),hor(d,c));`,
+    },
+    // 18. Flower Petals
+    {
+      id: 26,
+      code: `
+  rect petal = rect(2,1,pink);
+  vert(rot(45,petal),rot(135,petal),rot(225,petal),rot(315,petal));`,
+    },
+    // 19. Bold Stripe Overlay
+    {
+      id: 27,
+      code: `
+  rect bg = rect(5,5,blue);
+  rect stripe = rect(1,5,red);
+  over(C,bg,stripe);`,
+    },
+    // 20. Diagonal Overlay
+    {
+      id: 28,
+      code: `
+  rect bg = rect(6,6,yellow);
+  rect diag1 = rot(45,rect(6,1,red));
+  rect diag2 = rot(135,rect(6,1,blue));
+  over(C,bg,diag1,diag2);`,
+    },
   ];
+  
+  
   
   
   

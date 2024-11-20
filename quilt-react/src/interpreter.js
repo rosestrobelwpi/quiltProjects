@@ -64,10 +64,19 @@ function evaluatorLogic(env, node) {
             evaluatorDefn(env, node)
             break;
         
-        case TAG_VAR_CALL:
-            //look up name in environment
-            //return value
-            return env[node.name]
+        case TAG_VAR_CALL: 
+            let lookup = env[node.name];
+            let clone = structuredClone(lookup); // don't want to directly change the original in case we are reusing a rectangle in multiple places
+            if (lookup instanceof Patch) {
+                Object.setPrototypeOf(clone, Patch.prototype); // because JS is STUPID and has to be reminded that it is a Patch object
+            } else if (lookup instanceof Design) {
+                Object.setPrototypeOf(clone, Design.prototype); // because JS is STUPID and has to be reminded that it is a Design object
+            } else {
+                console.log("bad environment lookup");
+            }
+            return clone;
+            
+            
 
         case TAG_IDENTIFIER:
             break;
