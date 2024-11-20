@@ -65,9 +65,11 @@ function evaluatorLogic(env, node) {
             break;
         
         case TAG_VAR_CALL:
-            //look up name in environment
-            //return value
-            return env[node.name]
+            //FIXME should this be a copy? 
+            let lookUp = env[node.name]
+            let clone = structuredClone(lookUp)
+            Object.setPrototypeOf(clone, Design.prototype) //because JS is STUPID and has to be reminded that it is a DESIGN object 
+            return clone //look up name in environment, return value
 
         case TAG_IDENTIFIER:
             break;
@@ -90,37 +92,87 @@ function evaluatorLogic(env, node) {
             return new Patch(0, 0, width, height, color) //set all patches to be at (0,0) initially, then update when combining into Design (in hor/vert/etc)
         
         case TAG_OVER:
-            //Starting with simple case of having just two Patches 
             let anchor = node.anchor
-            let firstDesignOver = evaluatorLogic(env, node.design[0])
-            let allPatchesOver = [firstDesignOver]
+            let firstDesignOver = evaluatorLogic(env, node.design[0]) //can be a Patch or Design
+            let allPatchesOver = []
+            let x;
+            let y;
+            if (firstDesignOver instanceof Patch) {
+                allPatchesOver.push(firstDesignOver)
+                x = firstDesignOver.x
+                y = firstDesignOver.y
+            } else if (firstDesignOver instanceof Design) {
+                allPatchesOver.push(firstDesignOver.patches)
+                allPatchesOver = allPatchesOver.flat()
+                x = firstDesignOver.patches[0].x //taking first patch in design's coordinates, should always be in the correct order
+                y = firstDesignOver.patches[0].y
+            } else {
+                console.log("this is not a Patch or Design, something went wrong")
+            }
             for (let i = 1; i < (node.design).length; i++) {
                 let currentDesign = evaluatorLogic(env, node.design[i])
-                switch(anchor) {
-                    case "TL":
-                        currentDesign.x = firstDesignOver.x
-                        currentDesign.y = firstDesignOver.y
-                        break;
-                    case "TR":
-                        currentDesign.x = (firstDesignOver.x + firstDesignOver.width) - currentDesign.width
-                        currentDesign.y = firstDesignOver.y
-                        break;
-                    case "BL":
-                        currentDesign.x = firstDesignOver.x
-                        currentDesign.y = (firstDesignOver.y + firstDesignOver.height) - currentDesign.height
-                        break;
-                    case "BR":
-                        currentDesign.x = (firstDesignOver.x + firstDesignOver.width) - currentDesign.width
-                        currentDesign.y = (firstDesignOver.y + firstDesignOver.height) - currentDesign.height
-                        break;
-                    case "C":
-                        currentDesign.x = firstDesignOver.width/2.0 - currentDesign.width/2.0
-                        currentDesign.y = firstDesignOver.height/2.0 - currentDesign.height/2.0
-                        break;
-                    default:
-                        console.log("Unsupported Anchor Tag")
+                if (currentDesign instanceof Patch) {
+                    switch(anchor) {
+                        case "TL":
+                            currentDesign.x = x
+                            currentDesign.y = y
+                            break;
+                        case "TR":
+                            currentDesign.x = (x + firstDesignOver.width) - currentDesign.width
+                            currentDesign.y = y
+                            break;
+                        case "BL":
+                            currentDesign.x = x
+                            currentDesign.y = (y + firstDesignOver.height) - currentDesign.height
+                            break;
+                        case "BR":
+                            currentDesign.x = (x + firstDesignOver.width) - currentDesign.width
+                            currentDesign.y = (y + firstDesignOver.height) - currentDesign.height
+                            break;
+                        case "C":
+                            currentDesign.x = firstDesignOver.width/2.0 - currentDesign.width/2.0
+                            currentDesign.y = firstDesignOver.height/2.0 - currentDesign.height/2.0
+                            break;
+                        default:
+                            console.log("Unsupported Anchor Tag")
+                    }
+                    allPatchesOver.push(currentDesign)
+
+                } else if (currentDesign instanceof Design) {
+                    //calculate change in location using first patch in the Design patches array
+                    let xOffset = currentDesign.patches[0].x - x
+                    let yOffset = currentDesign.patches[0].y - y
+                    for (let patch of currentDesign.patches) {
+                        switch(anchor) {
+                            case "TL":
+                                patch.x -= xOffset
+                                patch.y -= yOffset
+                                break;
+                            //FIXME math from here on quick (not fully thought out) so may have bugs
+                            case "TR":
+                                patch.x += (x + firstDesignOver.width) - currentDesign.width
+                                patch.y -= yOffset
+                                break;
+                            case "BL":
+                                patch.x -= xOffset 
+                                patch.y += (y + firstDesignOver.height) - currentDesign.height
+                                break;
+                            case "BR":
+                                patch.x += (x + firstDesignOver.width) - currentDesign.width
+                                patch.y += (y + firstDesignOver.height) - currentDesign.height
+                                break;
+                            case "C":
+                                patch.x += firstDesignOver.width/2.0 - currentDesign.width/2.0
+                                patch.y += firstDesignOver.height/2.0 - currentDesign.height/2.0
+                                break;
+                            default:
+                                console.log("Unsupported Anchor Tag")
+                        }
+                        allPatchesOver.push(patch)   
+                    }
+                } else {
+                    console.log("this is not a Patch or Design, something went wrong")
                 }
-                allPatchesOver.push(currentDesign)
             }
 
             //FIXME height and width
@@ -212,9 +264,7 @@ function evaluatorLogic(env, node) {
             return designRot;
 
         case TAG_REP: //assuming we are repeating in the x direction
-            console.log("NODE.DESIGN", node.design)
             let original = evaluatorLogic(env, node.design)
-            console.log('ORIGINAL:', original)
             let numRepetitions = evaluatorLogic(env, node.value)
             let allPatchesRep = []
 
@@ -230,7 +280,8 @@ function evaluatorLogic(env, node) {
                 allPatchesRep.push(original.patches)
                 allPatchesRep = allPatchesRep.flat() //to ensure 1d array
                 for (let i = 1; i < numRepetitions; i++) {
-                    let newRep = structuredClone(original) //deep copy - doesn't display the word "Patch" when logged to console
+                    let newRep = structuredClone(original) //deep copy - doesn't display the word "Patch" when logged to console, fix on next line
+                    Object.setPrototypeOf(newRep, Design.prototype) //it seemed to be working without this, but just for consistancy, give it its prototype back (because JS is STUPID)
                     for (let patch of newRep.patches) {
                         patch.x += (i * original.width) //i represents which repetition we are on, so this calculation will give us the correct offset
                         allPatchesRep.push(patch)
