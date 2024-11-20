@@ -17,14 +17,14 @@ const Document = () => {
           </ul>
         </div>
       </div>
-      <h1>Getting Started</h1>
+      <h1>Definitions</h1>
       <div className="getting-started-text-container">
         <p>
-          Quilt Designer is a student project designed to help programmers express themselves creatively. To create your first shape, we have to go over a few main definitions and variables:
+          Quilt Designer is a student project designed to help programmers express themselves creatively. To create your first shape, we have to go over a few main definitions and variables: <br /> <br />
         </p>
         <p>
           <h3>rect(width, height, color)</h3>
-          Rect creates a simple rectangle. We define the dimensions of this rectangle with its parameters, width, height, and color.
+          Rect creates a simple rectangle. We define the dimensions of this rectangle with its parameters, width, height, and color.<br /> <br />
         </p>
 
         <p>
@@ -39,7 +39,7 @@ const Document = () => {
         </p>
         <p>
         <h3>vert(Patch, Patch, ...)</h3>
-          Vert is similar to hor, but rather than placing your designs horizontally, it places it vertically. Similarly, you can also nest directional patterns inside each of each other with vert.
+          Vert is similar to hor, but rather than placing your designs horizontally, it places it vertically. Similarly, you can also nest directional patterns inside each of each other with vert.<br /> <br />
         </p>
         <p>
         <h3>rep(Number, Patch)</h3>

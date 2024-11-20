@@ -133,15 +133,15 @@
   padding: 15px;
   font-size: 20px;
   list-style: none;
-  background-color: #f4f4f4;
+  background-color: #FEFAE0;
   width: 20vw;
   height: 15vh;
   border-radius: 10px;
-  border: 1px solid #101014;
+  border: 2px solid #BC6C25;
 }
 
 .document-links ul li a {
-  color: #101014;
+  color: #542e0e;
   text-decoration: none;
   display: flex;
   align-items: center;
@@ -151,4 +151,5 @@
 
 .icon {
   font-size: 30px;
+  color: #BC6C25;
 }

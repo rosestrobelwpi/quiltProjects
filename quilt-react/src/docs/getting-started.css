@@ -40,11 +40,11 @@
     font-weight: 700;
   } */
 
- #getting-started-h1 h1 {
+ /* #getting-started-h1 h1 {
     text-align: center;
-    margin-bottom: 1em;
+    margin-bottom: 0.5%;
     font-size: 55px;
-  }
+  } */
 
   /* Container styles */
 .getting-started-container {
@@ -56,13 +56,12 @@
   
 .getting-started-container h1 {
     text-align: center;
-    margin-bottom: 1em;
+    margin: 5% 0% 1% 0%;
     font-size: 55px;
     color: #2d1907;
   }
 
   .getting-started-text-container p {
-    margin-bottom: 30px;
     line-height: 1.5;
     color: #2d1907;
   }
@@ -80,11 +79,12 @@
     /* background-color: #e3dec3; */
     padding: 15px;
     border-radius: 5px;
-    margin-bottom: 2em;
+    margin: 5% 0%;
     text-align: left;
     overflow-y: auto;
     width: 100%;
     color: black;
+    background-color: #e3dec3;
 
   }
   
@@ -99,6 +99,6 @@
   }
   
   .variable {
-    color: rgb(255, 142, 35);
+    color: rgb(236, 117, 5);
   }
   

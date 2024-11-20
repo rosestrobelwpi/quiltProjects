@@ -46,12 +46,12 @@ function Examples() {
         <ul>
           <li>
             <a href="/gettingStarted">
-              <FontAwesomeIcon icon={faHouse} className="icon" /> Getting Started
+              <FontAwesomeIcon icon={faHouse} className="icon" /> Definitions & Variables
             </a>
           </li>
           <li>
-            <a href="/variables">
-              <FontAwesomeIcon icon={faPenFancy} className="icon" /> Variables
+            <a href="/functions">
+              <FontAwesomeIcon icon={faPenFancy} className="icon" /> Functions
             </a>
           </li>
         </ul>
