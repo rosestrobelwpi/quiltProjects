@@ -435,7 +435,7 @@ function evaluatorDefn (env, node) {
 
         case TAG_DEPENDENT_FUNC:
             //make a structure (function record) that has both args and body ?
-            //env[node.name] = [node.args, node.body] 
+            //env[node.name] = [node.args, node.body] c
             break;
         
         default:

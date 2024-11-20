@@ -80,7 +80,8 @@ function Play() {
             renderDesign(design); // Render design on canvas
         } catch (error) {
             console.error("Error interpreting code:", error);
-            alert(error);
+            //alert(error);
+            alert(`[line ${error.location.start.line}, column ${error.location.start.column}] ${error.message}`)
         }
     };
 
