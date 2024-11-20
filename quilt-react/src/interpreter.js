@@ -41,6 +41,11 @@ function Design(maxWidth, maxHeight, patches) {
 //let testAST = parser.parse("rot 90 vert(rect(3, 2, red), rect(3, 3, blue))")
 //let testAST = parser.parse("rect x = rect(3,2,blue);rect y = rect(3,2,red);vert(x, y);")
 
+// define (rect x, rect y) {
+//     expression
+//     (optional) return
+// }
+
 //console.log(testAST)
 //console.log(evaluatorLogic(environment, testAST))
 //evaluator(environment, testAST)
@@ -65,11 +70,10 @@ function evaluatorLogic(env, node) {
             break;
         
         case TAG_VAR_CALL:
-            //FIXME should this be a copy? 
             let lookUp = env[node.name]
-            let clone = structuredClone(lookUp)
+            let clone = structuredClone(lookUp) //don't want to directly change the original in case we are reusing a rectangle in a Design (ex. hor(x, x))
             Object.setPrototypeOf(clone, Design.prototype) //because JS is STUPID and has to be reminded that it is a DESIGN object 
-            return clone //look up name in environment, return value
+            return clone 
 
         case TAG_IDENTIFIER:
             break;
@@ -112,6 +116,13 @@ function evaluatorLogic(env, node) {
             for (let i = 1; i < (node.design).length; i++) {
                 let currentDesign = evaluatorLogic(env, node.design[i])
                 if (currentDesign instanceof Patch) {
+                    if (currentDesign.width >  firstDesignOver.width && currentDesign.height > firstDesignOver.height) {
+                        throw new Error("Patch #" + (i+1) + " is wider AND taller than the Design it is being placed over. Please put the largest Design first.")
+                    } else if(currentDesign.width >  firstDesignOver.width) {
+                        throw new Error("Patch #" + (i+1) + " is wider than the Design it is being placed over. Please put the largest Design first.")
+                    } else if (currentDesign.height > firstDesignOver.height) {
+                        throw new Error("Patch #" + (i+1) + " is taller than the Design it is being placed over. Please put the largest Design first.")
+                    }
                     switch(anchor) {
                         case "TL":
                             currentDesign.x = x
@@ -143,12 +154,19 @@ function evaluatorLogic(env, node) {
                     let xOffset = currentDesign.patches[0].x - x
                     let yOffset = currentDesign.patches[0].y - y
                     for (let patch of currentDesign.patches) {
+                        if (patch.width >  firstDesignOver.width && patch.height > firstDesignOver.height) {
+                            throw new Error("Patch #" + (i+1) + " is wider AND taller than the Design it is being placed over. Please put the largest Design first.")
+                        } else if(patch.width >  firstDesignOver.width) {
+                            throw new Error("Patch #" + (i+1) + " is wider than the Design it is being placed over. Please put the largest Design first.")
+                        } else if (patch.height > firstDesignOver.height) {
+                            throw new Error("Patch #" + (i+1) + " is taller than the Design it is being placed over. Please put the largest Design first.")
+                        }
                         switch(anchor) {
                             case "TL":
                                 patch.x -= xOffset
                                 patch.y -= yOffset
                                 break;
-                            //FIXME math from here on quick (not fully thought out) so may have bugs
+                            //FIXME math from here on quick (not fully thought out) so may have bugs (tested with just 2 examples)
                             case "TR":
                                 patch.x += (x + firstDesignOver.width) - currentDesign.width
                                 patch.y -= yOffset
@@ -316,8 +334,7 @@ function evaluatorLogic(env, node) {
            for (let i = 1; i < (node.design).length; i++) { //start at index 1 bc already took care of the first one
                 let currentDesign = evaluatorLogic(env, node.design[i]) //recursively process the very next Patch/Design
                 if (currentDesign.height !== heightHor) { //check to make sure heights are compatable, works regardless of if it's a Design or a Patch
-                    console.error("Input Error: Heights need to be the same in order to place Patches horizontally.")
-                    throw new Error("Incompatable Height");
+                    throw new Error("Heights need to be the same in order to place Patches horizontally.");
                     //return "unsuccessful :( please make sure heights match when using hor()";
                 }
 
@@ -370,8 +387,7 @@ function evaluatorLogic(env, node) {
            for (let i = 1; i < (node.design).length; i++) { //start at index 1 bc already took care of the first one
                 let currentDesign = evaluatorLogic(env, node.design[i]) //recursively process the very next Patch/Design
                 if (currentDesign.width !== widthVert) { //check to make sure widths are compatable, works regardless of if it's a Design or a Patch
-                    console.error("Input Error: Widths need to be the same in order to place Patches vertically.")
-                    return "unsuccessful :( please make sure widths match when using vert()";
+                    throw new Error("Widths need to be the same in order to place Patches vertically.")
                 }
                 if (currentDesign instanceof Patch) { //Patch case is easier since we only have to worry about a single Patch
                     currentDesign.y = (prevPatchVert.height + prevPatchVert.y) //since vert, this calculation will give us the correct y-value
@@ -418,8 +434,8 @@ function evaluatorDefn (env, node) {
             break;
 
         case TAG_DEPENDENT_FUNC:
-            let key = node.name //we should change the name of these
-            env[`${key}`] = [node.args, node.body] //is this right idk im so tired
+            //make a structure (function record) that has both args and body ?
+            //env[node.name] = [node.args, node.body] 
             break;
         
         default:

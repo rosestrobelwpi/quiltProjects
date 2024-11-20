@@ -80,7 +80,7 @@ function Play() {
             renderDesign(design); // Render design on canvas
         } catch (error) {
             console.error("Error interpreting code:", error);
-            alert("Error interpreting your code. Please enter a valid design structure.");
+            alert(error);
         }
     };
 
