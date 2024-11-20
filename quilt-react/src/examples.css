@@ -95,10 +95,11 @@
     display: block;
     margin: auto;
     transition: 0.6s;
+    cursor: pointer;
 }
 
 .picture-container img:hover {
-    transform: scale(1.02);
+    transform: scale(1.01);
     cursor: pointer;
 }
 
@@ -119,11 +120,11 @@
   margin: 0;
 }
 
-.document-links ul li:hover {
+/* .document-links ul li:hover {
   opacity: 0.8;
   box-shadow: 1px 1px 5px#1B4965;
   transition: 0.3s;
-}
+} */
 
 .document-links ul li {
   display: flex;

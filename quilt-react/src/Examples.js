@@ -50,8 +50,8 @@ function Examples() {
             </a>
           </li>
           <li>
-            <a href="#">
-              <FontAwesomeIcon icon={faPenFancy} className="icon" /> Creating Patterns
+            <a href="/variables">
+              <FontAwesomeIcon icon={faPenFancy} className="icon" /> Variables
             </a>
           </li>
         </ul>
