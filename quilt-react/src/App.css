@@ -97,6 +97,9 @@ color: #283618 !important;
   opacity: 0.7 !important;
 }
 
+.cm-operator {
+  color: #283618 !important;
+}
 
 .drawing-container {
   flex-grow: 1;

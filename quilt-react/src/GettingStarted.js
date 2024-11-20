@@ -69,6 +69,18 @@ const Document = () => {
           </code>
         </pre>
         </p>
+
+        <h1>Variables</h1>
+        <p>
+          You can use variables to reduce how often you need to retype code. Types can be ints or rect, as long as it returns a rectangle.
+          <pre>
+          <code>
+          <span className="keyword"></span><span className="variable">int</span> x = 3<br />
+          <span className="keyword">rect</span> y = <span className="variable">rect</span>(1, 2, green), <span className="variable">rect</span>(2, 2, green))
+          </code>
+        </pre>
+        </p>
+        
       </div>
     </div>
   );
