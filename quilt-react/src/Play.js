@@ -144,7 +144,7 @@ function Play() {
             }}
             onBeforeChange={(editor, data, value) => setTextInput(value)}
         />
-          
+         
           </div>
           <div className="drawing-container">
             <canvas id="canvas" ref={canvasRef} width={400} height={400}></canvas>
