@@ -215,14 +215,22 @@ function Play() {
       } catch (error) {
           console.error("Error interpreting code:", error);
           alert(`[line ${error.location.start.line}, column ${error.location.start.column}] ${error.message}`)
-
       }
     };
-    window.addEventListener("keydown", keyPressed);
-
-    return() => {
-      window.removeEventListener("keydown", keyPressed);
-    };
+    useEffect(() => {
+      const keyPressed = (event) => {
+          if (event.shiftKey && event.key === "Enter") {
+              handleSubmit();
+              event.preventDefault();
+          } else if (event.shiftKey && event.key === "Backspace") {
+              handleClear();
+              event.preventDefault();
+          }
+      };
+      window.addEventListener("keydown", keyPressed);
+      return () => {
+          window.removeEventListener("keydown", keyPressed);
+      };
   }, [textInput]);
 
 
