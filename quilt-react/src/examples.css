@@ -79,29 +79,24 @@ h1 {
 
 .picture-container {
   display: grid;
-  grid-template-columns: repeat(5, 1fr); /* 4 columns */
-  grid-auto-rows: auto; /* Automatically add new rows as needed */
-  gap: 5px; /* Space between items */
-  margin-top: 10em;
-  justify-items: center; /* Center each canvas horizontally */
-  align-items: center; /* Center each canvas vertically */
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Dynamically adjusts columns */
+  gap: 10px; /* Reduces space between items */
+  padding: 20px;
+  margin: 0 auto;
 }
 
-
 .picture-container canvas {
-    width: 100%; /* Auto-fit to container */
-    height: auto;
-    display: block;
-    border: 1px solid #ccc;
-    border-radius: 8px; /* Rounded corners */
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  border-radius: 10px; /* Slightly rounded corners */
+  transition: transform 0.3s ease; /* Smooth hover scaling */
+  width: 100%; /* Ensures canvases scale to fill available space */
+  aspect-ratio: 1 / 1; /* Keeps canvases square */
 }
 
 .picture-container canvas:hover {
-    transform: scale(1.05); /* Slight growth on hover */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow effect */
-    cursor: pointer;
+  transform: scale(1.1); /* Slight growth on hover */
+  cursor: pointer;
 }
+
 
 .document-links {
     text-align: center;

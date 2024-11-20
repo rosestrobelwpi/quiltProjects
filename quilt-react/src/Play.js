@@ -198,25 +198,32 @@ function Play() {
     };
 
     const handleSubmit = () => {
-        try {
-            const debugErrors = debugInput(textInput);
-            if (debugErrors.length && debugErrors[0] !== "No errors detected.") {
-                const formattedErrors = debugErrors
-                    .map(error => `Line ${error.line}, Column ${error.column}: ${error.message}`)
-                    .join("\n");
-                console.warn("Debugging issues detected:\n", formattedErrors); // Log errors to the console
-                alert(`Debugging issues:\n${formattedErrors}`);
-                return;
-            }
-
-            const parsedInput = parser.parse(textInput);
-            const design = evaluator(parsedInput);
-            renderDesign(design);
-        } catch (error) {
-            console.error("Error interpreting code:", error);
-            alert("Error interpreting your code. Please check for syntax errors.");
-        }
-    };
+      try {
+          const debugErrors = debugInput(textInput);
+  
+          if (debugErrors.length && debugErrors[0] !== "No errors detected.") {
+              const formattedErrors = debugErrors
+                  .map(error => `Line ${error.line}, Column ${error.column}: ${error.message}`)
+                  .join("\n");
+  
+              console.warn("Debugging issues detected:\n", formattedErrors); // Log errors to the console
+              alert(`Debugging issues:\n${formattedErrors}`);
+              return;
+          }
+  
+          const parsedInput = parser.parse(textInput); // This is where the detailed error occurs
+          const design = evaluator(parsedInput);
+          renderDesign(design);
+  
+      } catch (error) {
+          console.error("Error interpreting code:", error);
+  
+          // Extract the detailed error message from the caught error
+          const errorMessage = error.message || "An unknown error occurred.";
+          alert(`Error interpreting your code:\n${errorMessage}`);
+      }
+  };
+  
 
     useEffect(() => {
         const keyPressed = (event) => {
