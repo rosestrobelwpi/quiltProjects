@@ -54,24 +54,20 @@ const Document = () => {
         <p>
           <h3>rot(Angle, Patch)</h3>
           Rot rotates your design. It takes in an angle number (0, 90, 190, 270), as well a patch.
-        </p>
-        <p>
-          <h3>over(topLeft, topRight, bottomLeft, bottomRight, Center)</h3>
-          Uhhhh
-        </p>
-        <pre>
+          <pre>
           <code>
-            This is code<br />
-            This is more code<br />
-            <span className="keyword">let </span><span className="variable">editor</span> = <span className="keyword">new</span><span className="keyword"> editor</span>
+          <span className="keyword">rot</span> (180, <span className="variable">rect</span>(3, 3, red))<br />
           </code>
         </pre>
-
-        <p>
-          The -f iife file tells Rollup that the output file should be formatted as an "immediately-invoked function expression" (as opposed to other module styles, such as CommonJS or UMD). This means the code will be wrapped in an anonymous function that is then immediately called, using that function's scope as a local namespace so that its variables don't end up in the global scope.
         </p>
         <p>
-          The -o option indicates which output file to write to, and the -p option loads the resolution plugin. You can also create a configuration file (called rollup.config.mjs) and just run rollup -c to take the configuration from that file.
+          <h3>over(Position, Patch)</h3>
+          Over allows you to overlay shapes over another. The first parameter is a position. All of the possible positions are top left (TL), top right (TR), bottom left (BL), bottom right (BR), and center. The first rectangle you code is the rectangle on the bottom.
+          <pre>
+          <code>
+          <span className="keyword">over</span> (TL, <span className="variable">rect</span>(1, 1, green), <span className="variable">rect</span>(1, 1, yellow))<br />
+          </code>
+        </pre>
         </p>
       </div>
     </div>
