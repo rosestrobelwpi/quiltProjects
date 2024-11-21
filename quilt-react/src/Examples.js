@@ -127,7 +127,7 @@ function Examples() {
               <a href="/about">About Us</a>
             </li>
             <li>
-              <a href="/examples">Docs</a>
+              <a href="/examples">Tutorial</a>
             </li>
           </ul>
         </div>
