@@ -68,7 +68,7 @@ function evaluatorLogic(env, node) {
 
         case TAG_VARIABLE:
         case TAG_ASSIGNMENT://this is actually re-assignment, the initial assignment happens in Variable - but essentially doing the same thing as Variable
-        case TAG_FUNC:
+        //case TAG_FUNC:
             evaluatorDefn(env, node)
             break;
         
@@ -84,28 +84,28 @@ function evaluatorLogic(env, node) {
             }
             return clone;
 
-        case TAG_FUN_CALL:
-            //node has function name and the function inputs
-            //environment has parameter names and function body
-            let lookUp = env[node.name]
-            let paramNames = lookUp[0]
-            let funcBody = lookUp[1]
+        // case TAG_FUN_CALL:
+        //     //node has function name and the function inputs
+        //     //environment has parameter names and function body
+        //     let lookUp = env[node.name]
+        //     let paramNames = lookUp[0]
+        //     let funcBody = lookUp[1]
 
-            //evaluate each input first
-            let evaluatedArgs = []
-            for (let arg of node.args) {
-                evaluatedArgs.push(evaluatorLogic(arg))
-            }
+        //     //evaluate each input first
+        //     let evaluatedArgs = []
+        //     for (let arg of node.args) {
+        //         evaluatedArgs.push(evaluatorLogic(arg))
+        //     }
 
-            //insert into environment (like a variable)
-            let i = 0;
-            for (let evaluatedArg of evaluatedArgs) {
-                env[paramNames[i]] = evaluatedArg;
-                i++;
-            }
+        //     //insert into environment (like a variable)
+        //     let i = 0;
+        //     for (let evaluatedArg of evaluatedArgs) {
+        //         env[paramNames[i]] = evaluatedArg;
+        //         i++;
+        //     }
 
-            //now we can evaluate the function body, now that the environment has the input names connected to the values
-            return evaluatorLogic(env, funcBody)
+        //     //now we can evaluate the function body, now that the environment has the input names connected to the values
+        //     return evaluatorLogic(env, funcBody)
 
         case TAG_IDENTIFIER:
             break;
