@@ -1,130 +1,135 @@
 
-  .home-body {
-    position: fixed; /* or absolute */
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: -1;
-    background-position: 0 0;
-    background-color: rgb(34, 34, 58);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
+.home-body {
+  position: fixed; /* or absolute */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  background-position: 0 0;
+  background-color: rgb(34, 34, 58);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-  .home-body canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: -1;
-  }
 
-  .bedroom-background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-    z-index: -1;
-    background-size: cover;
+.home-body canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+.bedroom-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  z-index: -1;
+  background-size: cover;
 }
 
 .bedroom-background img {
-    width: 100vw;
-    height: auto;
-    max-height: 100vh;
-    object-fit: cover; 
+  width: 100vw;
+  height: auto;
+  max-height: 100vh;
+  object-fit: cover; 
 }
 
 .home-container h1{
-  font-size: 70px;
+font-size: 70px;
+margin: 0;
+color: white;
+}
+
+.home-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 2;
+}
+
+.container h1 {
+  font-family: "Handjet", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-size: 120px;
+  text-align: center;
+  letter-spacing: 10px;
+  padding: 0;
   margin: 0;
   color: white;
 }
-  
-  .home-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    z-index: 2;
-  }
-  
-  .container h1 {
-    font-family: "Handjet", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 700;
-    font-size: 120px;
-    text-align: center;
-    letter-spacing: 10px;
-    padding: 0;
-    margin: 0;
-    color: white;
-  }
-  
-  .btn-container {
-    margin: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-  }
 
-  .btn-container button {
-    font-size: 30px;
-    padding: 10px 10px;
-    width: 250px;
-    height: 70px;
-    border-radius: 10px;
-    border: 2px solid black;
-    cursor: pointer;
-    transition: 0.5s;
-  }
-  
-  .btn-container button:hover {
-    opacity: 0.9;
-  }
+.btn-container {
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
 
-  .btn-container button a {
-    text-decoration: none;
-    color: black;
-  }
+.btn-container button {
+  font-size: 30px;
+  padding: 10px 10px;
+  width: 250px;
+  height: 70px;
+  border-radius: 10px;
+  border: 2px solid black;
+  cursor: pointer;
+  transition: 0.5s;
+}
 
-  /* Responsive image resizing */
+.btn-container button:hover {
+  opacity: 0.9;
+}
 
-  /* Small devices */
+.btn-container button a {
+  text-decoration: none;
+  color: black;
+}
+
+.button-home, .button-link {
+  display: block;
+
+}
+
+/* Responsive image resizing */
+
+/* Small devices */
 @media (max-width: 768px) {
-  .bedroom-background img {
-    background-size: cover;
-    height: 100vh;
-  }
+.bedroom-background img {
+  background-size: cover;
+  height: 100vh;
+}
 }
 
 /* Tablets */
 @media (max-width: 1024px) {
-  .bedroom-background img {
-    background-size: cover;
-    height: 100vh;
-  }
+.bedroom-background img {
+  background-size: cover;
+  height: 100vh;
+}
 }
 
 /* Laptops */
 @media (max-width: 1280px) {
-  .bedroom-background img {
-    height: 100vh;
-    background-size: cover;
-  }
+.bedroom-background img {
+  height: 100vh;
+  background-size: cover;
+}
 }
 
 /* Desktops */
 @media (min-width: 1281px) and (max-width: 1920px) {
-  .bedroom-background img {
-    background-size: cover;
-    height: 100vh;
-  }
+.bedroom-background img {
+  background-size: cover;
+  height: 100vh;
+}
 }
 
 /* Huge desktop screens */
