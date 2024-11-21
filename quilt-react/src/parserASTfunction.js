@@ -274,7 +274,7 @@ function expr_size (expr) {
         case TAG_NAT:
             return 1;
             break;
-        case TAG_ROT:
+        case TAG_ROTATION:
             return 1;
             break;
         case TAG_PIXEL:
