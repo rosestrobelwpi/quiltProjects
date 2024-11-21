@@ -1,7 +1,6 @@
 const {
     TAG_RECT, TAG_NAT_NUM, TAG_COLOR, TAG_HOR, TAG_VERT, TAG_PLUS, TAG_TIMES, TAG_VARIABLE, TAG_DEPENDENT_FUNC, TAG_ROTATION, TAG_ROT, TAG_REP,
-    TAG_IDENTIFIER, TAG_VAR_CALL, TAG_OVER, TAG_PROGRAM, TAG_ASSIGNMENT, TAG_FUNC, TAG_FUN_CALL,
-    NatNum
+    TAG_IDENTIFIER, TAG_VAR_CALL, TAG_OVER, TAG_PROGRAM, TAG_ASSIGNMENT, TAG_FUNC, TAG_FUN_CALL
 } = require('./parserASTfunction.js');
 
 const parser = require("./parser.js");
@@ -82,8 +81,8 @@ function evaluatorLogic(env, node) {
                 Object.setPrototypeOf(clone, Patch.prototype); // because JS is STUPID and has to be reminded that it is a Patch object
             } else if (lookup instanceof Design) {
                 Object.setPrototypeOf(clone, Design.prototype); // because JS is STUPID and has to be reminded that it is a Design object
-            } else if (lookup instanceof NatNum) {
-                Object.setPrototypeOf(clone, NatNum.prototype);
+            // } else if (lookup instanceof NatNum) {
+            //     Object.setPrototypeOf(clone, NatNum.prototype);
             } else {
                 console.log("bad environment lookup");
             }
