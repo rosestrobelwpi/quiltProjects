@@ -81,8 +81,7 @@
 
 .picture-container {
   display: grid;
-
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Dynamically adjusts columns */
+  grid-template-columns: repeat(4, 1fr);
   gap: 10px; /* Reduces space between items */
   padding: 20px;
   margin: 0 auto;
@@ -204,7 +203,7 @@
 }
 .picture-container {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(4, 1fr);
 }
 .picture-container canvas {
   width: 200px;
