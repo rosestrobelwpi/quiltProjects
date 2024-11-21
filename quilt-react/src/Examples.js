@@ -75,7 +75,8 @@ function Examples() {
     },    
     {
       id: 5,
-      code: "rect red = rect(1,1,red);\nrect black = rect(1,1,black);\nrect X = hor(red,black,red);\nrect Y = hor(black,red,black);\nvert(X,Y,X);"
+      code: "rect red = rect(1,1,red);\nrect black = rect(1,1,black);\nrect X = hor(red,black,red);\nrect Y = hor(black,red,black);\nvert(X,Y,X);",
+      
     },
     {
       id: 6,
@@ -88,6 +89,10 @@ function Examples() {
     {
       id: 8,
       code: "rect red = rect(5,5,red);\nrect white = rect(4,4,grey);\nrect blue = rect(3,3,blue);\nrect center = rect(1,1,black);\nover(C,red,white,blue,center);"
+    },
+    {
+      id: 9,
+      code: "define checkerboard(rect a, rect b, rect x, rect y) {\nreturn rep(4, hor(vert(a,b,x,y,a,b,x,y), vert(y,x,b,a,y,x,b,a)));\n}\nrect theGreen = rect(1, 1, green);\nrect theYellow = rect(1,1,yellow);\nrect theBlue = rect(1,1,blue);\nrect thePurple = rect(1,1,purple);\ncheckerboard(theGreen, theYellow, theBlue, thePurple);"
     }
   ];
 
