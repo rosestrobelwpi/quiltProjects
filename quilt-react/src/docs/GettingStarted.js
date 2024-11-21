@@ -159,13 +159,13 @@ const Document = () => {
 
           <pre>
             <code>
-              <span className='keyword'>rect</span> yellowRect = <span className='keyword'>rect</span>(1, 1, yellow);<br />
-              <span className='keyword'>rect</span> blackRect = <span className='keyword'>rect</span>(1, 1, black);<br /><br />
+              <span className='variable'>rect</span> yellowRect = <span className='variable'>rect</span>(1, 1, yellow);<br />
+              <span className='variable'>rect</span> blackRect = <span className='variable'>rect</span>(1, 1, black);<br /><br />
 
-              <span className='keyword'>rect</span> yellowBackground = <span className='keyword'>hor</span>(<span className='keyword'>rep</span>(8, yellowRect));<br />
-              <span className='keyword'>rect</span> eyes = <span className='keyword'>hor</span>(yellowRect, yellowRect, blackRect, yellowRect, yellowRect, blackRect, yellowRect, yellowRect);<br />
-              <span className='keyword'>rect</span> topLip = <span className='keyword'>hor</span>(yellowRect, blackRect, yellowRect, yellowRect, yellowRect, yellowRect, blackRect, yellowRect);<br />
-              <span className='keyword'>rect</span> bottomLip = <span className='keyword'>hor</span>(yellowRect, yellowRect, blackRect, blackRect, blackRect, blackRect, yellowRect, yellowRect);<br /><br />
+              <span className='variable'>rect</span> yellowBackground = <span className='keyword'>hor</span>(<span className='keyword'>rep</span>(8, yellowRect));<br />
+              <span className='variable'>rect</span> eyes = <span className='keyword'>hor</span>(yellowRect, yellowRect, blackRect, yellowRect, yellowRect, blackRect, yellowRect, yellowRect);<br />
+              <span className='variable'>rect</span> topLip = <span className='keyword'>hor</span>(yellowRect, blackRect, yellowRect, yellowRect, yellowRect, yellowRect, blackRect, yellowRect);<br />
+              <span className='variable'>rect</span> bottomLip = <span className='keyword'>hor</span>(yellowRect, yellowRect, blackRect, blackRect, blackRect, blackRect, yellowRect, yellowRect);<br /><br />
 
               <span className='keyword'>vert</span>(yellowBackground, yellowBackground, yellowBackground, eyes, yellowBackground, yellowBackground, topLip, bottomLip, yellowBackground);
             </code>
@@ -174,12 +174,12 @@ const Document = () => {
           <i><u>Checkboard Design:</u></i>
           <pre>
             <code>
-            <span className='keyword'>rect</span> grey = <span className='keyword'>rect</span>(1, 1, grey);<br />
-            <span className='keyword'>rect</span> black = <span className='keyword'>rect</span>(1, 1, black);<br />
+            <span className='variable'>rect</span> grey = <span className='variable'>rect</span>(1, 1, grey);<br />
+            <span className='variable'>rect</span> black = <span className='variable'>rect</span>(1, 1, black);<br />
 
-            <span className='keyword'>rect</span> top = <span className='keyword'>hor</span>(grey, black);<br />
-            <span className='keyword'>rect</span> bottom = <span className='keyword'>hor</span>(black, grey);<br />
-            <span className='keyword'>rect</span> repeat = <span className='keyword'>rep</span>(8, (vert(top, bottom)));<br /><br />
+            <span className='variable'>rect</span> top = <span className='keyword'>hor</span>(grey, black);<br />
+            <span className='variable'>rect</span> bottom = <span className='keyword'>hor</span>(black, grey);<br />
+            <span className='variable'>rect</span> repeat = <span className='keyword'>rep</span>(8, (vert(top, bottom)));<br /><br />
 
             <span className='keyword'>vert</span>(repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat);
             </code>
