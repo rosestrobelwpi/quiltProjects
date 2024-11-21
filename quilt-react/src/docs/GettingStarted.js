@@ -160,7 +160,7 @@ const Document = () => {
           <pre>
             <code>
               <span className='variable'>rect</span> yellowRect = <span className='variable'>rect</span>(1, 1, yellow);<br />
-              <span className='variable'>rect</span> blackRect = <span className='variable'>rect</span>(1, 1, black);<br /><br />
+              <span className='variable'>rect</span> blackRect = <span className='keyword'>rect</span>(1, 1, black);<br /><br />
 
               <span className='variable'>rect</span> yellowBackground = <span className='keyword'>hor</span>(<span className='keyword'>rep</span>(8, yellowRect));<br />
               <span className='variable'>rect</span> eyes = <span className='keyword'>hor</span>(yellowRect, yellowRect, blackRect, yellowRect, yellowRect, blackRect, yellowRect, yellowRect);<br />
@@ -179,9 +179,9 @@ const Document = () => {
 
             <span className='variable'>rect</span> top = <span className='keyword'>hor</span>(grey, black);<br />
             <span className='variable'>rect</span> bottom = <span className='keyword'>hor</span>(black, grey);<br />
-            <span className='variable'>rect</span> repeat = <span className='keyword'>rep</span>(8, (vert(top, bottom)));<br /><br />
+            <span className='variable'>rect</span> repeat = <span className='keyword'>rep</span>(4, (vert(top, bottom)));<br /><br />
 
-            <span className='keyword'>vert</span>(repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat);
+            <span className='keyword'>vert</span>(repeat, repeat, repeat, repeat);
             </code>
           </pre>
         </p>
