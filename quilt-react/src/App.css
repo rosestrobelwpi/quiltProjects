@@ -139,3 +139,17 @@ color: #283618 !important;
   /* border-radius: 15px; */
   margin-right: 2%;
 }
+
+#downloadBtn {
+  background-color: #de6800;
+  border-radius: 15px;
+  cursor: pointer;
+  padding: 5px 10px;
+  margin: 0 auto;
+  font-size: 10px;
+  transition: 0.2s;
+}
+
+#downloadBtn:hover {
+  opacity: 0.8;
+}
