@@ -29,8 +29,8 @@ const Document = () => {
           <span className='keyword'>Rect</span> creates a simple rectangle. We define the dimensions of this rectangle with its parameters, width, height, and color. In this document, I will reference <strong>patches</strong>, which is another word for a rectangle design.<br />
           <pre>
             <code>
-            <span className="keyword"></span><span className="variable">rect</span>(1, 1, red); <br /><br />
-            <span className="keyword"></span><span className="variable">rect</span>(4, 3, blue); <br /><br />
+            <span className="keyword"></span><span className="variable">rect</span>(1, 1, blue); <br /><br />
+            <span className="keyword"></span><span className="variable">rect</span>(4, 3, red); <br /><br />
             <span className="keyword"></span><span className="variable">rect</span>(2, 2, green); <br />
             </code>
           </pre>
@@ -63,7 +63,7 @@ const Document = () => {
             <span className="keyword">vert</span>(<span className="keyword">hor</span>(<span className="variable">rect</span>(3, 2, black), <span className="variable">rect</span>(3, 2, orange)), hor(<span className="variable">rect</span>(3, 2, yellow), <span className="variable">rect</span>(3, 2, red)));<br />
             </code>
         </pre>
-        In the first example, we are placing 2 rectangles with widths of 3 and heights of 2 in a vertical row.<br /><br />
+        In the first example, we are placing 2 rectangles with widths of 1 and heights of 2 in a vertical row.<br /><br />
         In the second example, we are placing 2 rectangles in a vertical row. But <strong>wait, not again!</strong> They are different heights! Remember, rectangles in vertical rows do not have to be the same height!<br /><br />
         In the third example, we are placing 2 rectangles in a horizontal row. Then we place 2 more rectangles in a horizontal row. Finally, we wrap all of the horizontal rows <i>nice and tight</i> with a <span className='keyword'>vert</span> definition. <br /><br />
         </p>
