@@ -135,7 +135,7 @@ const Document = () => {
           </pre>
           The syntax begins with the type: <span className='keyword'>rect</span>, the name of the variable, and then the patch.<br /><br />
 
-          <h3>Examples</h3><br />
+          <h1>Examples</h1><br />
           <i><u>Smiley Face Design:</u></i>
           {/* <pre>
             <code>
