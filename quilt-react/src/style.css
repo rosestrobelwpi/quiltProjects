@@ -85,7 +85,7 @@
   }
   
   .btn-container button:hover {
-    opacity: 0.9;;
+    opacity: 0.9;
   }
 
   .btn-container button a {
@@ -97,25 +97,37 @@
 
   /* Small devices */
 @media (max-width: 768px) {
-  
+  .bedroom-background img {
+    background-size: cover;
+    height: 100vh;
+  }
 }
 
 /* Tablets */
 @media (max-width: 1024px) {
-  
+  .bedroom-background img {
+    background-size: cover;
+    height: 100vh;
+  }
 }
 
 /* Laptops */
 @media (max-width: 1280px) {
-  
+  .bedroom-background img {
+    height: 100vh;
+    background-size: cover;
+  }
 }
 
 /* Desktops */
 @media (min-width: 1281px) and (max-width: 1920px) {
-  
+  .bedroom-background img {
+    background-size: cover;
+    height: 100vh;
+  }
 }
 
 /* Huge desktop screens */
 @media (min-width: 1921px) {
-  
+
 }
