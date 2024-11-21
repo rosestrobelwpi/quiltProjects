@@ -336,8 +336,8 @@ function peg$parse(input, options) {
     name = name.join('');
     return new p.Arg(name, type);
   };
-  var peg$f16 = function(name, ex) {
-    return new p.Assignment(name, ex);
+  var peg$f16 = function(name, value) {
+    return new p.Assignment(name, value);
   };
   var peg$f17 = function(element, rectObjList) {
     if (element === "vert") {
@@ -848,7 +848,7 @@ function peg$parse(input, options) {
   }
 
   function peg$parseFunction() {
-    var s0, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16;
+    var s0, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17;
 
     peg$silentFails++;
     s0 = peg$currPos;
@@ -912,7 +912,10 @@ function peg$parse(input, options) {
                   s11 = null;
                 }
                 s12 = peg$parse_();
-                s13 = peg$parseRectObj();
+                s13 = peg$parseRectangle();
+                if (s13 === peg$FAILED) {
+                  s13 = peg$parseRectObj();
+                }
                 if (s13 !== peg$FAILED) {
                   s14 = peg$parse_();
                   if (input.charCodeAt(peg$currPos) === 59) {
@@ -923,14 +926,15 @@ function peg$parse(input, options) {
                     if (peg$silentFails === 0) { peg$fail(peg$e1); }
                   }
                   if (s15 !== peg$FAILED) {
+                    s16 = peg$parse_();
                     if (input.charCodeAt(peg$currPos) === 125) {
-                      s16 = peg$c7;
+                      s17 = peg$c7;
                       peg$currPos++;
                     } else {
-                      s16 = peg$FAILED;
+                      s17 = peg$FAILED;
                       if (peg$silentFails === 0) { peg$fail(peg$e12); }
                     }
-                    if (s16 !== peg$FAILED) {
+                    if (s17 !== peg$FAILED) {
                       peg$savedPos = s0;
                       s0 = peg$f8(s3, s6, s13);
                     } else {

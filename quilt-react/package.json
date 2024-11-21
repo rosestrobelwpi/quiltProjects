@@ -13,6 +13,7 @@
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.27.0",
     "react-scripts": "^5.0.1",
+    "structured-clone": "^0.2.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -43,6 +44,7 @@
     "@babel/preset-env": "^7.26.0",
     "@babel/preset-react": "^7.25.9",
     "babel-jest": "^29.7.0",
+    "jest": "^27.5.1",
     "peggy": "^4.1.1"
   }
 }
