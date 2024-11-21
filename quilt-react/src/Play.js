@@ -139,7 +139,11 @@ function Play() {
         if (code) {
             const decodedCode = decodeURIComponent(code);
             setTextInput(decodedCode); // Preload the code into the editor
+
+            const loadDesign = evaluator(parser.parse(decodedCode));
+            renderDesign(loadDesign);
         }
+        
     }, [code]);
 
     // Render design on the canvas based on input text
@@ -260,6 +264,9 @@ function Play() {
                 </div>
             </div>
             <div className="container2">
+                
+
+                <div className="parser-container">
                 <div className="button-help">
                     <div className="btn-action">
                         <code>Shift + Enter</code> <span>to submit</span>
@@ -268,8 +275,7 @@ function Play() {
                         <code>Shift + Backspace</code> <span>to clear</span>
                     </div>
                 </div>
-
-                <div className="parser-container">
+                <div className="codemirror-container">
                     <CodeMirror
                         value={textInput}
                         options={{
@@ -280,6 +286,7 @@ function Play() {
                         }}
                         onBeforeChange={(editor, data, value) => setTextInput(value)}
                     />
+                </div>
                 </div>
                 <div className="drawing-container">
                     <canvas id="canvas" ref={canvasRef} width={400} height={400}></canvas>
