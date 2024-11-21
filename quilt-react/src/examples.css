@@ -81,6 +81,7 @@
 
 .picture-container {
   display: grid;
+
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Dynamically adjusts columns */
   gap: 10px; /* Reduces space between items */
   padding: 20px;
@@ -90,15 +91,15 @@
 .picture-container img {
     width: 100%;
     height: auto;
-    object-fit: contain;
     display: block;
-    margin: auto;
-    transition: 0.6s;
-    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 8px; /* Rounded corners */
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
-.picture-container img:hover {
-    transform: scale(1.01);
+.picture-container canvas:hover {
+    transform: scale(1.05); /* Slight growth on hover */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow effect */
     cursor: pointer;
 }
 
@@ -120,11 +121,11 @@
     margin: 0;
 }
 
-/* .document-links ul li:hover {
-  opacity: 0.8;
-  box-shadow: 1px 1px 5px#1B4965;
-  transition: 0.3s;
-} */
+.document-links ul li:hover {
+    opacity: 0.8;
+    box-shadow: 1px 1px 5px #1B4965;
+    transition: 0.3s;
+}
 
 .document-links ul li {
   display: flex;

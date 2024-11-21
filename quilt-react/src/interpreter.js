@@ -1,6 +1,6 @@
 const {
     TAG_RECT, TAG_NAT_NUM, TAG_COLOR, TAG_HOR, TAG_VERT, TAG_PLUS, TAG_TIMES, TAG_VARIABLE, TAG_DEPENDENT_FUNC, TAG_ROTATION, TAG_ROT, TAG_REP,
-    TAG_IDENTIFIER, TAG_VAR_CALL, TAG_OVER, TAG_PROGRAM, TAG_ASSIGNMENT
+    TAG_IDENTIFIER, TAG_VAR_CALL, TAG_OVER, TAG_PROGRAM, TAG_ASSIGNMENT, TAG_FUNC, TAG_FUN_CALL
 } = require('./parserASTfunction.js');
 
 const parser = require("./parser.js");
@@ -63,6 +63,7 @@ function evaluatorLogic(env, node) {
 
         case TAG_VARIABLE:
         case TAG_ASSIGNMENT://this is actually re-assignment, the initial assignment happens in Variable - but essentially doing the same thing as Variable
+        case TAG_FUNC:
             evaluatorDefn(env, node)
             break;
         
@@ -73,18 +74,46 @@ function evaluatorLogic(env, node) {
                 Object.setPrototypeOf(clone, Patch.prototype); // because JS is STUPID and has to be reminded that it is a Patch object
             } else if (lookup instanceof Design) {
                 Object.setPrototypeOf(clone, Design.prototype); // because JS is STUPID and has to be reminded that it is a Design object
+            // } else if (lookup instanceof NatNum) {
+            //     Object.setPrototypeOf(clone, NatNum.prototype);
             } else {
+                console.log("i am trying to lookup", node.name)
+                console.log("i got a ", clone)
                 console.log("bad environment lookup");
             }
             return clone;
-            
-            
+
+        case TAG_FUN_CALL:
+            //node has function name and the function inputs
+            //environment has parameter names and function body
+            let lookUp = env[node.name]
+            let paramNames = lookUp[0]
+            let funcBody = lookUp[1]
+
+            //evaluate each input first
+            let evaluatedArgs = []
+            for (let arg of node.args) {
+                console.log("arg tag!!", arg.tag)
+                evaluatedArgs.push(evaluatorLogic(env, arg))
+                console.log("what did it giv?!", evaluatedArgs)
+            }
+
+            //insert into environment (like a variable)
+            let i = 0;
+            for (let evaluatedArg of evaluatedArgs) {
+                env[paramNames[i].name] = evaluatedArg;
+                i++;
+            }
+
+            //now we can evaluate the function body, now that the environment has the input names connected to the values
+            console.log("this is func body", funcBody)
+            console.log("env before lookin at funcbody maybe", env)
+            return evaluatorLogic(env, funcBody)
 
         case TAG_IDENTIFIER:
             break;
        
         case TAG_NAT_NUM:
-        case "NAT": //FIXME remove later when parser stuff is updated
             return node.value
 
         case TAG_ROTATION:
@@ -336,6 +365,7 @@ function evaluatorLogic(env, node) {
            }
            
            //now we process all of the rest of the patches/designs
+           console.log(firstDesignHor)
            let sumWidthsHor = firstDesignHor.width //since this is placing horizontally, we add all the widths to get the overall Design width
            let cumulativeWidths = firstDesignHor.width //need to keep track of where to place designs after the first two
            for (let i = 1; i < (node.design).length; i++) { //start at index 1 bc already took care of the first one
@@ -440,9 +470,8 @@ function evaluatorDefn (env, node) {
             //console.log("AFTER", env)
             break;
 
-        case TAG_DEPENDENT_FUNC:
-            //make a structure (function record) that has both args and body ?
-            //env[node.name] = [node.args, node.body] c
+        case TAG_FUNC:
+            env[node.name] = [node.args, node.body] 
             break;
         
         default:

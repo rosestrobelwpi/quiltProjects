@@ -4,22 +4,24 @@ import { Controlled as CodeMirror } from "react-codemirror2";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/material.css";
 import "codemirror/mode/javascript/javascript";
+import { Link } from 'react-router-dom';
+import { Alert } from "bootstrap";
 import parser from "./parser";
 import evaluator from "./interpreter";
 import "./App.css";
 
 // Define a muted color palette
 const colorPalette = {
-    Red: '#b57c7c',
-    Orange: '#d9a078',
-    Yellow: '#c8b77a',
-    Green: '#85a586',
-    Blue: '#6a8caf',
-    Purple: '#9e86a6',
-    Black: '#4d4d4d',
-    Pink: '#d8a6b8',
-    Brown: '#a58c72',
-    Grey: '#b0b0b0',
+    red: '#b57c7c',
+    orange: '#d9a078',
+    yellow: '#c8b77a',
+    green: '#85a586',
+    blue: '#6a8caf',
+    purple: '#9e86a6',
+    black: '#4d4d4d',
+    pink: '#d8a6b8',
+    brown: '#a58c72',
+    grey: '#b0b0b0',
 };
 
 // Debugger Function
@@ -160,15 +162,12 @@ function Play() {
         }
 
         // Calculate scaling factors
-        const maxWidth = design.patches
-            ? Math.max(...design.patches.map(p => p.x + p.width))
-            : design.x + design.width;
-        const maxHeight = design.patches
-            ? Math.max(...design.patches.map(p => p.y + p.height))
-            : design.y + design.height;
+        const maxWidth = design.width
+        const maxHeight = design.height
 
-        const scaleX = canvas.width / maxWidth;
-        const scaleY = canvas.height / maxHeight;
+        //FIXME remove minus 100 later, just fitting it to my screen -laura
+        const scaleX = (canvas.width) / maxWidth;
+        const scaleY = (canvas.height) / maxHeight;
         const scale = Math.min(scaleX, scaleY); // Uniform scaling
 
         if (design.patches && Array.isArray(design.patches)) {
@@ -179,7 +178,7 @@ function Play() {
                     patch.y * scale,
                     patch.width * scale,
                     patch.height * scale,
-                    patch.color
+                    colorPalette[patch.color]
                 );
             });
         } else if (design.x !== undefined && design.y !== undefined) {
@@ -189,7 +188,7 @@ function Play() {
                 design.y * scale,
                 design.width * scale,
                 design.height * scale,
-                design.color
+                colorPalette[design.color]
             );
         }
     };
@@ -205,17 +204,15 @@ function Play() {
     // Only called on Submit button click
     const handleSubmit = () => {
       try {
-          const debugErrors = debugInput(textInput);
-  
-          if (debugErrors.length && debugErrors[0] !== "No errors detected.") {
-              const formattedErrors = debugErrors
-                  .map(error => `Line ${error.line}, Column ${error.column}: ${error.message}`)
-                  .join("\n");
-  
-              console.warn("Debugging issues detected:\n", formattedErrors); // Log errors to the console
-              alert(`Debugging issues:\n${formattedErrors}`);
-              return;
-          }
+            // const debugErrors = debugInput(textInput);
+            // if (debugErrors.length && debugErrors[0] !== "No errors detected.") {
+            //     const formattedErrors = debugErrors
+            //         .map(error => `Line ${error.line}, Column ${error.column}: ${error.message}`)
+            //         .join("\n");
+            //     console.warn("Debugging issues detected:\n", formattedErrors); // Log errors to the console
+            //     alert(`Debugging issues:\n${formattedErrors}`);
+            //     return;
+            // }
   
           const parsedInput = parser.parse(textInput); // This is where the detailed error occurs
           const design = evaluator(parsedInput);
@@ -248,10 +245,7 @@ function Play() {
       link.href = url;
       link.click();
 
-      // const downloadBtn = document.getElementById("downloadBtn");
-      // downloadBtn.removeEventListener("click", downloadCanvasDrawing);
     }
-      // document.getElementById("downloadBtn").addEventListener("click", downloadCanvasDrawing);
   }
 
     useEffect(() => {
@@ -324,8 +318,6 @@ function Play() {
                 </div>
             </div>
         </div>
-
-    
         
     );
     
