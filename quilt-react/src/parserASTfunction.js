@@ -225,7 +225,7 @@ function VarCall(n) {
 }
 
 function Arg(n, t) {
-    this.tag = TAG_VAR_CALL;
+    this.tag = TAG_ARG;
     this.name = n;
     this.type = t;
 }
