@@ -1,6 +1,6 @@
 const {
     TAG_RECT, TAG_NAT_NUM, TAG_COLOR, TAG_HOR, TAG_VERT, TAG_PLUS, TAG_TIMES, TAG_VARIABLE, TAG_DEPENDENT_FUNC, TAG_ROTATION, TAG_ROT, TAG_REP,
-    TAG_IDENTIFIER, TAG_VAR_CALL, TAG_OVER, TAG_PROGRAM, TAG_ASSIGNMENT
+    TAG_IDENTIFIER, TAG_VAR_CALL, TAG_OVER, TAG_PROGRAM, TAG_ASSIGNMENT, TAG_FUNC, TAG_FUN_CALL
 } = require('./parserASTfunction.js');
 
 const parser = require("./parser.js");
@@ -68,6 +68,7 @@ function evaluatorLogic(env, node) {
 
         case TAG_VARIABLE:
         case TAG_ASSIGNMENT://this is actually re-assignment, the initial assignment happens in Variable - but essentially doing the same thing as Variable
+        case TAG_FUNC:
             evaluatorDefn(env, node)
             break;
         
@@ -82,6 +83,30 @@ function evaluatorLogic(env, node) {
                 console.log("bad environment lookup");
             }
             return clone;
+
+        case TAG_FUN_CALL:
+            //node has function name and the function inputs
+            //environment has parameter names and function body
+            let lookUp = env[node.name]
+            let paramNames = lookUp[0]
+            let funcBody = lookUp[1]
+
+            //evaluate each input first
+            let evaluatedArgs = []
+            for (let arg of node.args) {
+                evaluatedArgs.push(evaluatorLogic(arg))
+            }
+
+            //insert into environment (like a variable)
+            let i = 0;
+            for (let evaluatedArg of evaluatedArgs) {
+                env[paramNames[i]] = evaluatedArg;
+                i++;
+            }
+
+            //now we can evaluate the function body, now that the environment has the input names connected to the values
+            return evaluatorLogic(env, funcBody)
+
         case TAG_IDENTIFIER:
             break;
        
@@ -442,9 +467,8 @@ function evaluatorDefn (env, node) {
             //console.log("AFTER", env)
             break;
 
-        case TAG_DEPENDENT_FUNC:
-            //make a structure (function record) that has both args and body ?
-            //env[node.name] = [node.args, node.body] c
+        case TAG_FUNC:
+            env[node.name] = [node.args, node.body] 
             break;
         
         default:

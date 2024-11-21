@@ -40,6 +40,8 @@ const TAG_IDENTIFIER = "IDENTIFIER";
 const TAG_COLOR = "COLOR";
 const TAG_PROGRAM = "PROGRAM"
 const TAG_ASSIGNMENT = "ASSIGNMENT"
+const TAG_FUN_CALL = "FUN_CALL"
+const TAG_FUNC = "FUNC"
 
 
 // class ASTNode {
@@ -212,10 +214,9 @@ function Times(l, r) {
     this.right = r;
 }
 
-function VarCall(n, v) {
+function VarCall(n) {
     this.tag = TAG_VAR_CALL;
     this.name = n;
-    this.value = v;
 }
 
 function Arg(n, t) {
@@ -244,6 +245,18 @@ function Assignment(n, v) {
     this.tag = TAG_ASSIGNMENT;
     this.name = n;
     this.value = v;
+}
+
+function FunCall(n, a) {
+    this.tag = TAG_FUN_CALL;
+    this.name = n;
+    this.args = a;
+}
+function Func(n, a, b) {
+    this.tag = TAG_FUNC;
+    this.name = n;
+    this.args = a;
+    this.body = b;
 }
 
 function expr_size (expr) {
@@ -308,7 +321,7 @@ function expr_size (expr) {
         case TAG_TIMES:
             return expr_size(expr.left) + expr_size(expr.right) + 1;
         case TAG_VAR_CALL:
-            return expr_size(expr.name) + expr_size(expr.value) + 1;
+            return expr_size(expr.name) + 1;
         case TAG_ARG:
             return expr_size(expr.name) + expr_size(expr.type) + 1;
         case TAG_IDENTIFIER:
@@ -319,6 +332,10 @@ function expr_size (expr) {
             return expr_size(expr.definitions) + expr_size(expr.quilt) + 1;
         case TAG_ASSIGNMENT:
             return expr_size(expr.name) + expr_size(expr.ex) + 1;
+        case TAG_FUN_CALL:
+            return expr_size(expr.name) + expr_size(expr.args) + 1;
+        case TAG_FUNC:
+            return expr_size(expr.name) + expr_size(expr.args) + expr_size(expr.body) + 1;
         default:
             return "tag not found"
     }
@@ -329,9 +346,9 @@ module.exports = {
     TAG_RECT, TAG_NAT, TAG_ROTATION, TAG_PIXEL, TAG_DEPENDENT_FUNC, TAG_IDENTITY, TAG_TYPE_EQUALITY,
     TAG_LAMBDA, TAG_PIX, TAG_COLORS, TAG_NAT_NUM, TAG_ZERO, TAG_NINETY, TAG_ONE_EIGHTY, TAG_TWO_SEVENTY, TAG_REFL,
     TAG_VALUE, TAG_VARIABLE, TAG_SIDE_BY_SIDE, TAG_SOLID, TAG_HOR, TAG_VERT, TAG_OVER, TAG_REP, TAG_ROT, TAG_PLUS,
-    TAG_TIMES, TAG_BUG, TAG_VAR_CALL, TAG_ARG, TAG_IDENTIFIER, TAG_COLOR, TAG_ASSIGNMENT, TAG_PROGRAM,
+    TAG_TIMES, TAG_BUG, TAG_VAR_CALL, TAG_ARG, TAG_IDENTIFIER, TAG_COLOR, TAG_ASSIGNMENT, TAG_PROGRAM, TAG_FUNC, TAG_FUN_CALL,
     Rect, Nat, Rotation, Pixel, DependentFunc, Identity, TypeEquality,
     Lambda, Pix, Colors, NatNum, Zero, Ninety, OneEighty, TwoSeventy, Refl,
     Value, Variable, SideBySide, Solid, Hor, Vert, Over, Rep, Rot, Plus, Times, VarCall, Arg, Identifier, Color,
-    Program, Assignment
+    Program, Assignment, FunCall, Func
 };
