@@ -194,16 +194,16 @@ function Over(a, d) {
     this.design = d;
 }
 
-function Rep(l, r) {
+function Rep(v, d) {
     this.tag = TAG_REP;
-    this.left = l;
-    this.right = r;
+    this.value = v;
+    this.design = d;
 }
 
-function Rot(l, r) {
+function Rot(a, d) {
     this.tag = TAG_ROT;
-    this.left = l;
-    this.right = r;
+    this.angle = a;
+    this.design = d;
 }
 
 function Plus(l, r) {
@@ -246,10 +246,10 @@ function Program(d, q) {
     this.quilt = q;
 }
 
-function Assignment(n, e) {
+function Assignment(n, v) {
     this.tag = TAG_ASSIGNMENT;
     this.name = n;
-    this.ex = e;
+    this.value = v;
 }
 
 function FunCall(n, a) {
@@ -344,10 +344,10 @@ function expr_size (expr) {
             return expr_size(expr.anchor) + expr_size(expr.design) + 1;
             break;
         case TAG_REP:
-            return expr_size(expr.left) + expr_size(expr.right) + 1;
+            return expr_size(expr.value) + expr_size(expr.design) + 1;
             break;
         case TAG_ROT:
-            return expr_size(expr.left) + expr_size(expr.right) + 1;
+            return expr_size(expr.angle) + expr_size(expr.design) + 1;
             break;
         case TAG_PLUS:
             return expr_size(expr.left) + expr_size(expr.right) + 1;
@@ -370,7 +370,7 @@ function expr_size (expr) {
         case TAG_PROGRAM:
             return expr_size(expr.definitions) + expr_size(expr.quilt) + 1;
         case TAG_ASSIGNMENT:
-            return expr_size(expr.name) + expr_size(expr.ex) + 1;
+            return expr_size(expr.name) + expr_size(expr.value) + 1;
         case TAG_FUN_CALL:
             return expr_size(expr.name) + expr_size(expr.args) + 1;
         case TAG_FUNC:
