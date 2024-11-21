@@ -98,7 +98,9 @@ function evaluatorLogic(env, node) {
             //evaluate each input first
             let evaluatedArgs = []
             for (let arg of node.args) {
+                console.log("arg tag!!", arg.tag)
                 evaluatedArgs.push(evaluatorLogic(env, arg))
+                console.log("what did it giv?!", evaluatedArgs)
             }
 
             //insert into environment (like a variable)

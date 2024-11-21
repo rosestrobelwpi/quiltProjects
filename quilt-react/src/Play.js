@@ -211,9 +211,9 @@ function Play() {
             // }
 
             const parsedInput = parser.parse(textInput);
-            console.log("PARSE ", parsedInput)
+            console.log("PARSED:", parsedInput)
             const design = evaluator(parsedInput);
-            console.log("INTERPRETER ", design)
+            console.log("INTERPRETER:", design)
             renderDesign(design);
         } catch (error) {
             console.error("Error interpreting code:", error);
