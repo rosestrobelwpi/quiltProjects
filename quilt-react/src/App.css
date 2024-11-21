@@ -22,8 +22,7 @@ html, body {
   text-align: center;
   display: flex;                
   gap: 2em;   
-  padding-bottom: 2%;
-                              
+  padding-bottom: 2%;    
 }
 
 .btn-action {
@@ -35,6 +34,7 @@ html, body {
 .button-help code {
   background-color: #BC6C25;
   border-radius: 10px;
+  border: 0.5px solid #542e0e;
   padding: 5px 15px;          
   color: #FEFAE0;      
   font-size: 14px;
@@ -86,6 +86,7 @@ html, body {
   min-height: 50vh !important;
   font-size: 18px;
   max-width: 95%;
+  border: 0.5px solid #542e0e !important;
 }
 
 .CodeMirror-gutter {
@@ -154,6 +155,23 @@ color: #283618 !important;
   background-color: #de6800;
 }
 
+/* .drawingName {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.drawingName input{
+  background-color: #BC6C25;
+  border-radius: 10px;
+  padding: 5px 15px;          
+  color: #FEFAE0;      
+  font-size: 16px;
+  vertical-align: middle;
+  border: none;
+  margin: 5% 1%;
+}
+ */
 
 
 /* Responsive design */

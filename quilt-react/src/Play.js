@@ -290,6 +290,11 @@ function Play() {
                 
 
                 <div className="parser-container">
+                {/* <div className="drawingName">
+                    <form>
+                        <input type="text" name="drawing-name" placeholder="Enter the name of your creation here!"></input>
+                    </form>
+                </div> */}
                 <div className="button-help">
                     <div className="btn-action">
                         <code>Shift + Enter</code> <span>to submit</span>
