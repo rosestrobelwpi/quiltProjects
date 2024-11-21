@@ -41,11 +41,6 @@ function Design(maxWidth, maxHeight, patches) {
 //let testAST = parser.parse("rot 90 vert(rect(3, 2, red), rect(3, 3, blue))")
 //let testAST = parser.parse("rect x = rect(3,2,blue);rect y = rect(3,2,red);vert(x, y);")
 
-// define (rect x, rect y) {
-//     expression
-//     (optional) return
-// }
-
 //console.log(testAST)
 //console.log(evaluatorLogic(environment, testAST))
 //evaluator(environment, testAST)

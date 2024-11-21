@@ -4,8 +4,9 @@ import Play from './Play';
 import Home from './Home';
 import About from './About';
 import Examples from './Examples';
-import GettingStarted from './GettingStarted';
+import GettingStarted from './docs/GettingStarted';
 import ExampleOne from './examples/ExampleOne';
+import Functions from './docs/Functions';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
       <Route path="/examples" element={<Examples />} />
       <Route path="/exampleOne" element={<ExampleOne />} />
       <Route path="/gettingStarted" element={<GettingStarted />} />
+      <Route path="/functions" element={<Functions />} />
     </Routes>
   );
 }
