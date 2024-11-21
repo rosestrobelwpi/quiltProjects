@@ -21,6 +21,7 @@
     font-family: "Roboto", serif;
     z-index: 50;
     border: 0.5px solid #542e0e;
+    box-shadow: 1px 2px 3px #b28a68;;
 }
 
 .navbar-links {
