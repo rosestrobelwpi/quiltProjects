@@ -200,18 +200,20 @@ function Play() {
     // Only called on Submit button click
     const handleSubmit = () => {
         try {
-            const debugErrors = debugInput(textInput);
-            if (debugErrors.length && debugErrors[0] !== "No errors detected.") {
-                const formattedErrors = debugErrors
-                    .map(error => `Line ${error.line}, Column ${error.column}: ${error.message}`)
-                    .join("\n");
-                console.warn("Debugging issues detected:\n", formattedErrors); // Log errors to the console
-                alert(`Debugging issues:\n${formattedErrors}`);
-                return;
-            }
+            // const debugErrors = debugInput(textInput);
+            // if (debugErrors.length && debugErrors[0] !== "No errors detected.") {
+            //     const formattedErrors = debugErrors
+            //         .map(error => `Line ${error.line}, Column ${error.column}: ${error.message}`)
+            //         .join("\n");
+            //     console.warn("Debugging issues detected:\n", formattedErrors); // Log errors to the console
+            //     alert(`Debugging issues:\n${formattedErrors}`);
+            //     return;
+            // }
 
             const parsedInput = parser.parse(textInput);
+            console.log("PARSED:", parsedInput)
             const design = evaluator(parsedInput);
+            console.log("INTERPRETER:", design)
             renderDesign(design);
         } catch (error) {
             console.error("Error interpreting code:", error);

@@ -49,7 +49,7 @@ const TAG_FUNC = "FUNC"
 //     tag = TAG_BUG;
 // }
 
-// Types
+//TYPES
 function Rect(w, h, c) {
     this.tag = TAG_RECT;
     this.width = w;
@@ -69,10 +69,10 @@ function Rotation(v) {
 
 function Pixel(r, g, b, a) {
     this.tag = TAG_PIXEL;
-    this.red = r;
-    this.green = g;
-    this.blue = b;
-    this.alpha = a;
+    this.red = r
+    this.green = g
+    this.blue = b
+    this.alpha = a
 }
 
 function DependentFunc(n, a, b) {
@@ -94,7 +94,8 @@ function TypeEquality(l, r) {
     this.right = r;
 }
 
-// Values
+
+//VALUES
 function Lambda(x, t, e) {
     this.tag = TAG_LAMBDA;
     this.x = x;
@@ -102,20 +103,22 @@ function Lambda(x, t, e) {
     this.e = e;
 }
 
+//diff naming convention for this one
 function Pix(r, g, b, a) {
     this.tag = TAG_PIX;
-    this.red = r;
-    this.green = g;
-    this.blue = b;
-    this.alpha = a;
+    this.red = r
+    this.green = g
+    this.blue = b
+    this.alpha = a
 }
 
+//diff naming convention for this one
 function Colors(r, g, b, a) {
     this.tag = TAG_COLORS;
-    this.red = r;
-    this.green = g;
-    this.blue = b;
-    this.alpha = a;
+    this.red = r
+    this.green = g
+    this.blue = b
+    this.alpha = a
 }
 
 function NatNum(v) {
@@ -148,7 +151,8 @@ function Refl(v) {
     this.value = v;
 }
 
-// Expressions
+
+//EXPRESSIONS
 function Value(v) {
     this.tag = TAG_VALUE;
     this.value = v;
@@ -190,16 +194,16 @@ function Over(a, d) {
     this.design = d;
 }
 
-function Rep(v, d) {
+function Rep(l, r) {
     this.tag = TAG_REP;
-    this.value = v;
-    this.design = d;
+    this.left = l;
+    this.right = r;
 }
 
-function Rot(a, d) {
+function Rot(l, r) {
     this.tag = TAG_ROT;
-    this.angle = a;
-    this.design = d;
+    this.left = l;
+    this.right = r;
 }
 
 function Plus(l, r) {
@@ -207,6 +211,7 @@ function Plus(l, r) {
     this.left = l;
     this.right = r;
 }
+
 
 function Times(l, r) {
     this.tag = TAG_TIMES;
@@ -220,7 +225,7 @@ function VarCall(n) {
 }
 
 function Arg(n, t) {
-    this.tag = TAG_ARG;
+    this.tag = TAG_VAR_CALL;
     this.name = n;
     this.type = t;
 }
@@ -241,10 +246,10 @@ function Program(d, q) {
     this.quilt = q;
 }
 
-function Assignment(n, v) {
+function Assignment(n, e) {
     this.tag = TAG_ASSIGNMENT;
     this.name = n;
-    this.value = v;
+    this.ex = e;
 }
 
 function FunCall(n, a) {
@@ -252,6 +257,7 @@ function FunCall(n, a) {
     this.name = n;
     this.args = a;
 }
+
 function Func(n, a, b) {
     this.tag = TAG_FUNC;
     this.name = n;
@@ -264,70 +270,103 @@ function expr_size (expr) {
         //TYPES
         case TAG_RECT:
             return expr_size(expr.width) + expr_size(expr.height) + expr_size(this.color) + 1;
+            break;
         case TAG_NAT:
             return 1;
-        case TAG_ROTATION:
+            break;
+        case TAG_ROT:
             return 1;
+            break;
         case TAG_PIXEL:
             return expr_size(expr.red) + expr_size(expr.green) + expr_size(expr.blue) + expr_size(expr.alpha) + 1;
+            break;
 
         //declaration?
         case TAG_DEPENDENT_FUNC:
             return expr_size(expr.name) + expr_size(expr.args) + expr_size(expr.body) + 1; 
+            break;
+
         case TAG_IDENTITY:
             return expr_size(expr.left) + expr_size(expr.right) + 1;
+            break;
         case TAG_TYPE_EQUALITY:
             return expr_size(expr.left) + expr_size(expr.right) + 1;
+            break;
         case TAG_LAMBDA:
             return expr_size(expr.x) + expr_size(expr.t) + expr_size(expr.e) + 1;
+            break;
         case TAG_PIX:
             return expr_size(expr.red) + expr_size(expr.green) + expr_size(expr.blue) + expr_size(expr.alpha) + 1;
+            break;
         case TAG_COLORS:
             return expr_size(expr.red) + expr_size(expr.green) + expr_size(expr.blue) + expr_size(expr.alpha) + 1;
+            break;
         case TAG_NAT_NUM:
             return 1;
+            break;
         case TAG_ZERO:
             return 1;
+            break;
         case TAG_NINETY:
             return 1;
+            break;
         case TAG_ONE_EIGHTY:
             return 1;
+            break;
         case TAG_TWO_SEVENTY:
             return 1;
+            break;
         case TAG_REFL:
             return expr_size(expr.value) + 1;
+            break;
         case TAG_VALUE:
             return 1;
+            break;
 
         //declaration??
         case TAG_VARIABLE:
             return expr_size(expr.type) + expr_size(expr.name) + expr_size(expr.value) + 1;
+            break;
+
         case TAG_SIDE_BY_SIDE:
             return expr_size(expr.left) + expr_size(expr.right) + 1;
+            break;
         case TAG_SOLID:
             return expr_size(expr.width) + expr_size(expr.height) + expr_size(expr.color) + 1;
+            break;
         case TAG_HOR:
             return expr_size(expr.design) + 1;
+            break;
         case TAG_VERT:
             return expr_size(expr.design) + 1;
+            break;
         case TAG_OVER:
             return expr_size(expr.anchor) + expr_size(expr.design) + 1;
+            break;
         case TAG_REP:
             return expr_size(expr.left) + expr_size(expr.right) + 1;
+            break;
         case TAG_ROT:
             return expr_size(expr.left) + expr_size(expr.right) + 1;
+            break;
         case TAG_PLUS:
             return expr_size(expr.left) + expr_size(expr.right) + 1;
+            break;
         case TAG_TIMES:
             return expr_size(expr.left) + expr_size(expr.right) + 1;
+            break;
         case TAG_VAR_CALL:
             return expr_size(expr.name) + 1;
+            break;
         case TAG_ARG:
             return expr_size(expr.name) + expr_size(expr.type) + 1;
+            break;
         case TAG_IDENTIFIER:
             return expr_size(expr.name) + 1;
+            break;
         case TAG_COLOR:
             return expr_size(expr.name) + 1;
+            break;
         case TAG_PROGRAM:
             return expr_size(expr.definitions) + expr_size(expr.quilt) + 1;
         case TAG_ASSIGNMENT:
@@ -336,8 +375,6 @@ function expr_size (expr) {
             return expr_size(expr.name) + expr_size(expr.args) + 1;
         case TAG_FUNC:
             return expr_size(expr.name) + expr_size(expr.args) + expr_size(expr.body) + 1;
-        default:
-            return "tag not found"
     }
 }
 
