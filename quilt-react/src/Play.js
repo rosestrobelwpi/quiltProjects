@@ -230,6 +230,29 @@ function Play() {
       }
   };
   
+  function downloadCanvasDrawing() {
+    var canvas = document.getElementById("canvas");
+    var url = canvas.toDataURL("image/png");
+    var fileName = prompt("Enter file name:")
+
+    if (fileName === null) {
+      return;
+    }
+
+    if (fileName) {
+      if (!fileName.endsWith(".png")) {
+        fileName += ".png";
+      }
+      var link = document.createElement('a');
+      link.download = fileName;
+      link.href = url;
+      link.click();
+
+      // const downloadBtn = document.getElementById("downloadBtn");
+      // downloadBtn.removeEventListener("click", downloadCanvasDrawing);
+    }
+      // document.getElementById("downloadBtn").addEventListener("click", downloadCanvasDrawing);
+  }
 
     useEffect(() => {
       const keyPressed = (event) => {
@@ -273,6 +296,9 @@ function Play() {
                     </div>
                     <div className="btn-action">
                         <code>Shift + Backspace</code> <span>to clear</span>
+                    </div>
+                    <div className="btn-action">
+                        <code id="downloadBtn" onClick={downloadCanvasDrawing}>Download</code>
                     </div>
                 </div>
                 <div className="codemirror-container">
