@@ -90,6 +90,7 @@ html, body {
 
 .CodeMirror-gutter {
   background-color: #d3ceb2 !important;
+  
 }
 
 .CodeMirror-cursor {
@@ -97,6 +98,10 @@ html, body {
   opacity: 0.7 !important;
 }
 
+.CodeMirror-scroll {
+  overflow-x: scroll !important;
+  overflow-y: scroll !important;
+}
 
 .cm-s-material.CodeMirror { 
 color: #283618 !important;
@@ -131,6 +136,6 @@ color: #283618 !important;
   background-color: #FEFAE0 !important;
   margin: 0;
   box-sizing: border-box;
-  border-radius: 15px;
+  /* border-radius: 15px; */
   margin-right: 2%;
 }
