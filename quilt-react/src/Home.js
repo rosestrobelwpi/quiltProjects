@@ -73,13 +73,13 @@ function Home() {
         <h1>Quilt Designer</h1>
         <div className="btn-container">
           <button className='button-home'>
-            <Link to="/play">Start</Link>
+            <Link to="/play" className='button-link'>Start</Link>
           </button>
           <button className='button-home'>
-            <a href="/examples">Examples</a>
+              <Link to="/examples" className='button-link'>Tutorial</Link>
           </button>
           <button className='button-home'>
-            <a href="/about">About Us</a>
+              <Link to="/about" className='button-link'>About Us</Link>
           </button>
         </div>
       </div>

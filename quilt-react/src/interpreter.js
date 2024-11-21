@@ -41,13 +41,6 @@ function Design(maxWidth, maxHeight, patches) {
 //let testAST = parser.parse("rot 90 vert(rect(3, 2, red), rect(3, 3, blue))")
 //let testAST = parser.parse("rect x = rect(3,2,blue);rect y = rect(3,2,red);vert(x, y);")
 
-// define (rect x, rect y) {
-//     expression
-//     (optional) return
-// }
-
-//let testAST = parser.parse("define func(int x, int y) {rect(x,y,red);}")
-
 //console.log(testAST)
 //console.log(evaluatorLogic(environment, testAST))
 //evaluator(environment, testAST)
@@ -84,6 +77,8 @@ function evaluatorLogic(env, node) {
             // } else if (lookup instanceof NatNum) {
             //     Object.setPrototypeOf(clone, NatNum.prototype);
             } else {
+                console.log("i am trying to lookup", node.name)
+                console.log("i got a ", clone)
                 console.log("bad environment lookup");
             }
             return clone;
@@ -106,11 +101,13 @@ function evaluatorLogic(env, node) {
             //insert into environment (like a variable)
             let i = 0;
             for (let evaluatedArg of evaluatedArgs) {
-                env[paramNames[i]] = evaluatedArg;
+                env[paramNames[i].name] = evaluatedArg;
                 i++;
             }
 
             //now we can evaluate the function body, now that the environment has the input names connected to the values
+            console.log("this is func body", funcBody)
+            console.log("env before lookin at funcbody maybe", env)
             return evaluatorLogic(env, funcBody)
 
         case TAG_IDENTIFIER:
@@ -368,6 +365,7 @@ function evaluatorLogic(env, node) {
            }
            
            //now we process all of the rest of the patches/designs
+           console.log(firstDesignHor)
            let sumWidthsHor = firstDesignHor.width //since this is placing horizontally, we add all the widths to get the overall Design width
            let cumulativeWidths = firstDesignHor.width //need to keep track of where to place designs after the first two
            for (let i = 1; i < (node.design).length; i++) { //start at index 1 bc already took care of the first one
