@@ -1,28 +1,126 @@
 import React, { useState, useRef, useEffect } from "react";
-import styles from './App.css';
-import { Controlled as CodeMirror } from 'react-codemirror2';
+import { useParams } from "react-router-dom";
+import { Controlled as CodeMirror } from "react-codemirror2";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/material.css";
 import "codemirror/mode/javascript/javascript";
-import { Link } from 'react-router-dom';
-import { Alert } from "bootstrap";
-import { useParams } from 'react-router-dom';
-import parser from './parser';
-import evaluator from './interpreter';
+import parser from "./parser";
+import evaluator from "./interpreter";
+import "./App.css";
 
 // Define a muted color palette
 const colorPalette = {
-    Red: '#b57c7c',        // Muted red
-    Orange: '#d9a078',     // Muted orange
-    Yellow: '#c8b77a',     // Muted yellow
-    Green: '#85a586',      // Muted green
-    Blue: '#6a8caf',       // Muted blue
-    Purple: '#9e86a6',     // Muted purple
-    Black: '#4d4d4d',      // Muted black
-    Pink: '#d8a6b8',       // Muted pink
-    Brown: '#a58c72',      // Muted brown
-    Grey: '#b0b0b0'        // Muted grey
+    Red: '#b57c7c',
+    Orange: '#d9a078',
+    Yellow: '#c8b77a',
+    Green: '#85a586',
+    Blue: '#6a8caf',
+    Purple: '#9e86a6',
+    Black: '#4d4d4d',
+    Pink: '#d8a6b8',
+    Brown: '#a58c72',
+    Grey: '#b0b0b0',
 };
+
+// Debugger Function
+function debugInput(input) {
+    const errors = [];
+    const context = {}; // Stores declared variables
+    const VALID_FUNCTIONS = ["rect", "hor", "vert", "rot", "rep", "over"];
+    const VALID_COLORS = [
+        "red", "blue", "green", "yellow", "orange", "purple",
+        "black", "pink", "brown", "grey"
+    ];
+
+    // Split input into lines, keeping track of original line numbers
+    const lines = input.split("\n");
+    const nonEmptyLines = lines.map((line, index) => ({ line, index }))
+        .filter(({ line }) => line.trim() !== "");
+
+    if (nonEmptyLines.length === 0) {
+        return ["No code provided."];
+    }
+
+    nonEmptyLines.forEach(({ line, index }) => {
+        const trimmedLine = line.trim();
+        const lineNumber = index + 1;
+
+        // Check for missing semicolon
+        if (!trimmedLine.endsWith(";")) {
+            errors.push({
+                message: "Missing semicolon at the end of the line.",
+                line: lineNumber,
+                column: trimmedLine.length,
+            });
+        }
+
+        // Match variable declarations
+        const variableRegex = /^(int|rect)\s+(\w+)\s*=\s*(.*);$/;
+        const variableMatch = trimmedLine.match(variableRegex);
+        if (variableMatch) {
+            const [, type, name, value] = variableMatch;
+
+            if (type === "int") {
+                if (!/^\d+$/.test(value.trim())) {
+                    errors.push({
+                        message: `Invalid int value '${value}'.`,
+                        line: lineNumber,
+                        column: trimmedLine.indexOf(value) + 1,
+                    });
+                } else {
+                    context[name] = parseInt(value.trim(), 10); // Store variable
+                }
+            } 
+            return; // Skip further validation for this line
+        }
+
+        // Match function calls
+        const functionRegex = /^(\w+)\((.*)\);$/;
+        const functionMatch = trimmedLine.match(functionRegex);
+        if (functionMatch) {
+            const [, functionName, args] = functionMatch;
+
+            // Check for capitalization errors in function names
+            if (!VALID_FUNCTIONS.includes(functionName.toLowerCase())) {
+                const isCapitalized = functionName !== functionName.toLowerCase();
+                const message = isCapitalized
+                    ? `Function '${functionName}' must be lowercase.`
+                    : `Unknown or invalid function '${functionName}'.`;
+                errors.push({
+                    message,
+                    line: lineNumber,
+                    column: trimmedLine.indexOf(functionName) + 1,
+                });
+                return;
+            }
+
+            // Parse and validate arguments
+            const argsList = args.split(",").map(arg => arg.trim());
+            argsList.forEach((arg, argIndex) => {
+                const argStartIndex = trimmedLine.indexOf(arg);
+
+                // Substitute variable values
+                const substitutedArg = context[arg] !== undefined ? context[arg] : arg;
+
+                if (functionName === "rect" && argIndex === 2) {
+                    if (!VALID_COLORS.includes(substitutedArg.toLowerCase())) {
+                        const isCapitalized = substitutedArg !== substitutedArg.toLowerCase();
+                        const message = isCapitalized
+                            ? `Color '${substitutedArg}' must be lowercase.`
+                            : `Invalid color '${substitutedArg}' in 'rect'.`;
+                        errors.push({
+                            message,
+                            line: lineNumber,
+                            column: argStartIndex + 1,
+                        });
+                    }
+                }
+            });
+        }
+    });
+
+    return errors.length > 0 ? errors : ["No errors detected."];
+}
 
 // Function to draw a single rectangle
 function drawRectangle(ctx, x, y, width, height, color) {
@@ -31,174 +129,69 @@ function drawRectangle(ctx, x, y, width, height, color) {
     ctx.fillRect(x, y, width, height);
 }
 
-
-// Debugging function
-function debugInput(input) {
-  const errors = [];
-  const VALID_FUNCTIONS = ["rect", "hor", "vert", "rot", "rep", "over"];
-  const VALID_COLORS = [
-      "red", "blue", "green", "yellow", "orange", "purple",
-      "black", "pink", "brown", "grey"
-  ];
-  const VALID_ANGLES = [0, 90, 180, 270];
-
-  // Preprocess input to remove empty lines
-  const lines = input.split('\n').filter(line => line.trim() !== "");
-
-  if (lines.length === 0) {
-      return ["No code provided."];
-  }
-
-  lines.forEach((line, index) => {
-      const spaceIndex = line.indexOf(' ');
-      if (spaceIndex !== -1) {
-          errors.push({
-              message: "Unexpected space detected. Please remove all spaces.",
-              line: index + 1,
-              column: spaceIndex + 1,
-          });
-      }
-
-      // Helper function to validate a function call
-      function validateFunctionCall(funcString, startIndex) {
-          const match = funcString.match(/^(\w+)\((.*)\)$/); // Match functionName(args)
-          if (!match) {
-              return {
-                  message: `Invalid function call: '${funcString.trim()}'.`,
-                  line: index + 1,
-                  column: startIndex + 1,
-              };
-          }
-
-          const [_, functionName, args] = match;
-
-          // Check for capitalization errors in function names
-          if (VALID_FUNCTIONS.includes(functionName.toLowerCase())) {
-              if (functionName !== functionName.toLowerCase()) {
-                  return {
-                      message: `Function '${functionName}' must be lowercase.`,
-                      line: index + 1,
-                      column: startIndex + 1,
-                  };
-              }
-          } else {
-              return {
-                  message: `Unknown function '${functionName}'.`,
-                  line: index + 1,
-                  column: startIndex + 1,
-              };
-          }
-
-          // Parse arguments, respecting nested functions
-          const argsList = [];
-          let currentArg = '';
-          let openParens = 0;
-
-          for (let i = 0; i < args.length; i++) {
-              const char = args[i];
-              if (char === '(') openParens++;
-              if (char === ')') openParens--;
-
-              if (char === ',' && openParens === 0) {
-                  argsList.push(currentArg.trim());
-                  currentArg = '';
-              } else {
-                  currentArg += char;
-              }
-          }
-          if (currentArg) argsList.push(currentArg.trim());
-
-          // Validate each argument
-          for (let argIndex = 0; argIndex < argsList.length; argIndex++) {
-              const arg = argsList[argIndex];
-              const argStartIndex = funcString.indexOf(arg, startIndex);
-
-              if (functionName === "rot" && argIndex === 0) {
-                  // Check for valid rotation angles
-                  const angle = parseInt(arg, 10);
-                  if (!VALID_ANGLES.includes(angle)) {
-                      return {
-                          message: `Invalid rotation angle '${arg}'. Allowed angles are 0, 90, 180, and 270.`,
-                          line: index + 1,
-                          column: argStartIndex + 1,
-                      };
-                  }
-              } else if (VALID_COLORS.includes(arg.toLowerCase())) {
-                  if (arg !== arg.toLowerCase()) {
-                      return {
-                          message: `Invalid capitalization '${arg}'. All colors must be lowercase.`,
-                          line: index + 1,
-                          column: argStartIndex + 1,
-                      };
-                  }
-              } else if (/^\d+$/.test(arg)) {
-                  continue; // Valid number
-              } else if (arg.match(/^\w+\(.*\)$/)) {
-                  const nestedError = validateFunctionCall(arg, argStartIndex);
-                  if (nestedError) {
-                      return nestedError;
-                  }
-              } else {
-                  return {
-                      message: `Invalid argument '${arg}' in '${funcString}'.`,
-                      line: index + 1,
-                      column: argStartIndex + 1,
-                  };
-              }
-          }
-
-          return null;
-      }
-
-      const mainError = validateFunctionCall(line, 0);
-      if (mainError) {
-          errors.push(mainError);
-      }
-  });
-
-  return errors.length > 0 ? errors : ["No errors detected."];
-}
-
 function Play() {
     const { code } = useParams(); // Get the code from the URL
-
     const [textInput, setTextInput] = useState(""); // Store input for handling submission
     const canvasRef = useRef(null);
 
+    // Preload code from URL on component mount
     useEffect(() => {
-      if (code) {
-          const decodedCode = decodeURIComponent(code);
-          setTextInput(decodedCode);
-      }
+        if (code) {
+            const decodedCode = decodeURIComponent(code);
+            setTextInput(decodedCode); // Preload the code into the editor
+
+            const loadDesign = evaluator(parser.parse(decodedCode));
+            renderDesign(loadDesign);
+        }
+        
     }, [code]);
 
     // Render design on the canvas based on input text
     const renderDesign = (design) => {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext("2d");
+
+        // Clear the canvas
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+        if (!design) {
+            console.error("No design provided for rendering");
+            return;
+        }
+
+        // Calculate scaling factors
+        const maxWidth = design.patches
+            ? Math.max(...design.patches.map(p => p.x + p.width))
+            : design.x + design.width;
+        const maxHeight = design.patches
+            ? Math.max(...design.patches.map(p => p.y + p.height))
+            : design.y + design.height;
+
+        const scaleX = canvas.width / maxWidth;
+        const scaleY = canvas.height / maxHeight;
+        const scale = Math.min(scaleX, scaleY); // Uniform scaling
+
         if (design.patches && Array.isArray(design.patches)) {
-          design.patches.forEach(patch => {
-              drawRectangle(
-                  ctx,
-                  patch.x * 50,
-                  patch.y * 50,
-                  patch.width * 50,
-                  patch.height * 50,
-                  patch.color
-              );
-          });
-      } else if (design.x !== undefined && design.y !== undefined) {
-          drawRectangle(
-              ctx,
-              design.x * 50,
-              design.y * 50,
-              design.width * 50,
-              design.height * 50,
-              design.color
-          );
-      }
+            design.patches.forEach(patch => {
+                drawRectangle(
+                    ctx,
+                    patch.x * scale,
+                    patch.y * scale,
+                    patch.width * scale,
+                    patch.height * scale,
+                    patch.color
+                );
+            });
+        } else if (design.x !== undefined && design.y !== undefined) {
+            drawRectangle(
+                ctx,
+                design.x * scale,
+                design.y * scale,
+                design.width * scale,
+                design.height * scale,
+                design.color
+            );
+        }
     };
 
 
@@ -212,23 +205,32 @@ function Play() {
     // Only called on Submit button click
     const handleSubmit = () => {
       try {
-          // const debugErrors = debugInput(textInput);
-          // if (debugErrors.length && debugErrors[0] !== "No errors detected.") {
-          //     const formattedErrors = debugErrors
-          //         .map(error => `Line ${error.line}, Column ${error.column}: ${error.message}`)
-          //         .join("\n");
-          //     alert(`Debugging issues:\n${formattedErrors}`);
-          //     return;
-          // }
+          const debugErrors = debugInput(textInput);
   
-          const parsedInput = parser.parse(textInput);
+          if (debugErrors.length && debugErrors[0] !== "No errors detected.") {
+              const formattedErrors = debugErrors
+                  .map(error => `Line ${error.line}, Column ${error.column}: ${error.message}`)
+                  .join("\n");
+  
+              console.warn("Debugging issues detected:\n", formattedErrors); // Log errors to the console
+              alert(`Debugging issues:\n${formattedErrors}`);
+              return;
+          }
+  
+          const parsedInput = parser.parse(textInput); // This is where the detailed error occurs
           const design = evaluator(parsedInput);
           renderDesign(design);
+  
       } catch (error) {
           console.error("Error interpreting code:", error);
-          //alert(`[line ${error.location.start.line}, column ${error.location.start.column}] ${error.message}`)
+  
+          // Extract the detailed error message from the caught error
+          const errorMessage = error.message || "An unknown error occurred.";
+          alert(`Error interpreting your code:\n${errorMessage}`);
       }
-    };
+  };
+  
+
     useEffect(() => {
       const keyPressed = (event) => {
           if (event.shiftKey && event.key === "Enter") {
@@ -246,54 +248,53 @@ function Play() {
   }, [textInput]);
 
 
+    return (
+        <div className="play-container">
+            <div className="navbar">
+                <ul>
+                    <li><a href="/" id="logo">Quilt Designer</a></li>
+                </ul>
+                <div className="navbar-links">
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/play">Play</a></li>
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/examples">Tutorial</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div className="container2">
+                
 
-  return (
+                <div className="parser-container">
+                <div className="button-help">
+                    <div className="btn-action">
+                        <code>Shift + Enter</code> <span>to submit</span>
+                    </div>
+                    <div className="btn-action">
+                        <code>Shift + Backspace</code> <span>to clear</span>
+                    </div>
+                </div>
+                <div className="codemirror-container">
+                    <CodeMirror
+                        value={textInput}
+                        options={{
+                            mode: "javascript",
+                            theme: "material",
+                            lineNumbers: true,
+                            lineWrapping: false,
+                        }}
+                        onBeforeChange={(editor, data, value) => setTextInput(value)}
+                    />
+                </div>
+                </div>
+                <div className="drawing-container">
+                    <canvas id="canvas" ref={canvasRef} width={400} height={400}></canvas>
+                </div>
+            </div>
+        </div>
 
-    <div className="play-container">
-   <div className="navbar">
-        <ul>
-          <li><a href="/" id="logo">Quilt Designer</a></li>
-        </ul>
-        <div className="navbar-links">
-          <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/play">Play</a></li>
-            <li><a href="/about">About Us</a></li>
-            <li><a href="/examples">Docs</a></li>
-          </ul>
-        </div>
-      </div>
-      
-      <div className="container2">
-
-      <div className="button-help">
-        <div className="btn-action">
-          <code>Shift + Enter</code> <span>to submit</span>
-        </div>
-        <div className="btn-action">
-          <code>Shift + Backspace</code> <span>to clear</span>
-        </div>
-      </div>  
-
-
-        <div className="parser-container">
-          <CodeMirror
-            value={textInput}
-            options={{
-              mode: 'javascript',
-              theme: 'material',
-              lineNumbers: true,
-              lineWrapping: true
-            }}
-            onBeforeChange={(editor, data, value) => setTextInput(value)}
-        />
-         
-          </div>
-          <div className="drawing-container">
-            <canvas id="canvas" ref={canvasRef} width={400} height={400}></canvas>
-          </div>
-        </div>
-        </div>
+    
         
     );
     

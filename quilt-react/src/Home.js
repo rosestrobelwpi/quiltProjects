@@ -76,7 +76,7 @@ function Home() {
             <Link to="/play">Start</Link>
           </button>
           <button className='button-home'>
-            <a href="/examples">Examples</a>
+            <a href="/examples">Tutorial</a>
           </button>
           <button className='button-home'>
             <a href="/about">About Us</a>

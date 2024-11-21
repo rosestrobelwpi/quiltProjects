@@ -6,40 +6,36 @@
     padding: 0;
     box-sizing: border-box;
     font-family: "Libre Franklin", sans-serif;
-  }
-  
-  
+}
 
-  .navbar {
+.navbar {
     background-color: #BC6C25;
-    padding: 10px;
-    margin-bottom: 5em;
     display: flex;
     align-items: center;
     justify-content: space-between; 
     position: fixed;
     top: 0;
     left: 0;
-    height: 6%;
+    height: 7%;
     width: 100%;
     font-family: "Roboto", serif;
     z-index: 50;
 }
-  
-  .navbar-links {
+
+.navbar-links {
     display: flex;
     justify-content: flex-end;
     height: 100%;
-  }
+}
 
-  .navbar ul {
+.navbar ul {
     display: flex;
     gap: 5em;
     list-style: none;
     margin-right: 2em;
-  }
-  
-  .navbar a {
+}
+
+.navbar a {
     text-decoration: none;
     color: #FEFAE0;
     font-size: 18px;
@@ -48,49 +44,49 @@
     align-items: center;
     padding: 0px 20px;
     transition: background-color 0.3s, color 0.3s;
-  }
+}
 
-  .navbar a:hover {
+.navbar a:hover {
     background-color: #FEFAE0;
     color: #101014;
-  }
+}
 
-  #logo {
+#logo {
     margin-left: 2em;
     font-weight: 700;
     font-size: 25px;
     padding: 0;
-  }
+}
 
-  #logo:hover {
+#logo:hover {
     background-color: #BC6C25;
     color: #FEFAE0;
-  }
+}
 
-  h1 {
+h1 {
     text-align: center;
     font-size: 55px;
     margin-top: 70px;
-  }
+}
 
 .examples-container {
     margin: 0;
     height: 100%;
     background-color: #FEFAE0;
     color: #DDA15E;
+    margin-bottom: 3%;
 }
 
 .picture-container {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
-    margin-top: 10em;
-    height: 100vh;
-    overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Dynamically adjusts columns */
+  gap: 10px; /* Reduces space between items */
+  padding: 20px;
+  margin: 0 auto;
 }
 
 .picture-container img {
-    width: 90%;
+    width: 100%;
     height: auto;
     object-fit: contain;
     display: block;
@@ -104,21 +100,22 @@
     cursor: pointer;
 }
 
+
 .document-links {
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
-  gap: 20px;
-  margin: 10em 0em 8em 0em;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 20px;
+    margin: 10em 0em 8em 0em;
 }
 
 .document-links ul {
-  display: flex;
-  gap: 20px;
-  padding: 0;
-  margin: 0;
+    display: flex;
+    gap: 20px;
+    padding: 0;
+    margin: 0;
 }
 
 /* .document-links ul li:hover {
@@ -153,4 +150,17 @@
 .icon {
   font-size: 30px;
   color: #BC6C25;
+}
+
+.example-canvas {
+  border-radius: 15px;
+  /* box-shadow: 2px 3px 5px #b9b6a0; */
+}
+
+.picture-container canvas {
+  transition: 0.3s;
+}
+
+.picture-container canvas:hover {
+  transform: scale(1.01);
 }

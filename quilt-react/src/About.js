@@ -13,7 +13,7 @@ function About() {
             <li><a href="/">Home</a></li>
             <li><a href="/play">Play</a></li>
             <li><a href="/about">About Us</a></li>
-            <li><a href="/examples">Docs</a></li>
+            <li><a href="/examples">Tutorial</a></li>
           </ul>
         </div>
       </div>

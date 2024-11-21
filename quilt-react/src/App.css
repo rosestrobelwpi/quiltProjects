@@ -9,21 +9,21 @@ html, body {
 .play-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding-top: 100px; 
-  height: 100%;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px;
+  min-height: 100vh;
   background-color:#FEFAE0;
 }
 
 /* Testing to see if git works now :'( */
 
 .button-help {
-  z-index: 2;
+  text-align: center;
   display: flex;                
-  gap: 2em;                     
-  margin-left: 1%;
-  margin-bottom: 19em;           
+  gap: 2em;   
+  padding-bottom: 2%;
+                              
 }
 
 .btn-action {
@@ -50,38 +50,57 @@ html, body {
 
 .container2 {
   display: flex;
-  flex-direction: column;
-  gap: 2%;
-  margin: auto;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
   width: 100%;  
-  align-items: flex-start;  
+  margin: 0 auto; 
 }
 
 .react-codemirror2 > .CodeMirror:first-child { display: none; }
 
 
 .parser-container {
+  flex: 1;
   display: flex;
-  /* justify-content: space-between; */
-  /* width: 100vw; */
-  align-items: flex-start;
-  /* margin: 20px; */
-  max-height: 70vh !important;
-  width: 100%;
-  margin-left: 1%;
-  margin-top: 2%;
+  flex-direction: column;
+  align-items: center;
+  width: 50%;
+  max-width: 50%;
+  background-color: #FEFAE0 !important;
+  margin-left: 1%  !important;
+}
+
+.codemirror-container {
+  display: flex;
+  flex: 1;
+  width: 45%;
 }
 
 .CodeMirror {
   background-color: #e3dec3 !important;
+  border-radius: 15px !important;
   border: none !important;
   color: #ffd000 !important;
-  min-height: 70vh !important;
+  min-height: 50vh !important;
+  font-size: 18px;
+  max-width: 95%;
 }
 
 .CodeMirror-gutter {
   background-color: #d3ceb2 !important;
   
+}
+
+.CodeMirror-cursor {
+  border: 1px solid black !important;
+  opacity: 0.7 !important;
+}
+
+.CodeMirror-scroll {
+  overflow-x: scroll !important;
+  overflow-y: scroll !important;
 }
 
 .cm-s-material.CodeMirror { 
@@ -92,36 +111,31 @@ color: #283618 !important;
   color: #de6800 !important;
 }
 
-.CodeMirror-cursor {
-  border: 1px solid black !important;
-  opacity: 0.7 !important;
-}
-
 .cm-operator {
   color: #283618 !important;
 }
 
 .drawing-container {
-  flex-grow: 1;
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 50vw;
-  height: 100vh !important;
-  margin-top: 2%;
+  max-width: 50%;
+  max-height: 90%;
   background-color: #FEFAE0 !important;
+  margin: 0 auto;
+  margin-top: 0.5%;
 }
 
 .drawing-container canvas {
-  width: 100%;
-  height: 100%;
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 90% !important;
   background-color: #FEFAE0 !important;
-}
-
-#canvas {
-  height: 100vh;
-  margin-left: 5%;
-  margin-right: 5%;
-
-  
+  margin: 0;
+  box-sizing: border-box;
+  /* border-radius: 15px; */
+  margin-right: 2%;
 }
