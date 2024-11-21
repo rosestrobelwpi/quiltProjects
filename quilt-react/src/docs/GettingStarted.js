@@ -115,15 +115,76 @@ const Document = () => {
 
         <h1>Variables</h1>
         <p>
-          You can use variables to reduce how often you need to retype code. Types can be ints or rect, as long as it returns a rectangle.
+          You can use variables to reduce how often you need to retype code. It may even simplify the entire coding process by making <strong>wrapping</strong> easier to visualize.
+          <br /><br />
+          <h3>Types</h3><br />
+          <strong>int</strong><br />
+          An <span className='keyword'>int</span> is short for an integer, which can be useful if you are building a patch that requires a lot of the same number.
           <pre>
           <code>
-          <span className="keyword"></span><span className="variable">int</span> x = 3<br />
-          <span className="keyword">rect</span> y = <span className="variable">rect</span>(1, 2, green), <span className="variable">rect</span>(2, 2, green))
+            <span className='keyword'>int</span> x = 3;
           </code>
-        </pre>
+          </pre>
+          <i>Note</i>: ints can only be set to <strong>unsigned integers</strong>, which means you cannot use a negative number or a number with a decimal. Numbers from 0 and up are valid to use.<br /><br />
+          <strong>rect</strong><br />
+          A <span className='keyword'>rect</span> is short for rectangle. It is used to return patches.
+          <pre>
+          <code>
+          <span className='keyword'>rect</span> redRect = <span className='keyword'>rect</span>(1, 1, red);
+          </code>
+          </pre>
+          The syntax begins with the type: <span className='keyword'>rect</span>, the name of the variable, and then the patch.<br /><br />
+
+          <h3>Examples</h3><br />
+          <i><u>Smiley Face Design:</u></i>
+          {/* <pre>
+            <code>
+              <span className='keyword'>rect</span> yellowRect = <span className='keyword'>rect</span>(1, 1, yellow);<br />
+              <span className='keyword'>rect</span> blackRect = <span className='keyword'>rect</span>(1, 1, black);<br /><br />
+
+              <span className='keyword'>rect</span> rowOne = hor(rep(8, yellowRect));<br />
+              <span className='keyword'>rect</span> rowTwo = rowOne;<br />
+              <span className='keyword'>rect</span> rowThree = rowOne;<br />
+              <span className='keyword'>rect</span> rowFour = hor(yellowRect, yellowRect, blackRect, yellowRect, yellowRect, blackRect, yellowRect, yellowRect);<br />
+              <span className='keyword'>rect</span> rowFive = rowOne;<br />
+              <span className='keyword'>rect</span> rowSix = rowOne;<br />
+              <span className='keyword'>rect</span> rowSeven = hor(yellowRect, blackRect, yellowRect, yellowRect, yellowRect, yellowRect, blackRect, yellowRect);<br />
+              <span className='keyword'>rect</span> rowEight = hor(yellowRect, yellowRect, blackRect, blackRect, blackRect, blackRect, yellowRect, yellowRect);<br />
+              <span className='keyword'>rect</span> rowNine = rowOne;<br /><br />
+
+              <span className='keyword'>vert</span>(rowOne, rowTwo, rowThree, rowFour, rowFive, rowSix, rowSeven, rowEight, rowNine);
+            </code>
+          </pre>
+          This is much easier to read and understand compared to doing everything on one line! But it's extremely long. Let's see if we can condense it into something more readable. */}
+
+          <pre>
+            <code>
+              <span className='keyword'>rect</span> yellowRect = <span className='keyword'>rect</span>(1, 1, yellow);<br />
+              <span className='keyword'>rect</span> blackRect = <span className='keyword'>rect</span>(1, 1, black);<br /><br />
+
+              <span className='keyword'>rect</span> yellowBackground = <span className='keyword'>hor</span>(<span className='keyword'>rep</span>(8, yellowRect));<br />
+              <span className='keyword'>rect</span> eyes = <span className='keyword'>hor</span>(yellowRect, yellowRect, blackRect, yellowRect, yellowRect, blackRect, yellowRect, yellowRect);<br />
+              <span className='keyword'>rect</span> topLip = <span className='keyword'>hor</span>(yellowRect, blackRect, yellowRect, yellowRect, yellowRect, yellowRect, blackRect, yellowRect);<br />
+              <span className='keyword'>rect</span> bottomLip = <span className='keyword'>hor</span>(yellowRect, yellowRect, blackRect, blackRect, blackRect, blackRect, yellowRect, yellowRect);<br /><br />
+
+              <span className='keyword'>vert</span>(yellowBackground, yellowBackground, yellowBackground, eyes, yellowBackground, yellowBackground, topLip, bottomLip, yellowBackground);
+            </code>
+          </pre>
+          {/* Perfect! We made use of the <span className='keyword'>rep</span> variable to condense the yellow horizontal row into one line of code!<br /><br /> */}
+          <i><u>Checkboard Design:</u></i>
+          <pre>
+            <code>
+            <span className='keyword'>rect</span> grey = <span className='keyword'>rect</span>(1, 1, grey);<br />
+            <span className='keyword'>rect</span> black = <span className='keyword'>rect</span>(1, 1, black);<br />
+
+            <span className='keyword'>rect</span> top = <span className='keyword'>hor</span>(grey, black);<br />
+            <span className='keyword'>rect</span> bottom = <span className='keyword'>hor</span>(black, grey);<br />
+            <span className='keyword'>rect</span> repeat = <span className='keyword'>rep</span>(8, (vert(top, bottom)));<br /><br />
+
+            <span className='keyword'>vert</span>(repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat);
+            </code>
+          </pre>
         </p>
-        
       </div>
     </div>
   );
