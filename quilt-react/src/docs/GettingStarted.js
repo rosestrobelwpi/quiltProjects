@@ -24,7 +24,8 @@ const Document = () => {
           Quilt Designer is a student project designed to help programmers express themselves creatively. To create your first shape, we have to go over a few main definitions and variables: <br /> <br />
         </p>
         <p>
-          <h3>rect(width, height, color)</h3>
+          <h3>rect(width, height, color);</h3>
+          <br />
           <span className='keyword'>Rect</span> creates a simple rectangle. We define the dimensions of this rectangle with its parameters, width, height, and color. In this document, I will reference <strong>patches</strong>, which is another word for a rectangle design.<br />
           <pre>
             <code>
@@ -37,7 +38,8 @@ const Document = () => {
         </p>
 
         <p>
-        <h3>hor(Patch, Patch, ...)</h3>
+        <h3>hor(Patch, Patch, ...);</h3>
+        <br />
           <span className='keyword'>Hor</span> places your designs horizontally. The heights of rectangles in the same row must be the same. You can also nest directional patterns inside of each other. <br />
           <pre>
             <code>
@@ -51,7 +53,8 @@ const Document = () => {
         In the third example, we are first creating a vertical row with 3 rectangles in a row. Next, we make another vertical row with three more rectangles. Finally, we wrap it all in a <span className='keyword'>hor</span> container to place the vertical rows side by side!<br /><br />
         </p>
         <p>
-        <h3>vert(Patch, Patch, ...)</h3>
+        <h3>vert(Patch, Patch, ...);</h3>
+        <br />
           <span className='keyword'>Vert</span> is similar to <span className='keyword'>hor</span>, but rather than placing your designs horizontally, it places them vertically. The widths of rectangles in the same row must be the same. Similarly, you can nest directional patterns with vert.<br />
           <pre>
             <code>
@@ -65,34 +68,50 @@ const Document = () => {
         In the third example, we are placing 2 rectangles in a horizontal row. Then we place 2 more rectangles in a horizontal row. Finally, we wrap all of the horizontal rows <i>nice and tight</i> with a <span className='keyword'>vert</span> definition. <br /><br />
         </p>
         <p>
-        <h3>rep(Number, Patch)</h3>
-          Rep allows you to repeat a design. It takes in a number of how many times you want to repeat, and the patch.
+        <h3 id='repeatTutorialID'>rep(Number, Patch);</h3>
+        <br />
+          <span className='keyword'>Rep</span> allows you to repeat a design. It takes in a number of how many times you want to repeat, and the patch.
           <pre>
           <code>
-          <span className="keyword">rep</span> (3, <span className="variable">rect</span>(1, 1, green), <span className="variable">rect</span>(1, 1, red))<br /><br />
-          <span className="keyword">hor</span> (<span className="keyword">vert</span> (<span className="variable">rect</span>(1, 2, green), <span className="variable">rect</span>(2, 2, green))<br /><br />
-          <span className="keyword">hor</span>(<span className="keyword">rep</span>(3,<span className="variable">rect</span>(1,1,red)),<span className="keyword">rep</span>(3,<span className="variable">rect</span>(1,1,blue)));
+          <span className="keyword">rep</span>(3, <span className="variable">rect</span>(1, 2, green));<br /><br />
+          <span className="keyword">rep</span>(4, <span className="keyword">hor</span>(<span className="variable">rect</span>(1, 2, red), <span className="variable">rect</span>(1, 2, blue)));<br /><br />
+          <span className='keyword'>rep</span>(2, <span className="keyword">vert</span>(<span className="keyword">hor</span>(<span className="variable">rect</span>(1, 1, purple), <span className="variable">rect</span>(1, 1, pink)), <span className="variable">rect</span>(2, 2, orange)));<br />
           </code>
         </pre>
+        In the first example, we are creating a simple green rectangle. We are then repeating the rectangle 3 times.<br /><br />
+        In the second example, we are creating a <span className='keyword'>hor</span> design containing 1 red rectangle and 1 blue rectangle. But we want this to repeat 4 times! It's time to <i>wrap</i>! We now wrap our rectangles in a <span className='keyword'>rep</span> definition, specifying that we want to repeat this design 4 times.<br /><br />
+        In the third example, we are really <strong>ramping</strong> things up! This design will look more like an oddly colored cake. First, we make a horizontal row with 1 purple rectangle and 1 pink rectangle. Now it's time for the next two rows! We are wrapping our <span className='keyword'>hor</span> design in a <span className='keyword'>vert</span> design. For the vertical row, we create 1 orange rectangle. Now we want this to repeat. Yup, <strong>you guessed it!</strong> We're wrapping it all in a <span className='keyword'>rep</span> definition, specifying that we want this pattern to repeat twice.<br /><br />
         </p>
         <p>
-          <h3>rot(Angle, Patch)</h3>
-          Rot rotates your design. It takes in an angle number (0, 90, 190, 270), as well a patch.
+          <h3 id='overlayTutorialID'>over(Position, Patch, Patch...);</h3>
+          <br />
+          <span className='keyword'>Over</span> allows you to overlay rectangles over each other. The first parameter is a position. All of the possible positions are <i>top left</i> <strong>(TL)</strong>, <i>top right</i> <strong>(TR)</strong>, <i>bottom left</i> <strong>(BL)</strong>, <i>bottom right</i> <strong>(BR)</strong>, and <i>center</i> <strong>(C)</strong>.
+          <br /><br /><i>Note:</i> Rectangles wrapped in the <span className='keyword'>over</span> definition can be different widths and heights, but the width and height of the first rectangle must be <strong><i>greater than or equal</i></strong> to the width and height of the rectangle after it, and so on.!
           <pre>
           <code>
-          <span className="keyword">rot</span> (180, <span className="variable">rect</span>(3, 3, red))<br />
+          <span className='keyword'>over</span>(TL, <span className='variable'>rect</span>(3, 4, red), <span className='variable'>rect</span>(2, 3, blue), <span className='variable'>rect</span>(1, 2, yellow));<br /><br />
+          <span className='keyword'>over</span>(C, <span className='variable'>rect</span>(20, 15, red), <span className='variable'>rect</span>(3, 10, grey), <span className='variable'>rect</span>(10, 3, grey));
           </code>
         </pre>
+        In the first example, we create rectangles of varying sizes. Notice how the first rectangle is both wider and taller than the next rectangle, and so on. This is because the first rectangle is your <strong>base</strong>. It is at the bottom in the overlay order. We then wrap these rectangles in the overlay definition, and specify that we want the corresponding rectangles to be in the top left corner.<br /><br />
+        In the second example, we're going to make the Switzerland flag! We start with the background color, which is red. Next, we make two grey rectangles. One tall and thin one, and one wide and short one. Time to <i>overlay</i>! We are going to position the grey rectangles in the center of the red rectangle, and <i>voila!</i> You've made the Switzerland flag.<br /><br />
         </p>
         <p>
-          <h3>over(Position, Patch)</h3>
-          Over allows you to overlay shapes over another. The first parameter is a position. All of the possible positions are top left (TL), top right (TR), bottom left (BL), bottom right (BR), and center. The first rectangle you code is the rectangle on the bottom.
+          <h3>rot(Angle, Patch);</h3>
+          <br />
+          Rot rotates your design. It takes an angle number <strong>(0, 90, 180, 270)</strong>, as well as a patch.
           <pre>
           <code>
-          <span className="keyword">over</span> (TL, <span className="variable">rect</span>(1, 1, green), <span className="variable">rect</span>(1, 1, yellow))<br />
+          <span className='keyword'>rot</span>(270, <span className='keyword'>over</span>(TL, <span className='variable'>rect</span>(3, 4, red), <span className='variable'>rect</span>(2, 3, blue), <span className='variable'>rect</span>(1, 2, yellow)));<br /><br />
+          <span className='keyword'>rot</span>(180, <span className='keyword'>rep</span>(2, <span className='keyword'>vert</span>(<span className='keyword'>hor</span>(<span className='variable'>rect</span>(1, 1, purple),  <span className='variable'>rect</span>(1, 1, pink)),  <span className='variable'>rect</span>(2, 2, orange))));
           </code>
         </pre>
+        Let's keep it simple and reuse older designs!
+        <br /><br />
+        In the first example, we are using the first design from the <a href='#overlayTutorialID'>over</a> section. The code is <i>exactly</i> the same. The only difference is that we <strong>wrapped</strong> it with the <span className='keyword'>rot</span> definition! We then specified that we wanted the design to rotate <strong>270 degrees</strong> clockwise.<br /><br />
+        In the second example, we are doing the exact same thing. The design we are using is from the <a href='#repeatTutorialID'>rep</a> section. Once again, we have a carbon copy of the code, except we rotated it <strong>180 degrees</strong> clockwise! Talk about nice and easy!
         </p>
+        
 
         <h1>Variables</h1>
         <p>
