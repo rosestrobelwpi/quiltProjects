@@ -33,7 +33,7 @@ html, body {
 }
 
 .button-help code {
-  background-color: #DDA15E;
+  background-color: #BC6C25;
   border-radius: 10px;
   padding: 5px 15px;          
   color: #FEFAE0;      
@@ -141,7 +141,7 @@ color: #283618 !important;
 }
 
 #downloadBtn {
-  background-color: #de6800;
+  background-color: #DDA15E;
   border-radius: 15px;
   cursor: pointer;
   padding: 5px 10px;
@@ -151,5 +151,54 @@ color: #283618 !important;
 }
 
 #downloadBtn:hover {
-  opacity: 0.8;
+  background-color: #de6800;
 }
+
+
+
+/* Responsive design */
+
+
+  @media (max-width: 768px) {
+
+.button-help {             
+  gap: 5%;   
+  padding-bottom: 2%;                  
+}
+
+.btn-action {
+  display: flex;                
+  align-items: center;          
+  gap: 0.5em;              
+}
+
+.button-help code {
+  background-color: #BC6C25;
+  border-radius: 10px;
+  padding: 5px 5px;          
+  color: #FEFAE0;      
+  font-size: 10px;
+  vertical-align: middle;       /* Ensures code element aligns in middle */
+}
+
+.btn-action span {
+  font-size: 10px;
+  color: #283618;       
+  margin: 0;   
+}
+#downloadBtn {
+  background-color: #de6800;
+}
+.CodeMirror {
+  font-size: 14px;
+  min-height: 70vh !important;
+}
+.parser-container {
+  width: 45%;
+}
+  }
+
+  /* Tablets */
+  @media (max-width: 1024px) {
+
+  }

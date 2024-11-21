@@ -148,6 +148,7 @@ function Examples() {
         </ul>
       </div>
       <h1>Examples</h1>
+      <div className="responsive-container">
       <div className="picture-container">
         {exampleDesigns.map((example, index) => (
           <Link
@@ -163,6 +164,7 @@ function Examples() {
             />
           </Link>
         ))}
+      </div>
       </div>
     </div>
   );

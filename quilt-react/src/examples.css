@@ -134,7 +134,7 @@ h1 {
   background-color: #FEFAE0;
   width: 20vw;
   height: 15vh;
-  border-radius: 10px;
+  border-radius: 15px;
   border: 2px solid #BC6C25;
 }
 
@@ -164,3 +164,92 @@ h1 {
 .picture-container canvas:hover {
   transform: scale(1.01);
 }
+
+
+
+
+
+
+/* Responsive image resizing */
+
+  /* Small devices */
+  @media (max-width: 768px) {
+    .navbar a {
+      text-decoration: none;
+      color: #FEFAE0;
+      font-size: 14px;
+      height: 100% !important;
+      display: flex;
+      align-items: center;
+      transition: background-color 0.3s, color 0.3s;
+  }
+  .navbar ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    gap: 5%;
+}
+  #logo {
+    font-weight: 700;
+    font-size: 20px;
+    padding: 0;
+}
+.responsive-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.picture-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+.picture-container canvas {
+  width: 200px;
+}
+.document-links {
+  margin: 10em 0em 8em 0em;
+}
+
+.document-links ul {
+  display: flex;
+  gap: 10px;
+  margin: 0;
+}
+
+.document-links ul li {
+  padding: 10px;
+  font-size: 18px;
+  background-color: #FEFAE0;
+  width: 25vw;
+  height: 15vh;
+  border-radius: 15px;
+  border: 2px solid #BC6C25;
+}
+
+.document-links ul li a {
+  color: #542e0e;
+  gap: 10px;
+}
+
+  
+  }
+  
+  /* Tablets */
+  @media (max-width: 1024px) {
+
+  }
+  
+  /* Laptops */
+  @media (max-width: 1280px) {
+
+  }
+  
+  /* Desktops */
+  @media (min-width: 1281px) and (max-width: 1920px) {
+
+  }
+  
+  /* Huge desktop screens */
+  @media (min-width: 1921px) {
+  
+  }
