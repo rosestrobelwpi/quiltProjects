@@ -112,6 +112,23 @@ const Document = () => {
         In the second example, we are doing the exact same thing. The design we are using is from the <a href='#repeatTutorialID'>rep</a> section. Once again, we have a carbon copy of the code, except we rotated it <strong>180 degrees</strong> clockwise! Talk about nice and easy!
         </p>
         
+        <h1>Colors</h1>
+        <p>Colors are a big part of our quilt designer. In order to achieve the same aesthetic as the rest of our website, we decided to use <i>muted</i> colors.<br /><br />
+        <i>Note: </i>Colors <strong>must</strong> be begin with a lowercase letter.</p><br />
+
+        <h3>Valid colors:</h3>
+        <ul className='valid-colors'>
+          <li id='red-valid'>red</li>
+          <li id='orange-valid'>orange</li>
+          <li id='yellow-valid'>yellow</li>
+          <li id='green-valid'>green</li>
+          <li id='blue-valid'>blue</li>
+          <li id='purple-valid'>purple</li>
+          <li id='black-valid'>black</li>
+          <li id='pink-valid'>pink</li>
+          <li id='brown-valid'>brown</li>
+          <li id='grey-valid'>grey</li>
+        </ul>
 
         <h1>Variables</h1>
         <p>
