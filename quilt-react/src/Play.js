@@ -307,7 +307,7 @@ function Play() {
                             mode: "javascript",
                             theme: "material",
                             lineNumbers: true,
-                            lineWrapping: false,
+                            lineWrapping: true,
                         }}
                         onBeforeChange={(editor, data, value) => setTextInput(value)}
                     />
