@@ -49,59 +49,68 @@
 
   .about-top-container {
     text-align: center;
-    margin-top: 10em;
+    margin: 10% auto;
   }
 
   .about-top-container h1 {
-    font-size: 45px;
-    max-width: 35%;
-    margin: 0 auto;
-    margin-bottom: 20px;
+    font-size: 40px;
+    max-width: 60%;
+    margin: 0 auto 5% auto;
   }
 
   .about-top-container p {
-    font-size: 20px;
     margin: 0 auto;
     line-height: 1.5;
-    max-width: 30%;
-    margin-bottom: 5em;
+    width: 70%;
   }
-
 
   .about-text-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     margin: 0 auto;
-    padding: 2em;
-    gap: 2em;
-  }
-
-  .about-text-content {
-    flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    font-size: larger;
-    gap: 20px;
-  }
-
-  .about-text-content p {
+    padding: 5% 0%;
     width: 70%;
     line-height: 1.5;
   }
 
+  .about-text-container p{
+    font-size: 18px;
+  }
 
   .about-img-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  .about-img-container img {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    object-fit: cover;
+
+  }
+
+  .about-img-person {
+    text-align: center;
     flex: 1;
   }
 
-  img {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
+  .about-img-person h3{
+    margin: 5% 0% 1% 0%;
+    font-size: 24px;
   }
+
+  .about-img-person p{
+    font-size: 16px;
+    white-space: nowrap;
+  }
+
 
   #img2 {
     flex: 1;
