@@ -1,48 +1,49 @@
-// here we will write the parser!
+//here we will write the parser!
 
-// TAGS for Types
-const TAG_RECT = "RECT";
-const TAG_NAT = "NAT";
-const TAG_ROTATION = "ROTATION"; // changed as there is already a Rot class in the expressions
-const TAG_PIXEL = "PIXEL";
-const TAG_DEPENDENT_FUNC = "DEPENDENT_FUNC";
-const TAG_IDENTITY = "IDENTITY";
-const TAG_TYPE_EQUALITY = "TYPE_EQUALITY";
+//TAGS for Types
+TAG_RECT = "RECT"
+TAG_NAT = "NAT"
+//changed as there is already a Rot class in the expressions
+TAG_ROTATION = "ROTATION"
+TAG_PIXEL = "PIXEL"
+TAG_DEPENDENT_FUNC = "DEPENDENT_FUNC"
+TAG_IDENTITY = "IDENTITY"
+TAG_TYPE_EQUALITY = "TYPE_EQUALITY"
 
-// TAGS for Values
-const TAG_LAMBDA = "LAMBDA";
-const TAG_PIX = "PIX";
-const TAG_COLORS = "COLORS";
-const TAG_NAT_NUM = "NAT_NUM";
-const TAG_ZERO = "ZERO";
-const TAG_NINETY = "NINETY";
-const TAG_ONE_EIGHTY = "ONE_EIGHTY";
-const TAG_TWO_SEVENTY = "TWO_SEVENTY";
-const TAG_REFL = "REFL";
+//TAGS for Values
+TAG_LAMBDA = "LAMBDA"
+TAG_PIX = "PIX"
+TAG_COLORS = "COLORS"
+TAG_NAT_NUM = "NAT_NUM"
+TAG_ZERO = "ZERO"
+TAG_NINETY = "NINETY"
+TAG_ONE_EIGHTY = "ONE_EIGHTY"
+TAG_TWO_SEVENTY = "TWO_SEVENTY"
+TAG_REFL = "REFL"
 
-// TAGS for Expressions
-const TAG_VALUE = "VALUE";
-const TAG_VARIABLE = "VARIABLE";
-const TAG_SIDE_BY_SIDE = "SIDE_BY_SIDE";
-const TAG_SOLID = "SOLID";
-const TAG_HOR = "HOR";
-const TAG_VERT = "VERT";
-const TAG_OVER = "OVER";
-const TAG_REP = "REP";
-const TAG_ROT = "ROT";
-const TAG_PLUS = "PLUS";
-const TAG_TIMES = "TIMES";
-const TAG_BUG = "BUG";
+//TAGS for Expressions
+TAG_VALUE = "VALUE"
+TAG_VARIABLE = "VARIABLE"
+TAG_SIDE_BY_SIDE = "SIDE_BY_SIDE"
+TAG_SOLID = "SOLID"
+TAG_HOR = "HOR"
+TAG_VERT = "VERT"
+TAG_OVER = "OVER"
+TAG_REPX = "REPX"
+TAG_REPY = "REPY"
+TAG_ROT = "ROT"
+TAG_PLUS = "PLUS"
+TAG_TIMES = "TIMES"
+TAG_BUG = "BUG"
 
-const TAG_VAR_CALL = "VAR_CALL";
-const TAG_ARG = "ARG";
-const TAG_IDENTIFIER = "IDENTIFIER";
-const TAG_COLOR = "COLOR";
-const TAG_PROGRAM = "PROGRAM"
-const TAG_ASSIGNMENT = "ASSIGNMENT"
-const TAG_FUN_CALL = "FUN_CALL"
-const TAG_FUNC = "FUNC"
-
+TAG_VAR_CALL = "VAR_CALL"
+TAG_ARG = "ARG"
+TAG_IDENTIFIER = "IDENTIFIER"
+TAG_COLOR = "COLOR"
+TAG_PROGRAM = "PROGRAM"
+TAG_ASSIGNMENT = "ASSIGNMENT"
+TAG_FUN_CALL = "FUN_CALL"
+TAG_FUNC = "FUNC"
 
 // class ASTNode {
 // //abstract class for js?
@@ -194,8 +195,14 @@ function Over(a, d) {
     this.design = d;
 }
 
-function Rep(v, d) {
-    this.tag = TAG_REP;
+function RepX(v, d) {
+    this.tag = TAG_REPX;
+    this.value = v;
+    this.design = d;
+}
+
+function RepY(v, d) {
+    this.tag = TAG_REPY;
     this.value = v;
     this.design = d;
 }
@@ -274,7 +281,7 @@ function expr_size (expr) {
         case TAG_NAT:
             return 1;
             break;
-        case TAG_ROTATION:
+        case TAG_ROT:
             return 1;
             break;
         case TAG_PIXEL:
@@ -343,7 +350,10 @@ function expr_size (expr) {
         case TAG_OVER:
             return expr_size(expr.anchor) + expr_size(expr.design) + 1;
             break;
-        case TAG_REP:
+        case TAG_REPX:
+            return expr_size(expr.value) + expr_size(expr.design) + 1;
+            break;
+        case TAG_REPY:
             return expr_size(expr.value) + expr_size(expr.design) + 1;
             break;
         case TAG_ROT:
@@ -378,14 +388,6 @@ function expr_size (expr) {
     }
 }
 
-// Export all tags and classes
-module.exports = { 
-    TAG_RECT, TAG_NAT, TAG_ROTATION, TAG_PIXEL, TAG_DEPENDENT_FUNC, TAG_IDENTITY, TAG_TYPE_EQUALITY,
-    TAG_LAMBDA, TAG_PIX, TAG_COLORS, TAG_NAT_NUM, TAG_ZERO, TAG_NINETY, TAG_ONE_EIGHTY, TAG_TWO_SEVENTY, TAG_REFL,
-    TAG_VALUE, TAG_VARIABLE, TAG_SIDE_BY_SIDE, TAG_SOLID, TAG_HOR, TAG_VERT, TAG_OVER, TAG_REP, TAG_ROT, TAG_PLUS,
-    TAG_TIMES, TAG_BUG, TAG_VAR_CALL, TAG_ARG, TAG_IDENTIFIER, TAG_COLOR, TAG_ASSIGNMENT, TAG_PROGRAM, TAG_FUNC, TAG_FUN_CALL,
-    Rect, Nat, Rotation, Pixel, DependentFunc, Identity, TypeEquality,
-    Lambda, Pix, Colors, NatNum, Zero, Ninety, OneEighty, TwoSeventy, Refl,
-    Value, Variable, SideBySide, Solid, Hor, Vert, Over, Rep, Rot, Plus, Times, VarCall, Arg, Identifier, Color,
-    Program, Assignment, FunCall, Func
-};
+module.exports = { Rect, Nat, Rotation, Pixel, DependentFunc, Identity, TypeEquality,
+                   Lambda, Pix, Colors, NatNum, Zero, Ninety, OneEighty, TwoSeventy, Refl,
+                   Value, Variable, SideBySide, Solid, Hor, Vert, Over, RepX, RepY, Rot, Plus, Times, VarCall, Arg, Identifier, Color, Program, Assignment, FunCall, Func}
