@@ -317,35 +317,63 @@ function evaluatorLogic(env, node) {
             }
             return designRot;
 
-        case TAG_REP: //assuming we are repeating in the x direction
-            console.log("NODE.DESIGN", node.design)
-            let original = evaluatorLogic(env, node.design)
-            console.log('ORIGINAL:', original)
-            let numRepetitions = evaluatorLogic(env, node.value)
-            let allPatchesRep = []
+        // case TAG_REP: //assuming we are repeating in the x direction
+        //     console.log("NODE.DESIGN", node.design)
+        //     let original = evaluatorLogic(env, node.design)
+        //     console.log('ORIGINAL:', original)
+        //     let numRepetitions = evaluatorLogic(env, node.value)
+        //     let allPatchesRep = []
 
-            if (original instanceof Patch) {
-                allPatchesRep.push(original)
-                let prevX = original.x
-                for (let i = 1; i < numRepetitions; i++) { //start at 1 since we've already taken care of the first repetition
-                    let newRep = new Patch(prevX + original.width, original.y, original.width, original.height, original.color)
-                    allPatchesRep.push(newRep)
-                    prevX = newRep.x
-                }
-            } else if (original instanceof Design) {
-                allPatchesRep.push(original.patches)
-                allPatchesRep = allPatchesRep.flat() //to ensure 1d array
-                for (let i = 1; i < numRepetitions; i++) {
-                    let newRep = structuredClone(original) //deep copy - doesn't display the word "Patch" when logged to console, fix on next line
-                    Object.setPrototypeOf(newRep, Design.prototype) //it seemed to be working without this, but just for consistancy, give it its prototype back (because JS is STUPID)
-                    for (let patch of newRep.patches) {
-                        patch.x += (i * original.width) //i represents which repetition we are on, so this calculation will give us the correct offset
-                        allPatchesRep.push(patch)
-                    }
+        //     if (original instanceof Patch) {
+        //         allPatchesRep.push(original)
+        //         let prevX = original.x
+        //         for (let i = 1; i < numRepetitions; i++) { //start at 1 since we've already taken care of the first repetition
+        //             let newRep = new Patch(prevX + original.width, original.y, original.width, original.height, original.color)
+        //             allPatchesRep.push(newRep)
+        //             prevX = newRep.x
+        //         }
+        //     } else if (original instanceof Design) {
+        //         allPatchesRep.push(original.patches)
+        //         allPatchesRep = allPatchesRep.flat() //to ensure 1d array
+        //         for (let i = 1; i < numRepetitions; i++) {
+        //             let newRep = structuredClone(original) //deep copy - doesn't display the word "Patch" when logged to console, fix on next line
+        //             Object.setPrototypeOf(newRep, Design.prototype) //it seemed to be working without this, but just for consistancy, give it its prototype back (because JS is STUPID)
+        //             for (let patch of newRep.patches) {
+        //                 patch.x += (i * original.width) //i represents which repetition we are on, so this calculation will give us the correct offset
+        //                 allPatchesRep.push(patch)
+        //             }
+        //         }
+        //     }
+        //     return new Design(original.width*numRepetitions, original.height, allPatchesRep)
+
+        case TAG_REP: //assuming we are repeating in the y direction
+        console.log("NODE.DESIGN", node.design)
+        let originalY = evaluatorLogic(env, node.design)
+        console.log('ORIGINAL:', originalY)
+        let numRepetitionsY = evaluatorLogic(env, node.value)
+        let allPatchesRepY = []
+
+        if (originalY instanceof Patch) {
+            allPatchesRepY.push(originalY)
+            let prevY = originalY.y
+            for (let i = 1; i < numRepetitionsY; i++) { //start at 1 since we've already taken care of the first repetition
+                let newRep = new Patch(originalY.x, prevY + originalY.height, originalY.width, originalY.height, originalY.color)
+                allPatchesRepY.push(newRep)
+                prevY = newRep.y
+            }
+        } else if (originalY instanceof Design) {
+            allPatchesRepY.push(originalY.patches)
+            allPatchesRepY = allPatchesRepY.flat() //to ensure 1d array
+            for (let i = 1; i < numRepetitionsY; i++) {
+                let newRep = structuredClone(originalY) //deep copy - doesn't display the word "Patch" when logged to console, fix on next line
+                Object.setPrototypeOf(newRep, Design.prototype) //it seemed to be working without this, but just for consistancy, give it its prototype back (because JS is STUPID)
+                for (let patch of newRep.patches) {
+                    patch.y += (i * originalY.height) //i represents which repetition we are on, so this calculation will give us the correct offset
+                    allPatchesRepY.push(patch)
                 }
             }
-            return new Design(original.width*numRepetitions, original.height, allPatchesRep)
-
+        }
+        return new Design(originalY.width, originalY.height*numRepetitionsY, allPatchesRepY)
 
         case TAG_HOR:
            //first one we don't change, it will be positioned at the origin
