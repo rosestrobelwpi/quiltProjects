@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import parser from "./parser";
 import evaluator from "./interpreter";
 
+// Define a muted color palette
 const colorPalette = {
   red: '#b57c7c',
   orange: '#d9a078',
@@ -146,7 +147,7 @@ function Examples() {
               <a href="/about">About Us</a>
             </li>
             <li>
-              <a href="/examples">Tutorial</a>
+              <a href="/examples">Docs</a>
             </li>
           </ul>
         </div>
@@ -155,18 +156,17 @@ function Examples() {
         <ul>
           <li>
             <a href="/gettingStarted">
-              <FontAwesomeIcon icon={faHouse} className="icon" /> Definitions & Variables
+              <FontAwesomeIcon icon={faHouse} className="icon" /> Getting Started
             </a>
           </li>
           <li>
-            <a href="/functions">
-              <FontAwesomeIcon icon={faPenFancy} className="icon" /> Functions
+            <a href="#">
+              <FontAwesomeIcon icon={faPenFancy} className="icon" /> Creating Patterns
             </a>
           </li>
         </ul>
       </div>
       <h1>Examples</h1>
-      <div className="responsive-container">
       <div className="picture-container">
         {exampleDesigns.map((example, index) => (
           <Link
@@ -175,14 +175,13 @@ function Examples() {
           >
             <canvas
               ref={(el) => (canvasRefs.current[index] = el)}
-              width={325}
-              height={325}
+              width={150}
+              height={150}
               title={example.code}
               className="example-canvas"
             />
           </Link>
         ))}
-      </div>
       </div>
     </div>
   );
