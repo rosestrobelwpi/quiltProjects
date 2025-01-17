@@ -141,7 +141,11 @@ function Play() {
         if (code) {
             const decodedCode = decodeURIComponent(code);
             setTextInput(decodedCode); // Preload the code into the editor
+
+            const loadDesign = evaluator(parser.parse(decodedCode));
+            renderDesign(loadDesign);
         }
+        
     }, [code]);
 
     // Render design on the canvas based on input text
@@ -162,8 +166,8 @@ function Play() {
         const maxHeight = design.height
 
         //FIXME remove minus 100 later, just fitting it to my screen -laura
-        const scaleX = (canvas.width-100) / maxWidth;
-        const scaleY = (canvas.height-100) / maxHeight;
+        const scaleX = (canvas.width) / maxWidth;
+        const scaleY = (canvas.height) / maxHeight;
         const scale = Math.min(scaleX, scaleY); // Uniform scaling
 
         if (design.patches && Array.isArray(design.patches)) {
@@ -199,7 +203,7 @@ function Play() {
 
     // Only called on Submit button click
     const handleSubmit = () => {
-        try {
+      try {
             // const debugErrors = debugInput(textInput);
             // if (debugErrors.length && debugErrors[0] !== "No errors detected.") {
             //     const formattedErrors = debugErrors
@@ -209,35 +213,57 @@ function Play() {
             //     alert(`Debugging issues:\n${formattedErrors}`);
             //     return;
             // }
+  
+          const parsedInput = parser.parse(textInput); // This is where the detailed error occurs
+          const design = evaluator(parsedInput);
+          renderDesign(design);
+  
+      } catch (error) {
+          console.error("Error interpreting code:", error);
+  
+          // Extract the detailed error message from the caught error
+          const errorMessage = error.message || "An unknown error occurred.";
+          alert(`Error interpreting your code:\n${errorMessage}`);
+      }
+  };
+  
+  function downloadCanvasDrawing() {
+    var canvas = document.getElementById("canvas");
+    var url = canvas.toDataURL("image/png");
+    var fileName = prompt("Enter file name:")
 
-            const parsedInput = parser.parse(textInput);
-            console.log("PARSED:", parsedInput)
-            const design = evaluator(parsedInput);
-            console.log("INTERPRETER:", design)
-            renderDesign(design);
-        } catch (error) {
-            console.error("Error interpreting code:", error);
-            alert(error)
-            //alert("Error interpreting your code. Please check for syntax errors.");
-        }
-    };
+    if (fileName === null) {
+      return;
+    }
+
+    if (fileName) {
+      if (!fileName.endsWith(".png")) {
+        fileName += ".png";
+      }
+      var link = document.createElement('a');
+      link.download = fileName;
+      link.href = url;
+      link.click();
+
+    }
+  }
 
     useEffect(() => {
-        const keyPressed = (event) => {
-            if (event.shiftKey && event.key === "Enter") {
-                handleSubmit();
-                event.preventDefault();
-            } else if (event.shiftKey && event.key === "Backspace") {
-                handleClear();
-                event.preventDefault();
-            }
-        };
-        window.addEventListener("keydown", keyPressed);
+      const keyPressed = (event) => {
+          if (event.shiftKey && event.key === "Enter") {
+              handleSubmit();
+              event.preventDefault();
+          } else if (event.shiftKey && event.key === "Backspace") {
+              handleClear();
+              event.preventDefault();
+          }
+      };
+      window.addEventListener("keydown", keyPressed);
+      return () => {
+          window.removeEventListener("keydown", keyPressed);
+      };
+  }, [textInput]);
 
-        return () => {
-            window.removeEventListener("keydown", keyPressed);
-        };
-    }, [textInput]);
 
     return (
         <div className="play-container">
@@ -250,11 +276,19 @@ function Play() {
                         <li><a href="/">Home</a></li>
                         <li><a href="/play">Play</a></li>
                         <li><a href="/about">About Us</a></li>
-                        <li><a href="/examples">Docs</a></li>
+                        <li><a href="/examples">Tutorial</a></li>
                     </ul>
                 </div>
             </div>
             <div className="container2">
+                
+
+                <div className="parser-container">
+                {/* <div className="drawingName">
+                    <form>
+                        <input type="text" name="drawing-name" placeholder="Enter the name of your creation here!"></input>
+                    </form>
+                </div> */}
                 <div className="button-help">
                     <div className="btn-action">
                         <code>Shift + Enter</code> <span>to submit</span>
@@ -262,19 +296,22 @@ function Play() {
                     <div className="btn-action">
                         <code>Shift + Backspace</code> <span>to clear</span>
                     </div>
+                    <div className="btn-action">
+                        <code id="downloadBtn" onClick={downloadCanvasDrawing}>Download</code>
+                    </div>
                 </div>
-
-                <div className="parser-container">
+                <div className="codemirror-container">
                     <CodeMirror
                         value={textInput}
                         options={{
                             mode: "javascript",
                             theme: "material",
                             lineNumbers: true,
-                            lineWrapping: true,
+                            lineWrapping: false,
                         }}
                         onBeforeChange={(editor, data, value) => setTextInput(value)}
                     />
+                </div>
                 </div>
                 <div className="drawing-container">
                     <canvas id="canvas" ref={canvasRef} width={400} height={400}></canvas>
