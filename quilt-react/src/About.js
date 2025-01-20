@@ -19,29 +19,39 @@ function About() {
       </div>
 
       <div className="about-top-container">
-        <h1>We are students at WPI this is our MQP!</h1>
-        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quos a voluptatum odio accusantium voluptatibus error necessitatibus..</p>
+        <h1>Meet the Developers</h1>
+        <div className='about-img-container'>
+          <div className='about-img-person'>
+            <img src='./static/abby.jpg'></img>
+            <h3>Abigail Haller</h3>
+            <p>Computer Science, 2025<br />Backend Developer</p>
+          </div>
+          <div className='about-img-person'>
+            <img src='./static/laura.jpg'></img>
+            <h3>Laura Pellowski</h3>
+            <p>Computer Science, 2025<br />Backend Developer</p>
+          </div>
+          <div className='about-img-person'>
+            <img src='./static/ben.jpg'></img>
+            <h3>E. Ben Tyler</h3>
+            <p>Computer Science, 2025<br />Frontend Developer</p>
+          </div>
+          <div className='about-img-person'>
+            <img src='./static/rose.jpg'></img>
+            <h3>Rose Strobel</h3>
+            <p>Computer Science, 2025<br />Frontend Developer</p>
+          </div>
+        </div>
       </div>
 
       <div className="about-text-container">
-        <div className="about-text-content">
-          <h2>Lorem ipsum dolor sit amet</h2>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum enim exercitationem alias, culpa corporis voluptas dolores architecto magni impedit ab hic illo praesentium sunt ad dolorum sint perferendis eum? Ab.</p>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio quibusdam blanditiis rerum? Saepe cumque aut repudiandae tempora, delectus dolor vero? Voluptatibus recusandae non doloribus quibusdam magni! Fugiat rem vel labore.</p>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, odio sapiente omnis at nostrum vitae consequatur ipsa repellendus quisquam ut quidem accusantium tempora cumque, ab hic dolore laudantium dolorem odit?</p>
-        </div>
-        <div className="about-img-container">
-          <img src="https://plus.unsplash.com/premium_photo-1661715812379-23d652805042?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Z3JvdXB8ZW58MHx8MHx8fDA%3D" alt="Group of people" />
-        </div>
+          <h1>Research Question</h1>
+          <p>Our primary research goal is to decide how we can best design a programming language in order to best supplement creativity through producing quilt patterns. This was accomplished in a number of steps, as the grammar was solidified first, and further implementation was decided after. Seemingly small choices, such as syntax differences and naming conventions, all add up to a bigger picture where the user is either more comfortable or less. Reliability is also important, as is conciseness and readability. Balancing these ideas with the relative ease of implementation led us to the programming language as it is now. Furthermore, the website was designed with the user in mind, such that it is easy to navigate and learn more about the programming language before jumping into coding.</p>
       </div>
 
       <div className="about-text-container">
-        <img src="https://previews.123rf.com/images/antoniodiaz/antoniodiaz1506/antoniodiaz150600015/41597583-portrait-of-a-group-of-people-looking-at-a-laptop-computer-and-doing-some-work-in-an-office.jpg" alt="Group working on laptop" id="img2" />
-        <div className="about-text-content">
-          <h2>Lorem ipsum dolor sit amet</h2>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum enim exercitationem alias, culpa corporis voluptas dolores architecto magni impedit ab hic illo praesentium sunt ad dolorum sint perferendis eum? Ab.</p>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio quibusdam blanditiis rerum? Saepe cumque aut repudiandae tempora, delectus dolor vero? Voluptatibus recusandae non doloribus quibusdam magni! Fugiat rem vel labore.</p>
-        </div>
+          <h1>Purpose of the Project</h1>
+          <p>	Our purpose in designing this programming language is twofold. First, the intrinsic joy received in creativity is enough on its own, and should not be overlooked. It is important to remember to have fun, and expression through the arts can be fulfilling to the everyday programmer. The purpose of coding is restricted to advancing technical skills and employment reasons too often. While these reasons are productive, gratification through creativity is just as necessary. Secondly, we created this to reach a larger audience of programmers who may not have experience with quilting. This is partly due to the stereotypical gendering of each hobby. The majority of quilters are women (98% in America, according to the Quilting in America survey), and the majority of programmers in the workforce are men (80% in America, according to Data USA information). Thus, we are able to tackle gender inequalities in quilting by introducing it through a typically male passion. We connect programming, which users already enjoy, to an unfamiliar concept, such that fulfillment is increased by association.</p>
       </div>
     </div>
   );
