@@ -122,6 +122,20 @@ function debugInput(input) {
     return errors.length > 0 ? errors : ["No errors detected."];
 }
 
+//Function to resize canvas
+function resizeCanvas(canvas){
+    const canvasSize = Math.min(window.innerWidth, window.innerHeight);
+
+    if (canvasSize > 1100) {
+        canvas.width = 1100;
+        canvas.height = 1100;
+    }
+    else {
+        canvas.width = canvasSize;
+        canvas.height = canvasSize;
+    }
+}
+
 // Function to draw a single rectangle
 function drawRectangle(ctx, x, y, width, height, color) {
     const mutedColor = colorPalette[color] || color;
@@ -136,6 +150,10 @@ function Play() {
 
     // Preload code from URL on component mount
     useEffect(() => {
+        const canvas = canvasRef.current;
+        if(canvas) {
+            resizeCanvas(canvas)
+        }
         if (code) {
             const decodedCode = decodeURIComponent(code);
             setTextInput(decodedCode); // Preload the code into the editor
@@ -145,7 +163,7 @@ function Play() {
         }
         
     }, [code]);
-
+    
     // Render design on the canvas based on input text
     const renderDesign = (design) => {
         const canvas = canvasRef.current;
@@ -297,10 +315,10 @@ function Play() {
                 </div> */}
                 <div className="button-help">
                     <div className="btn-action">
-                        <code>Shift + Enter</code> <span>to submit</span>
+                        <code id="submitBtn" onClick={handleSubmit}>Shift + Enter</code> <span>to submit</span>
                     </div>
                     <div className="btn-action">
-                        <code>Shift + Backspace</code> <span>to clear</span>
+                        <code id="clearBtn" onClick={handleClear}>Shift + Backspace</code> <span>to clear</span>
                     </div>
                     <div className="btn-action">
                         <code id="downloadBtn" onClick={downloadCanvasDrawing}>Download</code>

@@ -12,7 +12,6 @@ html, body {
   justify-content: space-between;
   align-items: flex-start;
   padding: 20px;
-  min-height: 100vh;
   background-color:#FEFAE0;
 }
 
@@ -52,10 +51,8 @@ html, body {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: center;
-  margin: 0 auto;
-  width: 100%;  
-  margin: 0 auto; 
+  align-items: flex-start;
+  width: 100%;
 }
 
 .react-codemirror2 > .CodeMirror:first-child { display: none; }
@@ -65,17 +62,14 @@ html, body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  width: 50%;
-  max-width: 50%;
+  justify-content: center;
+  align-items: flex-start;
   background-color: #FEFAE0 !important;
-  margin-left: 1%  !important;
 }
 
 .codemirror-container {
   display: flex;
   flex: 1;
-  width: 45%;
 }
 
 .CodeMirror {
@@ -85,7 +79,7 @@ html, body {
   color: #ffd000 !important;
   min-height: 50vh !important;
   font-size: 18px;
-  max-width: 95%;
+  min-width: 500px;
   border: 0.5px solid #542e0e !important;
 }
 
@@ -121,13 +115,11 @@ color: #283618 !important;
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 50%;
-  max-height: 90%;
   background-color: #FEFAE0 !important;
-  margin: 0 auto;
-  margin-top: 0.5%;
+  padding: 20px;
 }
 
+<<<<<<< Updated upstream
 .drawing-container canvas {
   display: block;
   width: 100% !important;
@@ -139,6 +131,11 @@ color: #283618 !important;
   box-sizing: border-box;
   /* border-radius: 15px; */
   margin-right: 2%;
+=======
+#canvas {
+  max-width: 100%;
+  max-height: 100%;
+>>>>>>> Stashed changes
 }
 
 #downloadBtn {
@@ -155,68 +152,12 @@ color: #283618 !important;
   background-color: #de6800;
 }
 
-/* .drawingName {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+#submitBtn:hover {
+  cursor: pointer;
 }
 
-.drawingName input{
-  background-color: #BC6C25;
-  border-radius: 10px;
-  padding: 5px 15px;          
-  color: #FEFAE0;      
-  font-size: 16px;
-  vertical-align: middle;
-  border: none;
-  margin: 5% 1%;
-}
- */
-
-
-/* Responsive design */
-
-
-  @media (max-width: 768px) {
-
-.button-help {             
-  gap: 5%;   
-  padding-bottom: 2%;                  
+#clearBtn:hover {
+  cursor: pointer;
 }
 
-.btn-action {
-  display: flex;                
-  align-items: center;          
-  gap: 0.5em;              
-}
 
-.button-help code {
-  background-color: #BC6C25;
-  border-radius: 10px;
-  padding: 5px 5px;          
-  color: #FEFAE0;      
-  font-size: 10px;
-  vertical-align: middle;       /* Ensures code element aligns in middle */
-}
-
-.btn-action span {
-  font-size: 10px;
-  color: #283618;       
-  margin: 0;   
-}
-#downloadBtn {
-  background-color: #de6800;
-}
-.CodeMirror {
-  font-size: 14px;
-  min-height: 70vh !important;
-}
-.parser-container {
-  width: 45%;
-}
-  }
-
-  /* Tablets */
-  @media (max-width: 1024px) {
-
-  }
