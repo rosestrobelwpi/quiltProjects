@@ -124,20 +124,43 @@ function debugInput(input) {
     return errors.length > 0 ? errors : ["No errors detected."];
 }
 
+
+//Function to resize canvas
+function resizeCanvas(canvas){
+    const canvasSize = Math.min(window.innerWidth, window.innerHeight);
+
+    if (canvasSize > 1100) {
+        canvas.width = 1100;
+        canvas.height = 1100;
+    }
+    else {
+        canvas.width = canvasSize;
+        canvas.height = canvasSize;
+    }
+}
+
 // Function to draw a single rectangle
 function drawRectangle(ctx, x, y, width, height, color) {
     const mutedColor = colorPalette[color] || color;
     ctx.fillStyle = mutedColor;
-    ctx.fillRect(x, y, width, height);
-}
+    ctx.fillRect(Math.floor(x), Math.floor(y), Math.ceil(width), Math.ceil(height));
 
+    //White lines caused by anti-aliasing (computer trying to get rid of jagged edges)
+    //Rounding doesn't work because some rectangles may round up or down, making some squares uneven
+    //floor for x and y to always round down
+    //ceil for width and height to always round up
+}
 function Play() {
     const { code } = useParams(); // Get the code from the URL
     const [textInput, setTextInput] = useState(""); // Store input for handling submission
     const canvasRef = useRef(null);
 
-    // Preload code from URL on component mount
-    useEffect(() => {
+     // Preload code from URL on component mount
+     useEffect(() => {
+        const canvas = canvasRef.current;
+        if(canvas) {
+            resizeCanvas(canvas)
+        }
         if (code) {
             const decodedCode = decodeURIComponent(code);
             setTextInput(decodedCode); // Preload the code into the editor
