@@ -11,12 +11,15 @@ const parser = require("./parser.js");
 const environment = {};
 
 //want some objects to hold information about the patches/designs
-function Patch(x, y, width, height, color) {
+function Patch(x, y, width, height, color, rotationFromOriginal=0) {
     this.x = x;
     this.y = y;
     this.width = width;
     this.height = height;
     this.color = color;
+
+    //FIXME testing out images
+    this.rotationFromOriginal = rotationFromOriginal;
 }
 
 function Design(maxWidth, maxHeight, patches) {
@@ -238,13 +241,22 @@ function evaluatorLogic(env, node) {
             if (designRot instanceof Patch) {
                 switch (angle) { 
                     case 0:
+                        designRot.rotationFromOriginal = 0; //#FIXME testing images, could be an issue if sum can be more than 270 (may have to mod)
+                        break;
                     case 180: //no change needed
+                        designRot.rotationFromOriginal = 180; //#FIXME testing images, could be an issue if sum can be more than 270 (may have to mod)
                         break; 
                     case 90:
-                    case 270: //switch width and height
-                        let tempWidth = designRot.width
+                        designRot.rotationFromOriginal = 90; //#FIXME testing images, could be an issue if sum can be more than 270 (may have to mod)
+                        let tempWidth90 = designRot.width
                         designRot.width = designRot.height;
-                        designRot.height = tempWidth
+                        designRot.height = tempWidth90
+                        break;
+                    case 270: //switch width and height
+                        designRot.rotationFromOriginal = 270; //#FIXME testing images, could be an issue if sum can be more than 270 (may have to mod)
+                        let tempWidth270 = designRot.width
+                        designRot.width = designRot.height;
+                        designRot.height = tempWidth270
                         break;
                     default:
                         console.log("Angle not supported")
@@ -264,6 +276,7 @@ function evaluatorLogic(env, node) {
                         case 0: //no change needed
                             // | | |
                             // | |*|
+                            patch.rotationFromOriginal = 0;
                             break; 
                         case 90:
                             // | | |
@@ -279,6 +292,8 @@ function evaluatorLogic(env, node) {
                             patch.height = tempWidth
                             
                             patch.x += designRot.width //in order to display in the correct position on canvas, have to perform translation
+
+                            patch.rotationFromOriginal = 90;
                             break;
                         case 180: 
                             // |*| |
@@ -292,6 +307,8 @@ function evaluatorLogic(env, node) {
                             
                             patch.x += designRot.width //have to move horizontally and vertically 
                             patch.y += designRot.height 
+
+                            patch.rotationFromOriginal = 180;
                             break;
                         case 270: 
                             // | |*|
@@ -307,6 +324,8 @@ function evaluatorLogic(env, node) {
                             patch.height = tempWidth
                             
                             patch.y += designRot.height //this has to just move vertically since it's above (below) the x-axis (screen coordingates upside down)
+                            
+                            patch.rotationFromOriginal = 270;
                             break;
                         default:
                             console.log("Angle not supported")

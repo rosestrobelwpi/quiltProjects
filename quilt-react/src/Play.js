@@ -10,6 +10,10 @@ import parser from "./parser";
 import evaluator from "./interpreter";
 import "./App.css";
 
+//laura messing around with inserting images
+//local import for now, not sure how to get image from user dynamically
+import imageSRC from './laura_test_image/larry.png';
+
 // Define a muted color palette
 const colorPalette = {
     red: '#b57c7c',
@@ -22,6 +26,7 @@ const colorPalette = {
     pink: '#d8a6b8',
     brown: '#a58c72',
     grey: '#b0b0b0',
+    larry: 'larry'
 };
 
 // Debugger Function
@@ -125,11 +130,30 @@ function debugInput(input) {
 }
 
 // Function to draw a single rectangle
-function drawRectangle(ctx, x, y, width, height, color) {
+function drawRectangle(ctx, x, y, width, height, color, rotationFromOriginal) {
     const mutedColor = colorPalette[color] || color;
-    ctx.fillStyle = mutedColor;
-    ctx.fillRect(x, y, width, height);
+
+    console.log("rotationFromOriginal", rotationFromOriginal)
+    if (mutedColor == 'larry') {
+        const image = new Image();
+        image.src = imageSRC
+
+        //okay so the problem here is that rotate will rotate the entire canvas but we just want to rotate a specified patch
+        //the interpreter just calculates a different width and height which works for solid colors
+        //but we additionally need to rotate the image if we are using one. So we  
+        //FIXME doesn't work with non-square rectangles since we have already changed width and height in interpreter
+        ctx.save();
+        ctx.translate(x + width / 2, y + height / 2); //move canvas to center of our patch
+        ctx.rotate(rotationFromOriginal * (Math.PI/180)); //rotate the canvas the specified amount of radians (a patch object now knows how many degrees it has been rotated since its creation)
+        ctx.drawImage(image, -width / 2, -height / 2, width, height); //draw image, rotates around its center
+        ctx.restore(); //restore canvas from ctx.save()
+
+    } else {
+        ctx.fillStyle = mutedColor;
+        ctx.fillRect(x, y, width, height);
+    }
 }
+
 
 function Play() {
     const { code } = useParams(); // Get the code from the URL
@@ -178,7 +202,8 @@ function Play() {
                     patch.y * scale,
                     patch.width * scale,
                     patch.height * scale,
-                    colorPalette[patch.color]
+                    colorPalette[patch.color],
+                    patch.rotationFromOriginal //FIXME laura added for testing images
                 );
             });
         } else if (design.x !== undefined && design.y !== undefined) {
@@ -188,7 +213,8 @@ function Play() {
                 design.y * scale,
                 design.width * scale,
                 design.height * scale,
-                colorPalette[design.color]
+                colorPalette[design.color],
+                design.rotationFromOriginal //FIXME laura added for testing images
             );
         }
     };
