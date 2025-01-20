@@ -171,7 +171,9 @@ function drawRectangle(ctx, x, y, width, height, color, rotationFromOriginal) {
         //Rounding doesn't work because some rectangles may round up or down, making some squares uneven
         //floor for x and y to always round down
         //ceil for width and height to always round up
+    }
 }
+
 function Play() {
     const { code } = useParams(); // Get the code from the URL
     const [textInput, setTextInput] = useState(""); // Store input for handling submission
