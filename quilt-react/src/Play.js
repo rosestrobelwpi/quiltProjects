@@ -27,7 +27,7 @@ const colorPalette = {
 // Debugger Function
 function debugInput(input) {
     const errors = [];
-    const context = {}; // Stores declared variables
+    const context = {}; 
     const VALID_FUNCTIONS = ["rect", "hor", "vert", "rot", "rep", "over"];
     const VALID_COLORS = [
         "red", "blue", "green", "yellow", "orange", "purple",
