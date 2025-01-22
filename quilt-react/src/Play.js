@@ -22,16 +22,18 @@ const colorPalette = {
     pink: '#d8a6b8',
     brown: '#a58c72',
     grey: '#b0b0b0',
+    white: '#ffffff', 
+    gray: '#b0b0b0'
 };
 
 // Debugger Function
 function debugInput(input) {
     const errors = [];
-    const context = {}; 
+    const context = {}; // Stores declared variables
     const VALID_FUNCTIONS = ["rect", "hor", "vert", "rot", "rep", "over"];
     const VALID_COLORS = [
         "red", "blue", "green", "yellow", "orange", "purple",
-        "black", "pink", "brown", "grey"
+        "black", "pink", "brown", "grey", "white", "gray"
     ];
 
     // Split input into lines, keeping track of original line numbers
@@ -124,24 +126,51 @@ function debugInput(input) {
     return errors.length > 0 ? errors : ["No errors detected."];
 }
 
+
+//Function to resize canvas
+function resizeCanvas(canvas){
+    const canvasSize = Math.min(window.innerWidth, window.innerHeight);
+
+    if (canvasSize > 1100) {
+        canvas.width = 1100;
+        canvas.height = 1100;
+    }
+    else {
+        canvas.width = canvasSize;
+        canvas.height = canvasSize;
+    }
+}
+
 // Function to draw a single rectangle
 function drawRectangle(ctx, x, y, width, height, color) {
     const mutedColor = colorPalette[color] || color;
     ctx.fillStyle = mutedColor;
-    ctx.fillRect(x, y, width, height);
-}
+    ctx.fillRect(Math.floor(x), Math.floor(y), Math.ceil(width), Math.ceil(height));
 
+    //White lines caused by anti-aliasing (computer trying to get rid of jagged edges)
+    //Rounding doesn't work because some rectangles may round up or down, making some squares uneven
+    //floor for x and y to always round down
+    //ceil for width and height to always round up
+}
 function Play() {
     const { code } = useParams(); // Get the code from the URL
     const [textInput, setTextInput] = useState(""); // Store input for handling submission
     const canvasRef = useRef(null);
 
-    // Preload code from URL on component mount
-    useEffect(() => {
+     // Preload code from URL on component mount
+     useEffect(() => {
+        const canvas = canvasRef.current;
+        if(canvas) {
+            resizeCanvas(canvas)
+        }
         if (code) {
             const decodedCode = decodeURIComponent(code);
             setTextInput(decodedCode); // Preload the code into the editor
+
+            const loadDesign = evaluator(parser.parse(decodedCode));
+            renderDesign(loadDesign);
         }
+        
     }, [code]);
 
     // Render design on the canvas based on input text
@@ -162,8 +191,8 @@ function Play() {
         const maxHeight = design.height
 
         //FIXME remove minus 100 later, just fitting it to my screen -laura
-        const scaleX = (canvas.width-100) / maxWidth;
-        const scaleY = (canvas.height-100) / maxHeight;
+        const scaleX = (canvas.width) / maxWidth;
+        const scaleY = (canvas.height) / maxHeight;
         const scale = Math.min(scaleX, scaleY); // Uniform scaling
 
         if (design.patches && Array.isArray(design.patches)) {
@@ -199,43 +228,67 @@ function Play() {
 
     // Only called on Submit button click
     const handleSubmit = () => {
-        try {
-            const debugErrors = debugInput(textInput);
-            if (debugErrors.length && debugErrors[0] !== "No errors detected.") {
-                const formattedErrors = debugErrors
-                    .map(error => `Line ${error.line}, Column ${error.column}: ${error.message}`)
-                    .join("\n");
-                console.warn("Debugging issues detected:\n", formattedErrors); // Log errors to the console
-                alert(`Debugging issues:\n${formattedErrors}`);
-                return;
-            }
+      try {
+            // const debugErrors = debugInput(textInput);
+            // if (debugErrors.length && debugErrors[0] !== "No errors detected.") {
+            //     const formattedErrors = debugErrors
+            //         .map(error => `Line ${error.line}, Column ${error.column}: ${error.message}`)
+            //         .join("\n");
+            //     console.warn("Debugging issues detected:\n", formattedErrors); // Log errors to the console
+            //     alert(`Debugging issues:\n${formattedErrors}`);
+            //     return;
+            // }
+  
+          const parsedInput = parser.parse(textInput); // This is where the detailed error occurs
+          const design = evaluator(parsedInput);
+          renderDesign(design);
+  
+      } catch (error) {
+          console.error("Error interpreting code:", error);
+  
+          // Extract the detailed error message from the caught error
+          const errorMessage = error.message || "An unknown error occurred.";
+          alert(`Error interpreting your code:\n${errorMessage}`);
+      }
+  };
+  
+  function downloadCanvasDrawing() {
+    var canvas = document.getElementById("canvas");
+    var url = canvas.toDataURL("image/png");
+    var fileName = prompt("Enter file name:")
 
-            const parsedInput = parser.parse(textInput);
-            const design = evaluator(parsedInput);
-            renderDesign(design);
-        } catch (error) {
-            console.error("Error interpreting code:", error);
-            alert(error)
-            //alert("Error interpreting your code. Please check for syntax errors.");
-        }
-    };
+    if (fileName === null) {
+      return;
+    }
+
+    if (fileName) {
+      if (!fileName.endsWith(".png")) {
+        fileName += ".png";
+      }
+      var link = document.createElement('a');
+      link.download = fileName;
+      link.href = url;
+      link.click();
+
+    }
+  }
 
     useEffect(() => {
-        const keyPressed = (event) => {
-            if (event.shiftKey && event.key === "Enter") {
-                handleSubmit();
-                event.preventDefault();
-            } else if (event.shiftKey && event.key === "Backspace") {
-                handleClear();
-                event.preventDefault();
-            }
-        };
-        window.addEventListener("keydown", keyPressed);
+      const keyPressed = (event) => {
+          if (event.shiftKey && event.key === "Enter") {
+              handleSubmit();
+              event.preventDefault();
+          } else if (event.shiftKey && event.key === "Backspace") {
+              handleClear();
+              event.preventDefault();
+          }
+      };
+      window.addEventListener("keydown", keyPressed);
+      return () => {
+          window.removeEventListener("keydown", keyPressed);
+      };
+  }, [textInput]);
 
-        return () => {
-            window.removeEventListener("keydown", keyPressed);
-        };
-    }, [textInput]);
 
     return (
         <div className="play-container">
@@ -248,21 +301,31 @@ function Play() {
                         <li><a href="/">Home</a></li>
                         <li><a href="/play">Play</a></li>
                         <li><a href="/about">About Us</a></li>
-                        <li><a href="/examples">Docs</a></li>
+                        <li><a href="/examples">Tutorial</a></li>
                     </ul>
                 </div>
             </div>
             <div className="container2">
-                <div className="button-help">
-                    <div className="btn-action">
-                        <code>Shift + Enter</code> <span>to submit</span>
-                    </div>
-                    <div className="btn-action">
-                        <code>Shift + Backspace</code> <span>to clear</span>
-                    </div>
-                </div>
+                
 
                 <div className="parser-container">
+                {/* <div className="drawingName">
+                    <form>
+                        <input type="text" name="drawing-name" placeholder="Enter the name of your creation here!"></input>
+                    </form>
+                </div> */}
+                <div className="button-help">
+                    <div className="btn-action">
+                        <code id="submitBtn" onClick={handleSubmit}>Shift + Enter</code> <span>to submit</span>
+                    </div>
+                    <div className="btn-action">
+                        <code id="clearBtn" onClick={handleClear}>Shift + Backspace</code> <span>to clear</span>
+                    </div>
+                    <div className="btn-action">
+                        <code id="downloadBtn" onClick={downloadCanvasDrawing}>Download</code>
+                    </div>
+                </div>
+                <div className="codemirror-container">
                     <CodeMirror
                         value={textInput}
                         options={{
@@ -273,6 +336,7 @@ function Play() {
                         }}
                         onBeforeChange={(editor, data, value) => setTextInput(value)}
                     />
+                </div>
                 </div>
                 <div className="drawing-container">
                     <canvas id="canvas" ref={canvasRef} width={400} height={400}></canvas>

@@ -10,17 +10,19 @@
 
 .navbar {
     background-color: #BC6C25;
-    padding: 10px;
-    margin-bottom: 5em;
     display: flex;
     align-items: center;
     justify-content: space-between; 
-    position: fixed;
+    position: sticky;
     top: 0;
     left: 0;
-    height: 6%;
+    padding: 1%;
     width: 100%;
     font-family: "Roboto", serif;
+    z-index: 50;
+    border: 0.5px solid #542e0e;
+    box-shadow: 1px 2px 3px #b28a68;
+    margin-bottom: 20px;
 }
 
 .navbar-links {
@@ -64,10 +66,10 @@
     color: #FEFAE0;
 }
 
-h1 {
+.examples-container h1 {
     text-align: center;
     font-size: 55px;
-    margin-top: 70px;
+    margin-bottom: 1%;
 }
 
 .examples-container {
@@ -75,28 +77,32 @@ h1 {
     height: 100%;
     background-color: #FEFAE0;
     color: #DDA15E;
+    margin-bottom: 3%;
 }
 
 .picture-container {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* Ensures exactly 4 columns */
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Dynamically adjusts columns */
   gap: 10px; /* Reduces space between items */
   padding: 20px;
   margin: 0 auto;
+  max-width: 1200px;
 }
 
-.picture-container canvas {
-  border-radius: 10px; /* Slightly rounded corners */
-  transition: transform 0.3s ease; /* Smooth hover scaling */
-  width: 100%; /* Ensures canvases scale to fill available space */
-  aspect-ratio: 1 / 1; /* Keeps canvases square */
+.picture-container img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    margin: auto;
+    transition: 0.6s;
+    cursor: pointer;
 }
 
-.picture-container canvas:hover {
-  transform: scale(1.1); /* Slight growth on hover */
-  cursor: pointer;
+.picture-container img:hover {
+    transform: scale(1.01);
+    cursor: pointer;
 }
-
 
 
 .document-links {
@@ -106,7 +112,7 @@ h1 {
     align-items: center;
     flex-direction: row;
     gap: 20px;
-    margin: 10em 0em 8em 0em;
+    margin: 7% 0% 2% 0%;
 }
 
 .document-links ul {
@@ -116,35 +122,138 @@ h1 {
     margin: 0;
 }
 
-.document-links ul li:hover {
-    opacity: 0.8;
-    box-shadow: 1px 1px 5px #1B4965;
-    transition: 0.3s;
-}
+/* .document-links ul li:hover {
+  opacity: 0.8;
+  box-shadow: 1px 1px 5px#1B4965;
+  transition: 0.3s;
+} */
 
 .document-links ul li {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 15px;
-    font-size: 20px;
-    list-style: none;
-    background-color: #f4f4f4;
-    width: 20vw;
-    height: 15vh;
-    border-radius: 10px;
-    border: 1px solid #101014;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  font-size: 20px;
+  list-style: none;
+  background-color: #FEFAE0;
+  width: 20vw;
+  height: 15vh;
+  border-radius: 15px;
+  border: 2px solid #BC6C25;
 }
 
 .document-links ul li a {
-    color: #101014;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    flex-direction: column;
+  color: #542e0e;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-direction: column;
 }
 
 .icon {
-    font-size: 30px;
+  font-size: 30px;
+  color: #BC6C25;
 }
+
+.example-canvas {
+  border-radius: 15px;
+  /* box-shadow: 2px 3px 5px #b9b6a0; */
+}
+
+.picture-container canvas {
+  transition: 0.3s;
+}
+
+.picture-container canvas:hover {
+  transform: scale(1.01);
+}
+
+
+
+
+
+
+/* Responsive image resizing */
+
+  /* Small devices */
+  @media (max-width: 768px) {
+    .navbar a {
+      text-decoration: none;
+      color: #FEFAE0;
+      font-size: 14px;
+      height: 100% !important;
+      display: flex;
+      align-items: center;
+      transition: background-color 0.3s, color 0.3s;
+  }
+  .navbar ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    gap: 5%;
+}
+  #logo {
+    font-weight: 700;
+    font-size: 20px;
+    padding: 0;
+}
+.responsive-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.picture-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+.picture-container canvas {
+  width: 200px;
+}
+.document-links {
+  margin: 10em 0em 8em 0em;
+}
+
+.document-links ul {
+  display: flex;
+  gap: 10px;
+  margin: 0;
+}
+
+.document-links ul li {
+  padding: 10px;
+  font-size: 18px;
+  background-color: #FEFAE0;
+  width: 25vw;
+  height: 15vh;
+  border-radius: 15px;
+  border: 2px solid #BC6C25;
+}
+
+.document-links ul li a {
+  color: #542e0e;
+  gap: 10px;
+}
+
+  
+  }
+  
+  /* Tablets */
+  @media (max-width: 1024px) {
+
+  }
+  
+  /* Laptops */
+  @media (max-width: 1280px) {
+
+  }
+  
+  /* Desktops */
+  @media (min-width: 1281px) and (max-width: 1920px) {
+
+  }
+  
+  /* Huge desktop screens */
+  @media (min-width: 1921px) {
+  
+  }
