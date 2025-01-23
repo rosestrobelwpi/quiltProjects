@@ -81,6 +81,7 @@ html, body {
   min-height: 50vh !important;
   font-size: 18px;
   min-width: 800px;
+  max-width: 50vw;
   border: 0.5px solid #542e0e !important;
 }
 
