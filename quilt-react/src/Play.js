@@ -156,7 +156,7 @@ function Play() {
     const handleSubmit = () => {
       try {
           const parsedInput = parser.parse(textInput); // This is where the detailed error occurs
-          typechecker(parsedInput);
+          //typechecker(parsedInput);
           const design = evaluator(parsedInput);
           renderDesign(design);
   
