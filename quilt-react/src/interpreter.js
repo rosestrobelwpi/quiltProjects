@@ -1,7 +1,7 @@
 import structuredClone from "@ungap/structured-clone";
 
 const {
-    TAG_RECT, TAG_NAT_NUM, TAG_COLOR, TAG_HOR, TAG_VERT, TAG_PLUS, TAG_TIMES, TAG_VARIABLE, TAG_DEPENDENT_FUNC, TAG_ROTATION, TAG_ROT, TAG_REPX, TAG_REPY,
+    TAG_RECT, TAG_NAT_NUM, TAG_COLOR, TAG_HOR, TAG_VERT, TAG_PLUS, TAG_TIMES, TAG_VARIABLE, TAG_ROTATION, TAG_ROT, TAG_REPX, TAG_REPY,
     TAG_IDENTIFIER, TAG_VAR_CALL, TAG_OVER, TAG_PROGRAM, TAG_ASSIGNMENT, TAG_FUNC, TAG_FUN_CALL
 } = require('./parserASTfunction.js');
 
@@ -56,7 +56,7 @@ export default function evaluator(node) {
     return evaluatorLogic(environment, node);
 }
 
-//returns Design object, containing information about every patch that is to be displayed
+//returns a Patch or Design object, containing information about every patch that is to be displayed
 function evaluatorLogic(env, node) {
     switch (node.tag) {
         case TAG_PROGRAM:

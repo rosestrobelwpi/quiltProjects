@@ -4,10 +4,11 @@ import { Controlled as CodeMirror } from "react-codemirror2";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/material.css";
 import "codemirror/mode/javascript/javascript";
-import { Link } from 'react-router-dom';
-import { Alert } from "bootstrap";
+//import { Link } from 'react-router-dom';
+//import { Alert } from "bootstrap";
 import parser from "./parser";
 import evaluator from "./interpreter";
+import typechecker from "./typechecker"
 import "./App.css";
 
 //laura messing around with inserting images
@@ -29,107 +30,6 @@ const colorPalette = {
     larry: 'larry'
 };
 
-// Debugger Function
-function debugInput(input) {
-    const errors = [];
-    const context = {}; // Stores declared variables
-    const VALID_FUNCTIONS = ["rect", "hor", "vert", "rot", "rep", "over"];
-    const VALID_COLORS = [
-        "red", "blue", "green", "yellow", "orange", "purple",
-        "black", "pink", "brown", "grey"
-    ];
-
-    // Split input into lines, keeping track of original line numbers
-    const lines = input.split("\n");
-    const nonEmptyLines = lines.map((line, index) => ({ line, index }))
-        .filter(({ line }) => line.trim() !== "");
-
-    if (nonEmptyLines.length === 0) {
-        return ["No code provided."];
-    }
-
-    nonEmptyLines.forEach(({ line, index }) => {
-        const trimmedLine = line.trim();
-        const lineNumber = index + 1;
-
-        // Check for missing semicolon
-        if (!trimmedLine.endsWith(";")) {
-            errors.push({
-                message: "Missing semicolon at the end of the line.",
-                line: lineNumber,
-                column: trimmedLine.length,
-            });
-        }
-
-        // Match variable declarations
-        const variableRegex = /^(int|rect)\s+(\w+)\s*=\s*(.*);$/;
-        const variableMatch = trimmedLine.match(variableRegex);
-        if (variableMatch) {
-            const [, type, name, value] = variableMatch;
-
-            if (type === "int") {
-                if (!/^\d+$/.test(value.trim())) {
-                    errors.push({
-                        message: `Invalid int value '${value}'.`,
-                        line: lineNumber,
-                        column: trimmedLine.indexOf(value) + 1,
-                    });
-                } else {
-                    context[name] = parseInt(value.trim(), 10); // Store variable
-                }
-            } 
-            return; // Skip further validation for this line
-        }
-
-        // Match function calls
-        const functionRegex = /^(\w+)\((.*)\);$/;
-        const functionMatch = trimmedLine.match(functionRegex);
-        if (functionMatch) {
-            const [, functionName, args] = functionMatch;
-
-            // Check for capitalization errors in function names
-            if (!VALID_FUNCTIONS.includes(functionName.toLowerCase())) {
-                const isCapitalized = functionName !== functionName.toLowerCase();
-                const message = isCapitalized
-                    ? `Function '${functionName}' must be lowercase.`
-                    : `Unknown or invalid function '${functionName}'.`;
-                errors.push({
-                    message,
-                    line: lineNumber,
-                    column: trimmedLine.indexOf(functionName) + 1,
-                });
-                return;
-            }
-
-            // Parse and validate arguments
-            const argsList = args.split(",").map(arg => arg.trim());
-            argsList.forEach((arg, argIndex) => {
-                const argStartIndex = trimmedLine.indexOf(arg);
-
-                // Substitute variable values
-                const substitutedArg = context[arg] !== undefined ? context[arg] : arg;
-
-                if (functionName === "rect" && argIndex === 2) {
-                    if (!VALID_COLORS.includes(substitutedArg.toLowerCase())) {
-                        const isCapitalized = substitutedArg !== substitutedArg.toLowerCase();
-                        const message = isCapitalized
-                            ? `Color '${substitutedArg}' must be lowercase.`
-                            : `Invalid color '${substitutedArg}' in 'rect'.`;
-                        errors.push({
-                            message,
-                            line: lineNumber,
-                            column: argStartIndex + 1,
-                        });
-                    }
-                }
-            });
-        }
-    });
-
-    return errors.length > 0 ? errors : ["No errors detected."];
-}
-
-
 //Function to resize canvas
 function resizeCanvas(canvas){
     const canvasSize = Math.min(window.innerWidth, window.innerHeight);
@@ -149,19 +49,20 @@ function drawRectangle(ctx, x, y, width, height, color, rotationFromOriginal) {
     const mutedColor = colorPalette[color] || color;
 
     console.log("rotationFromOriginal", rotationFromOriginal)
-    if (mutedColor == 'larry') {
+    if (mutedColor === 'larry') {
         const image = new Image();
         image.src = imageSRC
+        ctx.drawImage(image, x, y, width, height)
 
         //okay so the problem here is that rotate will rotate the entire canvas but we just want to rotate a specified patch
         //the interpreter just calculates a different width and height which works for solid colors
         //but we additionally need to rotate the image if we are using one. So we  
         //FIXME doesn't work with non-square rectangles since we have already changed width and height in interpreter
-        ctx.save();
-        ctx.translate(x + width / 2, y + height / 2); //move canvas to center of our patch
-        ctx.rotate(rotationFromOriginal * (Math.PI/180)); //rotate the canvas the specified amount of radians (a patch object now knows how many degrees it has been rotated since its creation)
-        ctx.drawImage(image, -width / 2, -height / 2, width, height); //draw image, rotates around its center
-        ctx.restore(); //restore canvas from ctx.save()
+        // ctx.save();
+        // ctx.translate(x + width / 2, y + height / 2); //move canvas to center of our patch
+        // ctx.rotate(rotationFromOriginal * (Math.PI/180)); //rotate the canvas the specified amount of radians (a patch object now knows how many degrees it has been rotated since its creation)
+        // ctx.drawImage(image, -width / 2, -height / 2, width, height); //draw image, rotates around its center
+        // ctx.restore(); //restore canvas from ctx.save()
 
     } else {
         ctx.fillStyle = mutedColor;
@@ -188,8 +89,9 @@ function Play() {
         if (code) {
             const decodedCode = decodeURIComponent(code);
             setTextInput(decodedCode); // Preload the code into the editor
-
-            const loadDesign = evaluator(parser.parse(decodedCode));
+            const parsedInput = parser.parse(decodedCode);
+            //FIXME not typechecked btw
+            const loadDesign = evaluator(parsedInput);
             renderDesign(loadDesign);
         }
         
@@ -253,17 +155,8 @@ function Play() {
     // Only called on Submit button click
     const handleSubmit = () => {
       try {
-            // const debugErrors = debugInput(textInput);
-            // if (debugErrors.length && debugErrors[0] !== "No errors detected.") {
-            //     const formattedErrors = debugErrors
-            //         .map(error => `Line ${error.line}, Column ${error.column}: ${error.message}`)
-            //         .join("\n");
-            //     console.warn("Debugging issues detected:\n", formattedErrors); // Log errors to the console
-            //     alert(`Debugging issues:\n${formattedErrors}`);
-            //     return;
-            // }
-  
           const parsedInput = parser.parse(textInput); // This is where the detailed error occurs
+          typechecker(parsedInput);
           const design = evaluator(parsedInput);
           renderDesign(design);
   

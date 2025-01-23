@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 import parser from "./parser";
 import evaluator from "./interpreter";
 
-// Define a muted color palette
 const colorPalette = {
   red: '#b57c7c',
   orange: '#d9a078',
@@ -77,6 +76,7 @@ function Examples() {
   const exampleDesigns = [
     {
       id: 1,
+      
       code: "rect brown = rect(1,1,brown);\nrect black = rect(1,1,black);\nrect yellow = rect(1,1,yellow);\nrect background = rect(1,1,green);\nrect red = rect(1,1,red);\nrect a = hor(rep(6,background),rep(4,black),rep(6,background));\nrect b = hor(rep(5,background),rep(1,black),rep(3,red),rep(1,black),rep(6,background));\nrect c = hor(rep(4,background),rep(1,black),rep(2,red),rep(2,black),rep(7,background));\nrect d = hor(rep(3,background),rep(1,black),rep(4,brown),rep(1,black),rep(7,background));\nrect e = hor(rep(2,background),rep(1,black),rep(1,brown),rep(1,black),rep(2,brown),rep(1,black),rep(1,brown),rep(1,black),rep(1,background),rep(4,black),rep(1,background));\nrect f = hor(rep(2,background),rep(1,black),rep(1,brown),rep(1,black),rep(2,brown),rep(1,black),rep(1,brown),rep(2,black),rep(4,brown),rep(1,black));\nrect g = hor(rep(1,background),rep(1,black),rep(3,yellow),rep(2,brown),rep(1,black),rep(1,brown),rep(1,black),rep(5,brown),rep(1,black));\nrect h = hor(rep(2,background),rep(2,black),rep(10,brown),rep(1,black),rep(1,background));\nrect i = hor(rep(1,background),rep(1,black),rep(13,brown),rep(1,black));\nrect j = hor(rep(1,black),rep(8,brown),rep(1,black),rep(2,brown),rep(1,black),rep(2,brown),rep(1,black));\nrect k = hor(rep(1,black),rep(9,brown),rep(2,black),rep(2,brown),rep(1,black),rep(1,background));\nrect l = hor(rep(1,black),rep(12,brown),rep(2,black),rep(1,background));\nrect m = hor(rep(1,background),rep(2,black),rep(10,brown),rep(1,black),rep(2,background));\nrect n = hor(rep(2,background),rep(2,black),rep(8,brown),rep(2,black),rep(2,background));\nrect o = hor(rep(3,background),rep(10,black),rep(3,background));\nrect p = hor(rep(2,background),rep(1,black),rep(3,yellow),rep(1,black),rep(3,yellow),rep(1,black),rep(5,background));\nvert(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p);"
     },
     { id: 2, 
@@ -147,7 +147,7 @@ function Examples() {
               <a href="/about">About Us</a>
             </li>
             <li>
-              <a href="/examples">Docs</a>
+              <a href="/examples">Tutorial</a>
             </li>
           </ul>
         </div>
@@ -156,17 +156,18 @@ function Examples() {
         <ul>
           <li>
             <a href="/gettingStarted">
-              <FontAwesomeIcon icon={faHouse} className="icon" /> Getting Started
+              <FontAwesomeIcon icon={faHouse} className="icon" /> Definitions & Variables
             </a>
           </li>
           <li>
-            <a href="#">
-              <FontAwesomeIcon icon={faPenFancy} className="icon" /> Creating Patterns
+            <a href="/functions">
+              <FontAwesomeIcon icon={faPenFancy} className="icon" /> Functions
             </a>
           </li>
         </ul>
       </div>
       <h1>Examples</h1>
+      <div className="responsive-container">
       <div className="picture-container">
         {exampleDesigns.map((example, index) => (
           <Link
@@ -175,13 +176,14 @@ function Examples() {
           >
             <canvas
               ref={(el) => (canvasRefs.current[index] = el)}
-              width={150}
-              height={150}
+              width={325}
+              height={325}
               title={example.code}
               className="example-canvas"
             />
           </Link>
         ))}
+      </div>
       </div>
     </div>
   );
