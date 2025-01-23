@@ -7,7 +7,7 @@ const {
     TAG_IDENTIFIER, TAG_VAR_CALL, TAG_OVER, TAG_PROGRAM, TAG_ASSIGNMENT, TAG_FUNC, TAG_FUN_CALL, TAG_TYPE_EQUALITY, TAG_ARG, TAG_SOLID, TAG_PIXEL
 } = require('./parserASTfunction.js');
 
-const context = {}
+
 
 //let testAST = parser.parse('hor (rect(1, 1, red), rect(1, 1, blue))')
 //let testAST = parser.parse('rect(1, 1, blue);')
@@ -26,6 +26,7 @@ const context = {}
 //console.log(check(context, testAST))
 
 export default function typechecker(node) {
+    const context = {}
     return check(context, node);
 }
 
@@ -33,7 +34,7 @@ function check(context, node){
     switch (node.tag) {
         case TAG_PROGRAM:
             //definitions, quilt
-            if (node.definitions === null)
+            if (node.definitions === undefined)
                 return check(context, node.quilt)
             else {
                 for (let x=0; x < node.definitions.length; x++){
@@ -88,7 +89,7 @@ function check(context, node){
         case TAG_VAR_CALL:
             //get the tag of the variable
             let curTag = context[node.name];
-            if (curTag === null){
+            if (curTag === undefined){
                 throw new Error(`Variable ${node.name} was not properly defined.`);
             }
             else {return curTag;}
@@ -230,7 +231,7 @@ function check(context, node){
             return TAG_RECT;
 
         case TAG_COLOR:
-            let colorArray = ["red", "orange", "yellow", "green", "blue", "purple", "black", "pink", "brown", "grey", "gray", "white"];
+            let colorArray = ["red", "orange", "yellow", "green", "blue", "purple", "black", "pink", "brown", "grey", "gray", "white", "larry"];
             if (colorArray.includes(node.name)){
                 return TAG_COLOR;
             }
@@ -275,7 +276,12 @@ function checkDefn (context, node) {
             //if context already has variable name that is bad
             //so we check if it has: if yes, send error, else add to con
             //however- maybe we dont care about that?? i cant tell
-            if (context[node.name] !== null) {
+            if (check(context, node.type) !== check(context, node.value)) {
+                throw new Error(`Expected a ${check(context, node.type)}, got a ${check(context, node.value)}.`);
+            }
+
+            if (context[node.name] !== undefined) {
+                console.log("context", context[node.name])
                 throw new Error(`Expected a new variable declaration, got old ${node.name}.`); }
             else {
                 context[node.name] = check(context, node.value); } //puts tag into context
@@ -290,7 +296,7 @@ function checkDefn (context, node) {
             //except maybe we can keep as is?
             //first get the old tag
             let oldTag = context[node.name];
-            if (oldTag === null) {
+            if (oldTag === undefined) {
                 throw new Error(`No typed variable available to reassign for ${node.name}.`)
             }
             if (oldTag !== check(context, node.value)) {
@@ -304,7 +310,7 @@ function checkDefn (context, node) {
         case TAG_FUNC:
             //i have name, args, body
             //first check if exists already
-            if (context[node.name] !== null) {
+            if (context[node.name] !== undefined) {
                 throw new Error(`Function ${node.name} was already declared.`);
             }
             else {

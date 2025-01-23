@@ -7,8 +7,7 @@ const {
 
 const parser = require("./parser.js");
 
-//our environment is a javascript object
-const environment = {};
+
 
 //want some objects to hold information about the patches/designs
 function Patch(x, y, width, height, color, rotationFromOriginal=0) {
@@ -53,6 +52,8 @@ function Design(maxWidth, maxHeight, patches) {
 //ERRORS TO ADD: at least 2 rectangles for hor,vert,etc
 
 export default function evaluator(node) {
+    //our environment is a javascript object
+    const environment = {};
     return evaluatorLogic(environment, node);
 }
 
