@@ -120,3 +120,17 @@
     color: rgb(236, 117, 5);
   }
   
+.valid-colors li {
+  list-style: none;
+}
+
+#red-valid{color: #b57c7c;}
+#orange-valid{color: #d9a078;}
+#yellow-valid{color: #c8b77a;}
+#green-valid{color: #85a586;}
+#blue-valid{color: #6a8caf;}
+#purple-valid{color: #9e86a6;}
+#black-valid{color: #4d4d4d;}
+#pink-valid{color: #d8a6b8;}
+#brown-valid{color: #a58c72;}
+#grey-valid{color: #b0b0b0;}

@@ -233,10 +233,10 @@ function Play() {
                 </div> */}
                 <div className="button-help">
                     <div className="btn-action">
-                        <code>Shift + Enter</code> <span>to submit</span>
+                        <code id="submitBtn" onClick={handleSubmit}>Shift + Enter</code> <span>to submit</span>
                     </div>
                     <div className="btn-action">
-                        <code>Shift + Backspace</code> <span>to clear</span>
+                        <code id="clearBtn" onClick={handleClear}>Shift + Backspace</code> <span>to clear</span>
                     </div>
                     <div className="btn-action">
                         <code id="downloadBtn" onClick={downloadCanvasDrawing}>Download</code>
