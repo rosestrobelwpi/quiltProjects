@@ -1,22 +1,24 @@
 import structuredClone from "@ungap/structured-clone";
 
 const {
-    TAG_RECT, TAG_NAT_NUM, TAG_COLOR, TAG_HOR, TAG_VERT, TAG_PLUS, TAG_TIMES, TAG_VARIABLE, TAG_DEPENDENT_FUNC, TAG_ROTATION, TAG_ROT, TAG_REP,
+    TAG_RECT, TAG_NAT_NUM, TAG_COLOR, TAG_HOR, TAG_VERT, TAG_PLUS, TAG_TIMES, TAG_VARIABLE, TAG_ROTATION, TAG_ROT, TAG_REPX, TAG_REPY,
     TAG_IDENTIFIER, TAG_VAR_CALL, TAG_OVER, TAG_PROGRAM, TAG_ASSIGNMENT, TAG_FUNC, TAG_FUN_CALL
 } = require('./parserASTfunction.js');
 
 const parser = require("./parser.js");
 
-//our environment is a javascript object
-const environment = {};
+
 
 //want some objects to hold information about the patches/designs
-function Patch(x, y, width, height, color) {
+function Patch(x, y, width, height, color, rotationFromOriginal=0) {
     this.x = x;
     this.y = y;
     this.width = width;
     this.height = height;
     this.color = color;
+
+    //FIXME testing out images
+    this.rotationFromOriginal = rotationFromOriginal;
 }
 
 function Design(maxWidth, maxHeight, patches) {
@@ -50,10 +52,12 @@ function Design(maxWidth, maxHeight, patches) {
 //ERRORS TO ADD: at least 2 rectangles for hor,vert,etc
 
 export default function evaluator(node) {
+    //our environment is a javascript object
+    const environment = {};
     return evaluatorLogic(environment, node);
 }
 
-//returns Design object, containing information about every patch that is to be displayed
+//returns a Patch or Design object, containing information about every patch that is to be displayed
 function evaluatorLogic(env, node) {
     switch (node.tag) {
         case TAG_PROGRAM:
@@ -238,13 +242,22 @@ function evaluatorLogic(env, node) {
             if (designRot instanceof Patch) {
                 switch (angle) { 
                     case 0:
+                        designRot.rotationFromOriginal = 0; //#FIXME testing images, could be an issue if sum can be more than 270 (may have to mod)
+                        break;
                     case 180: //no change needed
+                        designRot.rotationFromOriginal = 180; //#FIXME testing images, could be an issue if sum can be more than 270 (may have to mod)
                         break; 
                     case 90:
-                    case 270: //switch width and height
-                        let tempWidth = designRot.width
+                        designRot.rotationFromOriginal = 90; //#FIXME testing images, could be an issue if sum can be more than 270 (may have to mod)
+                        let tempWidth90 = designRot.width
                         designRot.width = designRot.height;
-                        designRot.height = tempWidth
+                        designRot.height = tempWidth90
+                        break;
+                    case 270: //switch width and height
+                        designRot.rotationFromOriginal = 270; //#FIXME testing images, could be an issue if sum can be more than 270 (may have to mod)
+                        let tempWidth270 = designRot.width
+                        designRot.width = designRot.height;
+                        designRot.height = tempWidth270
                         break;
                     default:
                         console.log("Angle not supported")
@@ -264,6 +277,7 @@ function evaluatorLogic(env, node) {
                         case 0: //no change needed
                             // | | |
                             // | |*|
+                            patch.rotationFromOriginal = 0;
                             break; 
                         case 90:
                             // | | |
@@ -279,6 +293,8 @@ function evaluatorLogic(env, node) {
                             patch.height = tempWidth
                             
                             patch.x += designRot.width //in order to display in the correct position on canvas, have to perform translation
+
+                            patch.rotationFromOriginal = 90;
                             break;
                         case 180: 
                             // |*| |
@@ -292,6 +308,8 @@ function evaluatorLogic(env, node) {
                             
                             patch.x += designRot.width //have to move horizontally and vertically 
                             patch.y += designRot.height 
+
+                            patch.rotationFromOriginal = 180;
                             break;
                         case 270: 
                             // | |*|
@@ -307,6 +325,8 @@ function evaluatorLogic(env, node) {
                             patch.height = tempWidth
                             
                             patch.y += designRot.height //this has to just move vertically since it's above (below) the x-axis (screen coordingates upside down)
+                            
+                            patch.rotationFromOriginal = 270;
                             break;
                         default:
                             console.log("Angle not supported")
@@ -317,7 +337,7 @@ function evaluatorLogic(env, node) {
             }
             return designRot;
 
-        case TAG_REP: //assuming we are repeating in the x direction
+        case TAG_REPX: //assuming we are repeating in the x direction
             console.log("NODE.DESIGN", node.design)
             let original = evaluatorLogic(env, node.design)
             console.log('ORIGINAL:', original)
@@ -346,6 +366,34 @@ function evaluatorLogic(env, node) {
             }
             return new Design(original.width*numRepetitions, original.height, allPatchesRep)
 
+        case TAG_REPY: //assuming we are repeating in the y direction
+            console.log("NODE.DESIGN", node.design)
+            let originalY = evaluatorLogic(env, node.design)
+            console.log('ORIGINAL:', originalY)
+            let numRepetitionsY = evaluatorLogic(env, node.value)
+            let allPatchesRepY = []
+
+            if (originalY instanceof Patch) {
+                allPatchesRepY.push(originalY)
+                let prevY = originalY.y
+                for (let i = 1; i < numRepetitionsY; i++) { //start at 1 since we've already taken care of the first repetition
+                    let newRep = new Patch(originalY.x, prevY + originalY.height, originalY.width, originalY.height, originalY.color)
+                    allPatchesRepY.push(newRep)
+                    prevY = newRep.y
+                }
+            } else if (originalY instanceof Design) {
+                allPatchesRepY.push(originalY.patches)
+                allPatchesRepY = allPatchesRepY.flat() //to ensure 1d array
+                for (let i = 1; i < numRepetitionsY; i++) {
+                    let newRep = structuredClone(originalY) //deep copy - doesn't display the word "Patch" when logged to console, fix on next line
+                    Object.setPrototypeOf(newRep, Design.prototype) //it seemed to be working without this, but just for consistancy, give it its prototype back (because JS is STUPID)
+                    for (let patch of newRep.patches) {
+                        patch.y += (i * originalY.height) //i represents which repetition we are on, so this calculation will give us the correct offset
+                        allPatchesRepY.push(patch)
+                    }
+                }
+            }
+            return new Design(originalY.width, originalY.height*numRepetitionsY, allPatchesRepY)
 
         case TAG_HOR:
            //first one we don't change, it will be positioned at the origin

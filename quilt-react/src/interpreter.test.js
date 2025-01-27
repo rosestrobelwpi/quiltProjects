@@ -1,6 +1,9 @@
 import evaluator from './interpreter.js';
 import parser from './parser.js';
 
+//add comments with intent
+//tests for error messages as well
+
 
 test("square", () => {
     expect(evaluator(parser.parse("rect(1,1,red);"))).toEqual({"x": 0, "y": 0, "width": 1, "height": 1, "color": "red"});
