@@ -45,10 +45,10 @@ function resizeCanvas(canvas){
 }
 
 // Function to draw a single rectangle
-function drawRectangle(ctx, x, y, width, height, color, rotationFromOriginal) {
+function drawRectangle(ctx, x, y, width, height, color) {
     const mutedColor = colorPalette[color] || color;
 
-    console.log("rotationFromOriginal", rotationFromOriginal)
+    //console.log("rotationFromOriginal", rotationFromOriginal)
     if (mutedColor === 'larry') {
         const image = new Image();
         image.src = imageSRC

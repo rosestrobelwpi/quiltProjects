@@ -309,7 +309,6 @@ function peg$parse(input, options) {
         if (element[1] === "+") { return new p.Plus(result, element[3]); }
         if (element[1] === "-") { return result - element[3]; }
         if (element[1] === "==") { return new p.TypeEquality(result, element[3]); }
-        //if (element.slice(1,5).join('') === "vert") { return new p.vert(element[6], element[8]); }
       }, head);
     };
   var peg$f7 = function(head, tail) {
@@ -1584,6 +1583,15 @@ function peg$parse(input, options) {
           if (s3 !== peg$FAILED) {
             s4 = peg$parse_();
             s5 = peg$parseInteger();
+            if (s5 === peg$FAILED) {
+              s5 = peg$parsevarCall();
+              if (s5 === peg$FAILED) {
+                s5 = peg$parseExpression();
+                if (s5 === peg$FAILED) {
+                  s5 = peg$parseTerm();
+                }
+              }
+            }
             if (s5 !== peg$FAILED) {
               s6 = peg$parse_();
               if (input.charCodeAt(peg$currPos) === 44) {
@@ -1665,6 +1673,15 @@ function peg$parse(input, options) {
             if (s3 !== peg$FAILED) {
               s4 = peg$parse_();
               s5 = peg$parseInteger();
+              if (s5 === peg$FAILED) {
+                s5 = peg$parsevarCall();
+                if (s5 === peg$FAILED) {
+                  s5 = peg$parseExpression();
+                  if (s5 === peg$FAILED) {
+                    s5 = peg$parseTerm();
+                  }
+                }
+              }
               if (s5 !== peg$FAILED) {
                 s6 = peg$parse_();
                 if (input.charCodeAt(peg$currPos) === 44) {
@@ -2025,6 +2042,12 @@ function peg$parse(input, options) {
         s5 = peg$parseInteger();
         if (s5 === peg$FAILED) {
           s5 = peg$parsevarCall();
+          if (s5 === peg$FAILED) {
+            s5 = peg$parseExpression();
+            if (s5 === peg$FAILED) {
+              s5 = peg$parseTerm();
+            }
+          }
         }
         if (s5 !== peg$FAILED) {
           s6 = peg$parse_();
@@ -2040,6 +2063,12 @@ function peg$parse(input, options) {
             s9 = peg$parseInteger();
             if (s9 === peg$FAILED) {
               s9 = peg$parsevarCall();
+              if (s9 === peg$FAILED) {
+                s9 = peg$parseExpression();
+                if (s9 === peg$FAILED) {
+                  s9 = peg$parseTerm();
+                }
+              }
             }
             if (s9 !== peg$FAILED) {
               s10 = peg$parse_();
@@ -2133,6 +2162,12 @@ function peg$parse(input, options) {
           s5 = peg$parseInteger();
           if (s5 === peg$FAILED) {
             s5 = peg$parsevarCall();
+            if (s5 === peg$FAILED) {
+              s5 = peg$parseExpression();
+              if (s5 === peg$FAILED) {
+                s5 = peg$parseTerm();
+              }
+            }
           }
           if (s5 !== peg$FAILED) {
             s6 = peg$parse_();
@@ -2148,6 +2183,12 @@ function peg$parse(input, options) {
               s9 = peg$parseInteger();
               if (s9 === peg$FAILED) {
                 s9 = peg$parsevarCall();
+                if (s9 === peg$FAILED) {
+                  s9 = peg$parseExpression();
+                  if (s9 === peg$FAILED) {
+                    s9 = peg$parseTerm();
+                  }
+                }
               }
               if (s9 !== peg$FAILED) {
                 s10 = peg$parse_();

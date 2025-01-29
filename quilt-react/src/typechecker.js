@@ -56,7 +56,7 @@ function check(context, node){
 
         case TAG_PLUS:
             if (check(context, node.left) === TAG_NAT_NUM && check(context, node.right) === TAG_NAT_NUM) {
-                return TAG_PLUS;
+                return TAG_NAT_NUM;
             }
             else {
                 throw new Error(`Expected two natural numbers to add, got ${node.left.value} and ${node.right.value}.`);
@@ -68,7 +68,7 @@ function check(context, node){
         
         case TAG_TIMES:
             if (check(context, node.left) === TAG_NAT_NUM && check(context, node.right) === TAG_NAT_NUM) {
-                return TAG_TIMES;
+                return TAG_NAT_NUM;
             }
             else {
                 throw new Error(`Expected two natural numbers to multiply, got ${node.left} and ${node.right}.`);
@@ -174,10 +174,10 @@ function check(context, node){
             return TAG_RECT;
 
         case TAG_REPX:
-            if (check(context, node.left) !== TAG_NAT_NUM) {
+            if (check(context, node.value) !== TAG_NAT_NUM) {
                 throw new Error(`Expected Integer to repeat over, got ${node.left}.`);
             }
-            for (let x=0; x < node.right.length; x++){
+            for (let x=0; x < node.design.length; x++){
                 let theRect = check(context, node.right[x])
                 if (theRect !== TAG_RECT){
                     throw new Error(`Expected Rectangles for a design, got ${theRect}.`);
@@ -186,10 +186,10 @@ function check(context, node){
             return TAG_RECT;
 
         case TAG_REPY:
-            if (check(context, node.left) !== TAG_NAT_NUM) {
+            if (check(context, node.value) !== TAG_NAT_NUM) {
                 throw new Error(`Expected Integer to repeat over, got ${node.left}.`);
             }
-            for (let x=0; x < node.right.length; x++){
+            for (let x=0; x < node.design.length; x++){
                 let theRect = check(context, node.right[x])
                 if (theRect !== TAG_RECT){
                     throw new Error(`Expected Rectangles for a design, got ${theRect}.`);
@@ -198,11 +198,11 @@ function check(context, node){
             return TAG_RECT;
 
         case TAG_ROT:
-            if (check(context, node.left) !== TAG_ROTATION) {
+            if (check(context, node.angle) !== TAG_ROTATION) {
                 throw new Error(`Expected 0/90/180/270 to rotate by, got ${node.left}.`);
             }
-            for (let x=0; x < node.right.length; x++){
-                let theRect = check(context, node.right[x])
+            for (let x=0; x < node.design.length; x++){
+                let theRect = check(context, node.design[x])
                 if (theRect !== TAG_RECT){
                     throw new Error(`Expected Rectangles for a design, got ${theRect}.`);
                 }

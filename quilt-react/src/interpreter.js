@@ -10,7 +10,7 @@ const parser = require("./parser.js");
 
 
 //want some objects to hold information about the patches/designs
-function Patch(x, y, width, height, color, rotationFromOriginal=0) {
+function Patch(x, y, width, height, color) {
     this.x = x;
     this.y = y;
     this.width = width;
@@ -18,7 +18,7 @@ function Patch(x, y, width, height, color, rotationFromOriginal=0) {
     this.color = color;
 
     //FIXME testing out images
-    this.rotationFromOriginal = rotationFromOriginal;
+    //this.rotationFromOriginal = rotationFromOriginal;
 }
 
 function Design(maxWidth, maxHeight, patches) {
@@ -65,7 +65,9 @@ function evaluatorLogic(env, node) {
                 //Add everything to environment that needs to be there
                 evaluatorLogic(env, defn) //FIXME would it be better to directly call evaluatorDefn?
             }
-            return evaluatorLogic(env, node.quilt)
+            let quilt = evaluatorLogic(env, node.quilt)
+            console.log("QUILT:", quilt)
+            return quilt
 
         case TAG_VARIABLE:
         case TAG_ASSIGNMENT://this is actually re-assignment, the initial assignment happens in Variable - but essentially doing the same thing as Variable
@@ -157,11 +159,11 @@ function evaluatorLogic(env, node) {
                 let currentDesign = evaluatorLogic(env, node.design[i])
                 if (currentDesign instanceof Patch) {
                     if (currentDesign.width >  firstDesignOver.width && currentDesign.height > firstDesignOver.height) {
-                        throw new Error("Patch #" + (i+1) + " is wider AND taller than the Design it is being placed over. Please put the largest Design first.")
+                        throw new Error("Patch #" + (i+1) + " is wider AND taller than the Design it is being placed over. Please put the larger Design first.")
                     } else if(currentDesign.width >  firstDesignOver.width) {
-                        throw new Error("Patch #" + (i+1) + " is wider than the Design it is being placed over. Please put the largest Design first.")
+                        throw new Error("Patch #" + (i+1) + " is wider than the Design it is being placed over. Please put the larger Design first.")
                     } else if (currentDesign.height > firstDesignOver.height) {
-                        throw new Error("Patch #" + (i+1) + " is taller than the Design it is being placed over. Please put the largest Design first.")
+                        throw new Error("Patch #" + (i+1) + " is taller than the Design it is being placed over. Please put the larger Design first.")
                     }
                     switch(anchor) {
                         case "TL":
@@ -242,19 +244,19 @@ function evaluatorLogic(env, node) {
             if (designRot instanceof Patch) {
                 switch (angle) { 
                     case 0:
-                        designRot.rotationFromOriginal = 0; //#FIXME testing images, could be an issue if sum can be more than 270 (may have to mod)
+                        //designRot.rotationFromOriginal = 0; //#FIXME testing images, could be an issue if sum can be more than 270 (may have to mod)
                         break;
                     case 180: //no change needed
-                        designRot.rotationFromOriginal = 180; //#FIXME testing images, could be an issue if sum can be more than 270 (may have to mod)
+                        //designRot.rotationFromOriginal = 180; //#FIXME testing images, could be an issue if sum can be more than 270 (may have to mod)
                         break; 
                     case 90:
-                        designRot.rotationFromOriginal = 90; //#FIXME testing images, could be an issue if sum can be more than 270 (may have to mod)
+                        //designRot.rotationFromOriginal = 90; //#FIXME testing images, could be an issue if sum can be more than 270 (may have to mod)
                         let tempWidth90 = designRot.width
                         designRot.width = designRot.height;
                         designRot.height = tempWidth90
                         break;
                     case 270: //switch width and height
-                        designRot.rotationFromOriginal = 270; //#FIXME testing images, could be an issue if sum can be more than 270 (may have to mod)
+                        //designRot.rotationFromOriginal = 270; //#FIXME testing images, could be an issue if sum can be more than 270 (may have to mod)
                         let tempWidth270 = designRot.width
                         designRot.width = designRot.height;
                         designRot.height = tempWidth270
@@ -277,7 +279,7 @@ function evaluatorLogic(env, node) {
                         case 0: //no change needed
                             // | | |
                             // | |*|
-                            patch.rotationFromOriginal = 0;
+                            //patch.rotationFromOriginal = 0;
                             break; 
                         case 90:
                             // | | |
@@ -294,7 +296,7 @@ function evaluatorLogic(env, node) {
                             
                             patch.x += designRot.width //in order to display in the correct position on canvas, have to perform translation
 
-                            patch.rotationFromOriginal = 90;
+                            //patch.rotationFromOriginal = 90;
                             break;
                         case 180: 
                             // |*| |
@@ -309,7 +311,7 @@ function evaluatorLogic(env, node) {
                             patch.x += designRot.width //have to move horizontally and vertically 
                             patch.y += designRot.height 
 
-                            patch.rotationFromOriginal = 180;
+                            //patch.rotationFromOriginal = 180;
                             break;
                         case 270: 
                             // | |*|
@@ -326,7 +328,7 @@ function evaluatorLogic(env, node) {
                             
                             patch.y += designRot.height //this has to just move vertically since it's above (below) the x-axis (screen coordingates upside down)
                             
-                            patch.rotationFromOriginal = 270;
+                            //patch.rotationFromOriginal = 270;
                             break;
                         default:
                             console.log("Angle not supported")
