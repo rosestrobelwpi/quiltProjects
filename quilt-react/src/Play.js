@@ -19,7 +19,7 @@ import imageSRC from './laura_test_image/larry.png';
 const colorPalette = {
     red: '#b57c7c',
     orange: '#d9a078',
-    yellow: '#c8b77a',
+    yellow: '#b57c7c',
     green: '#85a586',
     blue: '#6a8caf',
     purple: '#9e86a6',
