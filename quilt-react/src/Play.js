@@ -34,7 +34,7 @@ const colorPalette = {
 
 //Function to resize canvas
 function resizeCanvas(canvas){
-    const canvasSize = Math.min(window.innerWidth, window.innerHeight);
+    const canvasSize = Math.min(window.innerWidth, window.innerHeight) * 0.85;
 
     if (canvasSize > 1100) {
         canvas.width = 1100;
