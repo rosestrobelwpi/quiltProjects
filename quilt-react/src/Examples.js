@@ -156,7 +156,7 @@ function Examples() {
         <ul>
           <li>
             <a href="/gettingStarted">
-              <FontAwesomeIcon icon={faHouse} className="icon" /> Definitions & Variables
+              <FontAwesomeIcon icon={faHouse} className="icon" /> Definitions & Vari
             </a>
           </li>
           <li>
