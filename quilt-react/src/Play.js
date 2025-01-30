@@ -27,6 +27,8 @@ const colorPalette = {
     pink: '#d8a6b8',
     brown: '#a58c72',
     grey: '#b0b0b0',
+    gray: '#b0b0b0',
+    white: '000000',
     larry: 'larry'
 };
 
