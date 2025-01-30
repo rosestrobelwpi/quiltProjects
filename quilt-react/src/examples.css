@@ -84,7 +84,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Dynamically adjusts columns */
   gap: 10px; /* Reduces space between items */
-  padding: 20px;
+  padding: 2%;
   margin: 0 auto;
   max-width: 1200px;
 }
@@ -221,7 +221,7 @@
 }
 
 .document-links ul li {
-  padding: 10px;
+  padding: 2%;
   font-size: 18px;
   background-color: #FEFAE0;
   width: 25vw;

@@ -65,7 +65,7 @@ html, body {
   justify-content: center;
   align-items: flex-start;
   background-color: #FEFAE0 !important;
-  padding: 20px;
+  padding: 2%;
 }
 
 .codemirror-container {
@@ -80,7 +80,7 @@ html, body {
   color: #ffd000 !important;
   min-height: 50vh !important;
   font-size: 18px;
-  min-width: 800px;
+  min-width: 50vw;
   max-width: 50vw;
   border: 0.5px solid #542e0e !important;
 }
@@ -118,7 +118,10 @@ color: #283618 !important;
   justify-content: center;
   align-items: center;
   background-color: #FEFAE0 !important;
-  padding: 20px;
+  padding: 2%;
+  max-width: 50vw;
+  width: 100%;
+  height: auto;
 }
 
 #canvas {
@@ -130,7 +133,7 @@ color: #283618 !important;
   background-color: #DDA15E;
   border-radius: 15px;
   cursor: pointer;
-  padding: 5px 10px;
+  padding: 5% 10%;
   margin: 0 auto;
   font-size: 10px;
   transition: 0.2s;
