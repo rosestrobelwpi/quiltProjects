@@ -1,8 +1,6 @@
 node_modules
-npm-debug.log
-yarn-error.log
-.DS_Store
+quilt-react/node_modules
+quilt-react/build
 .git
 .gitignore
-.env
-
+.dockerignore
