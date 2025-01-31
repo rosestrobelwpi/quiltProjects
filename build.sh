@@ -1,18 +1,14 @@
 #!/bin/bash
 
-# Exit script on error
-set -e
+# Set Docker Buildx to enable multi-platform builds
+docker buildx create --use
 
-# Navigate to the React project folder
-cd quilt-react
+# Build the image explicitly for `linux/amd64`
+docker buildx build --platform linux/amd64 \
+    -t bentyler2003/quiltmakermqp:latest \
+    --push .
 
-# Install dependencies and build React app
-npm install
-npm run build
+# Remove unused Docker images to free up space
+docker system prune -f
 
-# Navigate back to root directory
-cd ..
-
-# Build and push Docker image
-docker build -t bentyler2003/quiltmakermqp .
-docker push bentyler2003/quiltmakermqp
+echo "✅ Build and push complete. Pull the image on your EC2 instance."
