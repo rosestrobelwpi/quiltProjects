@@ -1,15 +1,19 @@
 # Use an official Node.js runtime as base image
-FROM node:16-alpine
+FROM node:18-alpine  
 
 # Set working directory in container
 WORKDIR /app
 
-# Copy package.json and install dependencies
-COPY quilt-react/package.json ./
+# Copy package.json and package-lock.json first (for better caching)
+COPY quilt-react/package.json quilt-react/package-lock.json ./
+
+# Install dependencies
 RUN npm install
 
-# Copy React app and build it
+# Copy the entire React app
 COPY quilt-react ./
+
+# Build React
 RUN npm run build
 
 # Use a lightweight web server to serve the build files
