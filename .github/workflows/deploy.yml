@@ -1,7 +1,7 @@
 name: Debug GitHub Secrets
 
 on:
-  workflow_dispatch  # Allows manual triggering
+  workflow_dispatch  # Allows manual 
 
 jobs:
   print-secrets:
