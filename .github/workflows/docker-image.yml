@@ -17,8 +17,8 @@ jobs:
 
       - name: Debug Secrets
         run: |
-          echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME:0:5 }}***"
-          echo "DOCKERHUB_REPO=${{ secrets.DOCKERHUB_REPO }}"
+          echo "DOCKERHUB_USERNAME is set"
+          echo "DOCKERHUB_REPO is set"
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
