@@ -1,31 +1,37 @@
-name: Debug GitHub Secrets
+name: Deploy to AWS EC2
 
 on:
-  workflow_dispatch  # Allows manual 
+  push:
+    branches: [ "main", "iteration1", "iteration2", "iteration3", "Iteration1", "Iteration2", "Iteration3" ]
 
 jobs:
-  print-secrets:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: List All Available Secrets
-        run: |
-          echo "🔍 Checking GitHub Secrets..."
-          echo "=================================="
-          echo "EC2_HOST: ${{ secrets.EC2_HOST }}"
-          echo "EC2_USERNAME: ${{ secrets.EC2_USERNAME }}"
-          echo "DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}"
-          echo "DOCKERHUB_REPO: ${{ secrets.DOCKERHUB_REPO }}"
-          echo "GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}"
-          echo "=================================="
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - name: Check if SSH Key Exists
+      - name: Set up SSH Key
         run: |
-          if [ -z "${{ secrets.EC2_SSH_KEY }}" ]; then
-            echo "❌ EC2_SSH_KEY is EMPTY!"
-            exit 1
-          else
-            echo "✅ EC2_SSH_KEY is set."
-            echo "First 50 characters of SSH Key:"
-            echo "${{ secrets.EC2_SSH_KEY }}" | head -c 50
-          fi
+          echo "${{ secrets.EC2_SSH_KEY }}" > ec2_key.pem
+          chmod 600 ec2_key.pem
+
+      - name: Test SSH Connection
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ec2_key.pem ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} "echo 'SSH connection successful'"
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            whoami
+            docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPO }}:latest
+            docker stop $(docker ps -q) || true
+            docker rm $(docker ps -aq) || true
+            docker run -d -p 80:3000 ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPO }}:latest
+
 
