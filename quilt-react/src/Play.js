@@ -14,6 +14,11 @@ import "./App.css";
 //laura messing around with inserting images
 //local import for now, not sure how to get image from user dynamically
 import imageSRC from './laura_test_image/larry.png';
+import imageSRCorange from './laura_test_image/orangeFabric.png';
+import imageSRCgrey from './laura_test_image/pumpkinFabric.png';
+import imageSRCblue from './laura_test_image/gooseFabric.png';
+import imageSRCpurple from './laura_test_image/halloweenFabric.png';
+import imageSRCbrown from './laura_test_image/woodlandFabric.png';
 
 // Define a muted color palette
 const colorPalette = {
@@ -64,6 +69,31 @@ function drawRectangle(ctx, x, y, width, height, color) {
         // ctx.drawImage(image, -width / 2, -height / 2, width, height); //draw image, rotates around its center
         // ctx.restore(); //restore canvas from ctx.save()
 
+    // } else if (color === '#d9a078'){
+    //     const image = new Image();
+    //     image.src = imageSRCorange;
+    //     ctx.drawImage(image, x, y, width, height);
+
+    // } else if (color === "#b0b0b0"){
+    //     const image = new Image();
+    //     image.src = imageSRCgrey;
+    //     ctx.drawImage(image, x, y, width, height);
+
+    // } else if (color === "#6a8caf"){
+    //     const image = new Image();
+    //     image.src = imageSRCblue;
+    //     ctx.drawImage(image, x, y, width, height);
+
+    // } else if (color === "#9e86a6"){
+    //     const image = new Image();
+    //     image.src = imageSRCpurple;
+    //     ctx.drawImage(image, x, y, width, height);
+
+    // } else if (color === "#a58c72"){
+    //     const image = new Image();
+    //     image.src = imageSRCbrown;
+    //     ctx.drawImage(image, x, y, width, height);
+    
     } else {
         ctx.fillStyle = mutedColor;
         ctx.fillRect(Math.floor(x), Math.floor(y), Math.ceil(width), Math.ceil(height));

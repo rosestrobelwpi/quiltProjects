@@ -2,7 +2,7 @@ import structuredClone from "@ungap/structured-clone";
 
 const {
     TAG_RECT, TAG_NAT_NUM, TAG_COLOR, TAG_HOR, TAG_VERT, TAG_PLUS, TAG_TIMES, TAG_VARIABLE, TAG_ROTATION, TAG_ROT, TAG_REPX, TAG_REPY,
-    TAG_IDENTIFIER, TAG_VAR_CALL, TAG_OVER, TAG_PROGRAM, TAG_ASSIGNMENT, TAG_FUNC, TAG_FUN_CALL
+    TAG_VAR_CALL, TAG_OVER, TAG_PROGRAM, TAG_ASSIGNMENT, TAG_FUNC, TAG_FUN_CALL
 } = require('./parserASTfunction.js');
 
 const parser = require("./parser.js");
@@ -117,9 +117,6 @@ function evaluatorLogic(env, node) {
             console.log("this is func body", funcBody)
             console.log("env before lookin at funcbody maybe", env)
             return evaluatorLogic(env, funcBody)
-
-        case TAG_IDENTIFIER:
-            break;
        
         case TAG_NAT_NUM:
             return node.value
@@ -155,16 +152,18 @@ function evaluatorLogic(env, node) {
             } else {
                 console.log("this is not a Patch or Design, something went wrong")
             }
+
             for (let i = 1; i < (node.design).length; i++) {
                 let currentDesign = evaluatorLogic(env, node.design[i])
+                if (currentDesign.width >  firstDesignOver.width && currentDesign.height > firstDesignOver.height) {
+                    throw new Error("Patch #" + (i+1) + " is wider AND taller than the Design it is being placed over. Please put the larger Design first.")
+                } else if(currentDesign.width >  firstDesignOver.width) {
+                    throw new Error("Patch #" + (i+1) + " is wider than the Design it is being placed over. Please put the larger Design first.")
+                } else if (currentDesign.height > firstDesignOver.height) {
+                    throw new Error("Patch #" + (i+1) + " is taller than the Design it is being placed over. Please put the larger Design first.")
+                }
+
                 if (currentDesign instanceof Patch) {
-                    if (currentDesign.width >  firstDesignOver.width && currentDesign.height > firstDesignOver.height) {
-                        throw new Error("Patch #" + (i+1) + " is wider AND taller than the Design it is being placed over. Please put the larger Design first.")
-                    } else if(currentDesign.width >  firstDesignOver.width) {
-                        throw new Error("Patch #" + (i+1) + " is wider than the Design it is being placed over. Please put the larger Design first.")
-                    } else if (currentDesign.height > firstDesignOver.height) {
-                        throw new Error("Patch #" + (i+1) + " is taller than the Design it is being placed over. Please put the larger Design first.")
-                    }
                     switch(anchor) {
                         case "TL":
                             currentDesign.x = x
@@ -196,13 +195,6 @@ function evaluatorLogic(env, node) {
                     let xOffset = currentDesign.patches[0].x - x
                     let yOffset = currentDesign.patches[0].y - y
                     for (let patch of currentDesign.patches) {
-                        if (patch.width >  firstDesignOver.width && patch.height > firstDesignOver.height) {
-                            throw new Error("Patch #" + (i+1) + " is wider AND taller than the Design it is being placed over. Please put the largest Design first.")
-                        } else if(patch.width >  firstDesignOver.width) {
-                            throw new Error("Patch #" + (i+1) + " is wider than the Design it is being placed over. Please put the largest Design first.")
-                        } else if (patch.height > firstDesignOver.height) {
-                            throw new Error("Patch #" + (i+1) + " is taller than the Design it is being placed over. Please put the largest Design first.")
-                        }
                         switch(anchor) {
                             case "TL":
                                 patch.x -= xOffset
