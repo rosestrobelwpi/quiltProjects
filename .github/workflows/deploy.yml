@@ -1,37 +1,59 @@
-name: Deploy to AWS EC2
+name: Debug Docker
 
 on:
+  workflow_dispatch:  # Allows manual run from GitHub Actions UI
   push:
-    branches: [ "main", "iteration1", "iteration2", "iteration3", "Iteration1", "Iteration2", "Iteration3" ]
+    branches:
+      - main
+      - iteration1
+      - iteration2
+      - iteration3
 
 jobs:
-  deploy:
+  debug-docker:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
+      - name: 🛠️ Checkout Code
         uses: actions/checkout@v4
 
-      - name: Set up SSH Key
+      # 🔍 Check if GitHub Secrets are Set Correctly (Does not expose values)
+      - name: 🔑 List GitHub Secrets (Without Exposing Values)
         run: |
-          echo "${{ secrets.EC2_SSH_KEY }}" > ec2_key.pem
-          chmod 600 ec2_key.pem
+          echo "Checking GitHub Secrets..."
+          echo "===================================="
+          echo "DOCKERHUB_USERNAME: ${DOCKERHUB_USERNAME:+SET}"
+          echo "DOCKERHUB_PASSWORD: ${DOCKERHUB_PASSWORD:+SET}"
+          echo "DOCKERHUB_REPO: ${DOCKERHUB_REPO:+SET}"
+          echo "===================================="
 
-      - name: Test SSH Connection
+      # 🔍 Check if Docker Hub Repo Exists
+      - name: 🔍 Verify Docker Hub Repository Exists
         run: |
-          ssh -o StrictHostKeyChecking=no -i ec2_key.pem ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} "echo 'SSH connection successful'"
+          response=$(curl -s -o /dev/null -w "%{http_code}" "https://hub.docker.com/v2/repositories/${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPO }}/")
+          if [[ "$response" == "200" ]]; then
+            echo "✅ Docker Hub repository exists!"
+          else
+            echo "❌ ERROR: Docker Hub repository does NOT exist or is private!"
+            exit 1
+          fi
 
-      - name: Deploy to EC2
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            whoami
-            docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPO }}:latest
-            docker stop $(docker ps -q) || true
-            docker rm $(docker ps -aq) || true
-            docker run -d -p 80:3000 ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPO }}:latest
+      # 🔑 Test Docker Login
+      - name: 🔑 Docker Login
+        run: |
+          echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+      # 🏗️ Build and Tag Docker Image (Temporary Debugging Tag)
+      - name: 🏗️ Build Docker Image
+        run: |
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPO }}:debug .
+
+      # 🚀 Attempt to Push the Debug Tag to Docker Hub
+      - name: 🚀 Try Pushing Docker Image
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPO }}:debug || (echo "❌ ERROR: Docker Push Failed!" && exit 1)
+
+      # ✅ Success Message
+      - name: ✅ Completed Debugging
+        run: echo "🎉 Debugging completed successfully!"
 
 
