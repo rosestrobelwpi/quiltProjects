@@ -19,8 +19,6 @@ import imageSRC from './laura_test_image/larry.png';
 import CodeMirrorBase from "codemirror";
 window.CodeMirror = CodeMirrorBase;
 
-window.CodeMirror = CodeMirrorBase; 
-
 // Define a muted color palette
 const colorPalette = {
     red: '#b57c7c',
