@@ -1,7 +1,7 @@
 name: Debug Docker
 
 on:
-  workflow_dispatch:  # Allows manual run from GitHub Actions UI
+  workflow_dispatch:  # Allows manual run from GitHub Actions 
   push:
     branches:
       - main
