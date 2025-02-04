@@ -10,7 +10,6 @@ import parser from "./parser";
 import evaluator from "./interpreter";
 import typechecker from "./typechecker"
 import "./App.css";
-import CodeMirrorBase from "codemirror";
 //laura messing around with inserting images
 //local import for now, not sure how to get image from user dynamically
 import imageSRC from './laura_test_image/larry.png';
