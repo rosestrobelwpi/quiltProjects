@@ -12,17 +12,33 @@ jobs:
 
       - name: Show First Few Characters of Private Key
         run: |
-          echo "First few characters of EC2_SSH_KEY:"
+          echo "🔍 First few characters of EC2_SSH_KEY:"
           echo "${{ secrets.EC2_SSH_KEY }}" | head -n 3
+          echo "✅ If this looks incorrect, check your GitHub Secret formatting."
+
+      - name: Check Private Key Formatting
+        run: |
+          echo "🔍 Checking private key line numbers:"
+          echo "${{ secrets.EC2_SSH_KEY }}" | awk '{print NR " " $0}'
+          echo "✅ Ensure the key is **MULTILINE**, not a single line."
 
       - name: Set up SSH Key
         run: |
-          echo "${{ secrets.EC2_SSH_KEY }}" | sed 's/\r$//' > ec2_key.pem
+          echo "🔍 Writing private key..."
+          echo "${{ secrets.EC2_SSH_KEY }}" | awk '{print}' > ec2_key.pem
+          sed -i 's/\r$//' ec2_key.pem  # Remove Windows-style line endings
           chmod 600 ec2_key.pem
-          echo "Private Key Written Successfully"
-          ls -lah ec2_key.pem  # Show file permissions
-          cat ec2_key.pem | head -n 5  # Show first few lines for debugging
+          ls -lah ec2_key.pem
+          echo "✅ Private Key Successfully Written!"
+          echo "🔍 Previewing first few lines of the key:"
+          cat ec2_key.pem | head -n 5
 
-      - name: Check if Key Works
+      - name: Test Private Key Validity
         run: |
-          ssh -o StrictHostKeyChecking=no -i ec2_key.pem ec2-user@${{ secrets.EC2_HOST }} -v "echo 'SSH Connected Successfully!'"
+          echo "🔍 Checking if SSH key is valid:"
+          ssh-keygen -lf ec2_key.pem || echo "❌ Invalid key! Check formatting."
+
+      - name: Debug SSH Connection
+        run: |
+          echo "🔍 Testing SSH connection..."
+          ssh -vvv -o StrictHostKeyChecking=no -i ec2_key.pem ec2-user@${{ secrets.EC2_HOST }} "echo 'SSH Connected Successfully!'" || echo "❌ SSH failed!"
