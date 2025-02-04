@@ -14,17 +14,6 @@
     color: #BC6C25;
   }
   
-/* 
-  .navbar {
-    background-color: #414146;
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 5em;
-    display: flex;
-    align-items: center;
-    justify-content: space-between; 
-} */
-  
   .navbar-links {
     display: flex;
     justify-content: flex-end;
@@ -70,7 +59,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 5% 0%;
+    padding: 2% 0%;
     width: 70%;
     line-height: 1.5;
   }

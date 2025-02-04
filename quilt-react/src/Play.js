@@ -24,7 +24,7 @@ import imageSRCbrown from './laura_test_image/woodlandFabric.png';
 const colorPalette = {
     red: '#b57c7c',
     orange: '#d9a078',
-    yellow: '#c8b77a',
+    yellow: '#6a8caf',
     green: '#85a586',
     blue: '#6a8caf',
     purple: '#9e86a6',
@@ -32,12 +32,14 @@ const colorPalette = {
     pink: '#d8a6b8',
     brown: '#a58c72',
     grey: '#b0b0b0',
+    gray: '#b0b0b0',
+    white: '000000',
     larry: 'larry'
 };
 
 //Function to resize canvas
 function resizeCanvas(canvas){
-    const canvasSize = Math.min(window.innerWidth, window.innerHeight);
+    const canvasSize = Math.min(window.innerWidth, window.innerHeight) * 0.85;
 
     if (canvasSize > 1100) {
         canvas.width = 1100;

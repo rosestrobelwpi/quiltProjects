@@ -1,0 +1,6 @@
+node_modules
+quilt-react/node_modules
+quilt-react/build
+.git
+.gitignore
+.dockerignore
