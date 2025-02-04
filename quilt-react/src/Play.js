@@ -191,11 +191,11 @@ function Play() {
           renderDesign(design);
   
       } catch (error) {
-          console.error("Error interpreting code:", error);
+          console.error("Error:", error);
   
           // Extract the detailed error message from the caught error
           const errorMessage = error.message || "An unknown error occurred.";
-          alert(`Error interpreting your code:\n${errorMessage}`);
+          alert(`Error at line ${error.location.start.line}, column ${error.location.start.column}:\n${errorMessage}`);
       }
   };
   
