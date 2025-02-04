@@ -16,9 +16,6 @@ COPY quilt-react ./
 # Build React
 RUN npm run build
 
-# Move build folder to the correct location
-RUN mv /app/build /app/quilt-react/build
-
 # Use a lightweight web server to serve the build files
 RUN npm install -g serve
-CMD ["serve", "-s", "quilt-react/build", "-l", "3000"]
+CMD ["serve", "-s", "build", "-l", "3000"]
