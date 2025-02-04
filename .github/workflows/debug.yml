@@ -10,6 +10,13 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Show EC2 Environment Variables
+        run: |
+          echo "🔍 Checking EC2 Variables..."
+          echo "EC2 Host: ${{ secrets.EC2_HOST }}"
+          echo "EC2 Username: ${{ secrets.EC2_USERNAME }}"
+          echo "✅ Ensure these values are correctly set in GitHub Secrets."
+
       - name: Show First Few Characters of Private Key
         run: |
           echo "🔍 First few characters of EC2_SSH_KEY:"
@@ -38,7 +45,22 @@ jobs:
           echo "🔍 Checking if SSH key is valid:"
           ssh-keygen -lf ec2_key.pem || echo "❌ Invalid key! Check formatting."
 
-      - name: Debug SSH Connection
+      - name: Debug SSH Connection (Default Username)
         run: |
-          echo "🔍 Testing SSH connection..."
+          echo "🔍 Testing SSH connection with default username..."
+          ssh -vvv -o StrictHostKeyChecking=no -i ec2_key.pem ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} "echo 'SSH Connected Successfully!'" || echo "❌ SSH failed!"
+
+      - name: Debug SSH Connection (Try Ubuntu User)
+        run: |
+          echo "🔍 Testing SSH connection with Ubuntu username..."
+          ssh -vvv -o StrictHostKeyChecking=no -i ec2_key.pem ubuntu@${{ secrets.EC2_HOST }} "echo 'SSH Connected Successfully!'" || echo "❌ SSH failed!"
+
+      - name: Debug SSH Connection (Try ec2-user)
+        run: |
+          echo "🔍 Testing SSH connection with ec2-user username..."
           ssh -vvv -o StrictHostKeyChecking=no -i ec2_key.pem ec2-user@${{ secrets.EC2_HOST }} "echo 'SSH Connected Successfully!'" || echo "❌ SSH failed!"
+
+      - name: Print Key Contents (DEBUG ONLY - REMOVE AFTER)
+        run: |
+          echo "🔍 Printing key contents for debugging (REMOVE AFTER):"
+          cat ec2_key.pem
