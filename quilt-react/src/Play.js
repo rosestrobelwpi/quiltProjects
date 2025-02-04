@@ -14,6 +14,11 @@ import CodeMirrorBase from "codemirror";
 //laura messing around with inserting images
 //local import for now, not sure how to get image from user dynamically
 import imageSRC from './laura_test_image/larry.png';
+
+// Ensure it's available globally
+import CodeMirrorBase from "codemirror";
+window.CodeMirror = CodeMirrorBase;
+
 window.CodeMirror = CodeMirrorBase; 
 
 // Define a muted color palette
@@ -254,7 +259,7 @@ function Play() {
                             lineNumbers: true,
                             lineWrapping: true,
                         }}
-                        onBeforeChange={(editor, data, value) => setTextInput(value)}
+                        onBeforeChange={(value) => setTextInput(value)}
                     />
                 </div>
                 </div>
