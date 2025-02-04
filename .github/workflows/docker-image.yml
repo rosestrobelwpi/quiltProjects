@@ -1,4 +1,4 @@
-name: Build and Deploy Docker Image
+name: Build Docker Image
 
 on:
   push:
@@ -31,20 +31,7 @@ jobs:
             FLASK_ENV=production
           no-cache: true
 
-      - name: Set up SSH Key
-        run: |
-          echo "${{ secrets.EC2_SSH_KEY }}" > ec2_key.pem
-          chmod 600 ec2_key.pem
-
-      - name: Deploy to EC2
-        run: |
-          ssh -o StrictHostKeyChecking=no -i ec2_key.pem ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} << 'EOF'
-            docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPO }}:latest
-            docker stop $(docker ps -q) || true
-            docker rm $(docker ps -aq) || true
-            docker run -d -p 80:3000 ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPO }}:latest
-          EOF
+      
 
 
 
