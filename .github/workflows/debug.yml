@@ -1,0 +1,28 @@
+name: Debug SSH Connection
+
+on:
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+  debug-ssh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Show First Few Characters of Private Key
+        run: |
+          echo "First few characters of EC2_SSH_KEY:"
+          echo "${{ secrets.EC2_SSH_KEY }}" | head -n 3
+
+      - name: Set up SSH Key
+        run: |
+          echo "${{ secrets.EC2_SSH_KEY }}" | sed 's/\r$//' > ec2_key.pem
+          chmod 600 ec2_key.pem
+          echo "Private Key Written Successfully"
+          ls -lah ec2_key.pem  # Show file permissions
+          cat ec2_key.pem | head -n 5  # Show first few lines for debugging
+
+      - name: Check if Key Works
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ec2_key.pem ec2-user@${{ secrets.EC2_HOST }} -v "echo 'SSH Connected Successfully!'"
