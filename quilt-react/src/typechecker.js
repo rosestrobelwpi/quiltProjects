@@ -58,6 +58,7 @@ function check(context, node){
         case TAG_PLUS:
             if (check(context, node.left) === TAG_NAT_NUM && check(context, node.right) === TAG_NAT_NUM) {
                 return TAG_NAT_NUM;
+                return TAG_NAT_NUM;
             }
             else {
                 throw new Error(`Expected two natural numbers to add, got ${node.left.value} and ${node.right.value}.`);
@@ -69,6 +70,7 @@ function check(context, node){
         
         case TAG_TIMES:
             if (check(context, node.left) === TAG_NAT_NUM && check(context, node.right) === TAG_NAT_NUM) {
+                return TAG_NAT_NUM;
                 return TAG_NAT_NUM;
             }
             else {
@@ -179,6 +181,7 @@ function check(context, node){
 
         case TAG_REPX:
             if (check(context, node.value) !== TAG_NAT_NUM) {
+            if (check(context, node.value) !== TAG_NAT_NUM) {
                 throw new Error(`Expected Integer to repeat over, got ${node.left}.`);
             }
             if (check(context, node.design) !== TAG_RECT) {
@@ -188,6 +191,7 @@ function check(context, node){
 
         case TAG_REPY:
             if (check(context, node.value) !== TAG_NAT_NUM) {
+            if (check(context, node.value) !== TAG_NAT_NUM) {
                 throw new Error(`Expected Integer to repeat over, got ${node.left}.`);
             }
             if (check(context, node.design) !== TAG_RECT) {
@@ -196,6 +200,7 @@ function check(context, node){
             return TAG_RECT;
 
         case TAG_ROT:
+            if (check(context, node.angle) !== TAG_ROTATION) {
             if (check(context, node.angle) !== TAG_ROTATION) {
                 throw new Error(`Expected 0/90/180/270 to rotate by, got ${node.left}.`);
             }

@@ -10,7 +10,9 @@
     "@testing-library/user-event": "^13.5.0",
     "@ungap/structured-clone": "^1.2.0",
     "bootstrap": "^5.3.3",
+    "codemirror": "^5.65.18",
     "react": "^18.3.1",
+    "react-codemirror2": "^8.0.0",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.27.0",
     "react-scripts": "^5.0.1",
@@ -48,5 +50,11 @@
     "babel-jest": "^29.7.0",
     "jest": "^27.5.1",
     "peggy": "^4.1.1"
-  }
+  },
+  "sideEffects": [
+    "codemirror/lib/codemirror.css",
+    "codemirror/mode/javascript/javascript",
+    "codemirror"
+  ]
+  
 }

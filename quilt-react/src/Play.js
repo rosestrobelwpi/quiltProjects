@@ -10,16 +10,24 @@ import parser from "./parser";
 import evaluator from "./interpreter";
 import typechecker from "./typechecker"
 import "./App.css";
-
 //laura messing around with inserting images
 //local import for now, not sure how to get image from user dynamically
 import imageSRC from './laura_test_image/larry.png';
+import imageSRCorange from './laura_test_image/orangeFabric.png';
+import imageSRCgrey from './laura_test_image/pumpkinFabric.png';
+import imageSRCblue from './laura_test_image/gooseFabric.png';
+import imageSRCpurple from './laura_test_image/halloweenFabric.png';
+import imageSRCbrown from './laura_test_image/woodlandFabric.png';
+
+// Ensure it's available globally
+import CodeMirrorBase from "codemirror";
+window.CodeMirror = CodeMirrorBase;
 
 // Define a muted color palette
 const colorPalette = {
     red: '#b57c7c',
     orange: '#d9a078',
-    yellow: '#c8b77a',
+    yellow: '#6a8caf',
     green: '#85a586',
     blue: '#6a8caf',
     purple: '#9e86a6',
@@ -27,12 +35,14 @@ const colorPalette = {
     pink: '#d8a6b8',
     brown: '#a58c72',
     grey: '#b0b0b0',
+    gray: '#b0b0b0',
+    white: '000000',
     larry: 'larry'
 };
 
 //Function to resize canvas
 function resizeCanvas(canvas){
-    const canvasSize = Math.min(window.innerWidth, window.innerHeight);
+    const canvasSize = Math.min(window.innerWidth, window.innerHeight) * 0.85;
 
     if (canvasSize > 1100) {
         canvas.width = 1100;
@@ -45,10 +55,10 @@ function resizeCanvas(canvas){
 }
 
 // Function to draw a single rectangle
-function drawRectangle(ctx, x, y, width, height, color, rotationFromOriginal) {
+function drawRectangle(ctx, x, y, width, height, color) {
     const mutedColor = colorPalette[color] || color;
 
-    console.log("rotationFromOriginal", rotationFromOriginal)
+    //console.log("rotationFromOriginal", rotationFromOriginal)
     if (mutedColor === 'larry') {
         const image = new Image();
         image.src = imageSRC
@@ -64,6 +74,31 @@ function drawRectangle(ctx, x, y, width, height, color, rotationFromOriginal) {
         // ctx.drawImage(image, -width / 2, -height / 2, width, height); //draw image, rotates around its center
         // ctx.restore(); //restore canvas from ctx.save()
 
+    // } else if (color === '#d9a078'){
+    //     const image = new Image();
+    //     image.src = imageSRCorange;
+    //     ctx.drawImage(image, x, y, width, height);
+
+    // } else if (color === "#b0b0b0"){
+    //     const image = new Image();
+    //     image.src = imageSRCgrey;
+    //     ctx.drawImage(image, x, y, width, height);
+
+    // } else if (color === "#6a8caf"){
+    //     const image = new Image();
+    //     image.src = imageSRCblue;
+    //     ctx.drawImage(image, x, y, width, height);
+
+    // } else if (color === "#9e86a6"){
+    //     const image = new Image();
+    //     image.src = imageSRCpurple;
+    //     ctx.drawImage(image, x, y, width, height);
+
+    // } else if (color === "#a58c72"){
+    //     const image = new Image();
+    //     image.src = imageSRCbrown;
+    //     ctx.drawImage(image, x, y, width, height);
+    
     } else {
         ctx.fillStyle = mutedColor;
         ctx.fillRect(Math.floor(x), Math.floor(y), Math.ceil(width), Math.ceil(height));
@@ -161,11 +196,19 @@ function Play() {
           renderDesign(design);
   
       } catch (error) {
-          console.error("Error interpreting code:", error);
-  
-          // Extract the detailed error message from the caught error
-          const errorMessage = error.message || "An unknown error occurred.";
-          alert(`Error interpreting your code:\n${errorMessage}`);
+            console.error("Error:", error, typeof(error));
+        try {
+            // Extract the detailed error message from the caught error
+            const errorMessage = error.message || "An unknown error occurred.";
+            alert(`Parse ERROR at line ${error.location.start.line}, column ${error.location.start.column}:\n${errorMessage}`);
+
+        } catch (error2) {
+            const errorMessage = error.message || "An unknown error occurred.";
+            alert(`Interpreter or Typechecker ERROR:\n${errorMessage}`);
+
+        }
+          
+
       }
   };
   
@@ -251,7 +294,7 @@ function Play() {
                             lineNumbers: true,
                             lineWrapping: true,
                         }}
-                        onBeforeChange={(editor, data, value) => setTextInput(value)}
+                        onBeforeChange={(value) => setTextInput(value)}
                     />
                 </div>
                 </div>

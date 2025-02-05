@@ -1,0 +1,66 @@
+name: Debug SSH Connection
+
+on:
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+  debug-ssh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Show EC2 Environment Variables
+        run: |
+          echo "🔍 Checking EC2 Variables..."
+          echo "EC2 Host: ${{ secrets.EC2_HOST }}"
+          echo "EC2 Username: ${{ secrets.EC2_USERNAME }}"
+          echo "✅ Ensure these values are correctly set in GitHub Secrets."
+
+      - name: Show First Few Characters of Private Key
+        run: |
+          echo "🔍 First few characters of EC2_SSH_KEY:"
+          echo "${{ secrets.EC2_SSH_KEY }}" | head -n 3
+          echo "✅ If this looks incorrect, check your GitHub Secret formatting."
+
+      - name: Check Private Key Formatting
+        run: |
+          echo "🔍 Checking private key line numbers:"
+          echo "${{ secrets.EC2_SSH_KEY }}" | awk '{print NR " " $0}'
+          echo "✅ Ensure the key is **MULTILINE**, not a single line."
+
+      - name: Set up SSH Key
+        run: |
+          echo "🔍 Writing private key..."
+          echo "${{ secrets.EC2_SSH_KEY }}" | awk '{print}' > ec2_key.pem
+          sed -i 's/\r$//' ec2_key.pem  # Remove Windows-style line endings
+          chmod 600 ec2_key.pem
+          ls -lah ec2_key.pem
+          echo "✅ Private Key Successfully Written!"
+          echo "🔍 Previewing first few lines of the key:"
+          cat ec2_key.pem | head -n 5
+
+      - name: Test Private Key Validity
+        run: |
+          echo "🔍 Checking if SSH key is valid:"
+          ssh-keygen -lf ec2_key.pem || echo "❌ Invalid key! Check formatting."
+
+      - name: Debug SSH Connection (Default Username)
+        run: |
+          echo "🔍 Testing SSH connection with default username..."
+          ssh -vvv -o StrictHostKeyChecking=no -i ec2_key.pem ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} "echo 'SSH Connected Successfully!'" || echo "❌ SSH failed!"
+
+      - name: Debug SSH Connection (Try Ubuntu User)
+        run: |
+          echo "🔍 Testing SSH connection with Ubuntu username..."
+          ssh -vvv -o StrictHostKeyChecking=no -i ec2_key.pem ubuntu@${{ secrets.EC2_HOST }} "echo 'SSH Connected Successfully!'" || echo "❌ SSH failed!"
+
+      - name: Debug SSH Connection (Try ec2-user)
+        run: |
+          echo "🔍 Testing SSH connection with ec2-user username..."
+          ssh -vvv -o StrictHostKeyChecking=no -i ec2_key.pem ec2-user@${{ secrets.EC2_HOST }} "echo 'SSH Connected Successfully!'" || echo "❌ SSH failed!"
+
+      - name: Print Key Contents (DEBUG ONLY - REMOVE AFTER)
+        run: |
+          echo "🔍 Printing key contents for debugging (REMOVE AFTER):"
+          cat ec2_key.pem
