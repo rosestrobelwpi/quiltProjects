@@ -256,7 +256,7 @@ function Play() {
                             lineNumbers: true,
                             lineWrapping: true,
                         }}
-                        onBeforeChange={(value) => setTextInput(value)}
+                        onBeforeChange={(editor, data, value) => setTextInput(value)}
                     />
                 </div>
                 </div>

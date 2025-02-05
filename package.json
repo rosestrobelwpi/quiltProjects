@@ -7,5 +7,10 @@
     "react-codemirror2": "^8.0.0",
     "react-router-dom": "^6.27.0",
     "start": "^5.1.0"
-  }
+  },
+  "sideEffects": [
+    "codemirror/lib/codemirror.css",
+    "codemirror/mode/javascript/javascript",
+    "codemirror"
+  ]
 }
