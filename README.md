@@ -9,7 +9,8 @@ This website was made by utilizing technologies such as React, CodeMirror, Peggy
 ## How to Install and Run
 Make sure to have Node.js and npm installed before proceeding.
 Unzip the file and navigate to the project folder, change directory to:  
-…\quiltProjects-main\quilt-react>  
+`…\quiltProjects-main\quilt-react>`  
+
 Install dependencies using:   
 ```javascript 
 npm install
