@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Controlled as CodeMirror } from "react-codemirror2";
-import { ReactCodeMirrorRef } from "react-codemirror2"
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/material.css";
 import "codemirror/mode/javascript/javascript";
@@ -112,7 +111,6 @@ function drawRectangle(ctx, x, y, width, height, color) {
 }
 
 function Play() {
-    const refs = React.useRef<ReactCodeMirrorRef>({});
     const { code } = useParams(); // Get the code from the URL
     const [textInput, setTextInput] = useState(""); // Store input for handling submission
     const canvasRef = useRef(null);
@@ -308,7 +306,7 @@ function Play() {
                 </div>
                 <div className="codemirror-container">
                     <CodeMirror
-                        ref={refs}
+
                         value={textInput}
                         options={{
                             mode: "javascript",
