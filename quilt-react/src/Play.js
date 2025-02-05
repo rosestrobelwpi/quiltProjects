@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Controlled as CodeMirror } from "react-codemirror2";
+import { ReactCodeMirrorRef } from "react-codemirror2"
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/material.css";
 import "codemirror/mode/javascript/javascript";
@@ -111,6 +112,7 @@ function drawRectangle(ctx, x, y, width, height, color) {
 }
 
 function Play() {
+    const refs = React.useRef<ReactCodeMirrorRef>({});
     const { code } = useParams(); // Get the code from the URL
     const [textInput, setTextInput] = useState(""); // Store input for handling submission
     const canvasRef = useRef(null);
@@ -233,6 +235,25 @@ function Play() {
     }
   }
 
+  useEffect(() => {
+    // Ensure CodeMirror is visible after mounting
+    const fixCodeMirrorVisibility = () => {
+        const editor = document.querySelector('.CodeMirror');
+        if (editor) {
+            editor.style.display = 'block';
+            editor.style.height = '300px';
+            editor.style.opacity = '1';
+            console.log("✅ CodeMirror is now visible.");
+        } else {
+            console.log("⚠️ CodeMirror not found, retrying...");
+            setTimeout(fixCodeMirrorVisibility, 500); // Retry if not found
+        }
+    };
+    
+    fixCodeMirrorVisibility();
+}, []);
+
+
     useEffect(() => {
       const keyPressed = (event) => {
           if (event.shiftKey && event.key === "Enter") {
@@ -287,6 +308,7 @@ function Play() {
                 </div>
                 <div className="codemirror-container">
                     <CodeMirror
+                        ref={refs}
                         value={textInput}
                         options={{
                             mode: "javascript",
@@ -294,7 +316,7 @@ function Play() {
                             lineNumbers: true,
                             lineWrapping: true,
                         }}
-                        onBeforeChange={(editor, data, value) => setTextInput(value)}
+                        onBeforeChange={(value) => setTextInput(value)}
                     />
                 </div>
                 </div>
