@@ -181,7 +181,6 @@ function check(context, node){
 
         case TAG_REPX:
             if (check(context, node.value) !== TAG_NAT_NUM) {
-            if (check(context, node.value) !== TAG_NAT_NUM) {
                 throw new Error(`Expected Integer to repeat over, got ${node.left}.`);
             }
             if (check(context, node.design) !== TAG_RECT) {
@@ -191,7 +190,6 @@ function check(context, node){
 
         case TAG_REPY:
             if (check(context, node.value) !== TAG_NAT_NUM) {
-            if (check(context, node.value) !== TAG_NAT_NUM) {
                 throw new Error(`Expected Integer to repeat over, got ${node.left}.`);
             }
             if (check(context, node.design) !== TAG_RECT) {
@@ -200,7 +198,6 @@ function check(context, node){
             return TAG_RECT;
 
         case TAG_ROT:
-            if (check(context, node.angle) !== TAG_ROTATION) {
             if (check(context, node.angle) !== TAG_ROTATION) {
                 throw new Error(`Expected 0/90/180/270 to rotate by, got ${node.left}.`);
             }
