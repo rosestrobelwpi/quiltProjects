@@ -193,11 +193,19 @@ function Play() {
           renderDesign(design);
   
       } catch (error) {
-          console.error("Error:", error);
-  
-          // Extract the detailed error message from the caught error
-          const errorMessage = error.message || "An unknown error occurred.";
-          alert(`Error at line ${error.location.start.line}, column ${error.location.start.column}:\n${errorMessage}`);
+            console.error("Error:", error, typeof(error));
+        try {
+            // Extract the detailed error message from the caught error
+            const errorMessage = error.message || "An unknown error occurred.";
+            alert(`Parse ERROR at line ${error.location.start.line}, column ${error.location.start.column}:\n${errorMessage}`);
+
+        } catch (error2) {
+            const errorMessage = error.message || "An unknown error occurred.";
+            alert(`Interpreter or Typechecker ERROR:\n${errorMessage}`);
+
+        }
+          
+
       }
   };
   

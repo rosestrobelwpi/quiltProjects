@@ -85,9 +85,9 @@ function evaluatorLogic(env, node) {
             // } else if (lookup instanceof NatNum) {
             //     Object.setPrototypeOf(clone, NatNum.prototype);
             } else {
-                console.log("i am trying to lookup", node.name)
-                console.log("i got a ", clone)
-                console.log("bad environment lookup");
+                // console.log("i am trying to lookup", node.name)
+                // console.log("i got a ", clone)
+                // console.log("bad environment lookup");
             }
             return clone;
 
@@ -107,16 +107,18 @@ function evaluatorLogic(env, node) {
             }
 
             //insert into environment (like a variable)
+            //UPDATED here for new environment
+            const newEnvironment = structuredClone(env)
             let i = 0;
             for (let evaluatedArg of evaluatedArgs) {
-                env[paramNames[i].name] = evaluatedArg;
+                newEnvironment[paramNames[i].name] = evaluatedArg;
                 i++;
             }
 
             //now we can evaluate the function body, now that the environment has the input names connected to the values
             console.log("this is func body", funcBody)
-            console.log("env before lookin at funcbody maybe", env)
-            return evaluatorLogic(env, funcBody)
+            console.log("env before lookin at funcbody maybe", newEnvironment)
+            return evaluatorLogic(newEnvironment, funcBody)
        
         case TAG_NAT_NUM:
             return node.value

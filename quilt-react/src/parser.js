@@ -368,8 +368,8 @@ function peg$parse(input, options) {
   var peg$f23 = function(s) {return s;};
   var peg$f24 = function(rectexpr) { return rectexpr; };
   var peg$f25 = function(r) {return r;};
-  var peg$f26 = function(v) { return v; };
-  var peg$f27 = function(f) { return f; };
+  var peg$f26 = function(f) { return f; };
+  var peg$f27 = function(v) { return v; };
   var peg$f28 = function(firstNat, secondNat, color) {
   return new p.Solid(firstNat, secondNat, color);
  };
@@ -1909,7 +1909,7 @@ function peg$parse(input, options) {
           }
           if (s0 === peg$FAILED) {
             s0 = peg$currPos;
-            s1 = peg$parsevarCall();
+            s1 = peg$parsefunCall();
             if (s1 !== peg$FAILED) {
               if (input.charCodeAt(peg$currPos) === 44) {
                 s2 = peg$c9;
@@ -1930,7 +1930,7 @@ function peg$parse(input, options) {
             }
             if (s0 === peg$FAILED) {
               s0 = peg$currPos;
-              s1 = peg$parsefunCall();
+              s1 = peg$parsevarCall();
               if (s1 !== peg$FAILED) {
                 if (input.charCodeAt(peg$currPos) === 44) {
                   s2 = peg$c9;
@@ -2061,11 +2061,14 @@ function peg$parse(input, options) {
         s4 = peg$parse_();
         s5 = peg$parseInteger();
         if (s5 === peg$FAILED) {
-          s5 = peg$parsevarCall();
+          s5 = peg$parsefunCall();
           if (s5 === peg$FAILED) {
-            s5 = peg$parseExpression();
+            s5 = peg$parsevarCall();
             if (s5 === peg$FAILED) {
-              s5 = peg$parseTerm();
+              s5 = peg$parseExpression();
+              if (s5 === peg$FAILED) {
+                s5 = peg$parseTerm();
+              }
             }
           }
         }
@@ -2181,11 +2184,14 @@ function peg$parse(input, options) {
           s4 = peg$parse_();
           s5 = peg$parseInteger();
           if (s5 === peg$FAILED) {
-            s5 = peg$parsevarCall();
+            s5 = peg$parsefunCall();
             if (s5 === peg$FAILED) {
-              s5 = peg$parseExpression();
+              s5 = peg$parsevarCall();
               if (s5 === peg$FAILED) {
-                s5 = peg$parseTerm();
+                s5 = peg$parseExpression();
+                if (s5 === peg$FAILED) {
+                  s5 = peg$parseTerm();
+                }
               }
             }
           }
