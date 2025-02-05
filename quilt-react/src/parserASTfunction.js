@@ -276,106 +276,74 @@ function expr_size (expr) {
         //TYPES
         case TAG_RECT:
             return expr_size(expr.width) + expr_size(expr.height) + expr_size(this.color) + 1;
-            break;
         case TAG_NAT:
             return 1;
-            break;
-        case TAG_ROT:
+        case TAG_ROTATION:
             return 1;
-            break;
         case TAG_PIXEL:
             return expr_size(expr.red) + expr_size(expr.green) + expr_size(expr.blue) + expr_size(expr.alpha) + 1;
-            break;
 
         //declaration?
         case TAG_DEPENDENT_FUNC:
             return expr_size(expr.name) + expr_size(expr.args) + expr_size(expr.body) + 1; 
-            break;
 
         case TAG_IDENTITY:
             return expr_size(expr.left) + expr_size(expr.right) + 1;
-            break;
         case TAG_TYPE_EQUALITY:
             return expr_size(expr.left) + expr_size(expr.right) + 1;
-            break;
         case TAG_LAMBDA:
             return expr_size(expr.x) + expr_size(expr.t) + expr_size(expr.e) + 1;
-            break;
         case TAG_PIX:
             return expr_size(expr.red) + expr_size(expr.green) + expr_size(expr.blue) + expr_size(expr.alpha) + 1;
-            break;
         case TAG_COLORS:
             return expr_size(expr.red) + expr_size(expr.green) + expr_size(expr.blue) + expr_size(expr.alpha) + 1;
-            break;
         case TAG_NAT_NUM:
             return 1;
-            break;
         case TAG_ZERO:
             return 1;
-            break;
         case TAG_NINETY:
             return 1;
-            break;
         case TAG_ONE_EIGHTY:
             return 1;
-            break;
         case TAG_TWO_SEVENTY:
             return 1;
-            break;
         case TAG_REFL:
             return expr_size(expr.value) + 1;
-            break;
         case TAG_VALUE:
             return 1;
-            break;
 
         //declaration??
         case TAG_VARIABLE:
             return expr_size(expr.type) + expr_size(expr.name) + expr_size(expr.value) + 1;
-            break;
 
         case TAG_SIDE_BY_SIDE:
             return expr_size(expr.left) + expr_size(expr.right) + 1;
-            break;
         case TAG_SOLID:
             return expr_size(expr.width) + expr_size(expr.height) + expr_size(expr.color) + 1;
-            break;
         case TAG_HOR:
             return expr_size(expr.design) + 1;
-            break;
         case TAG_VERT:
             return expr_size(expr.design) + 1;
-            break;
         case TAG_OVER:
             return expr_size(expr.anchor) + expr_size(expr.design) + 1;
-            break;
         case TAG_REPX:
             return expr_size(expr.value) + expr_size(expr.design) + 1;
-            break;
         case TAG_REPY:
             return expr_size(expr.value) + expr_size(expr.design) + 1;
-            break;
         case TAG_ROT:
             return expr_size(expr.angle) + expr_size(expr.design) + 1;
-            break;
         case TAG_PLUS:
             return expr_size(expr.left) + expr_size(expr.right) + 1;
-            break;
         case TAG_TIMES:
             return expr_size(expr.left) + expr_size(expr.right) + 1;
-            break;
         case TAG_VAR_CALL:
             return expr_size(expr.name) + 1;
-            break;
         case TAG_ARG:
             return expr_size(expr.name) + expr_size(expr.type) + 1;
-            break;
         case TAG_IDENTIFIER:
             return expr_size(expr.name) + 1;
-            break;
         case TAG_COLOR:
             return expr_size(expr.name) + 1;
-            break;
         case TAG_PROGRAM:
             return expr_size(expr.definitions) + expr_size(expr.quilt) + 1;
         case TAG_ASSIGNMENT:
@@ -384,6 +352,8 @@ function expr_size (expr) {
             return expr_size(expr.name) + expr_size(expr.args) + 1;
         case TAG_FUNC:
             return expr_size(expr.name) + expr_size(expr.args) + expr_size(expr.body) + 1;
+        default:
+            return "something went wrong"
     }
 }
 
