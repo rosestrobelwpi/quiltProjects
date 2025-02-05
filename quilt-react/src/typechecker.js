@@ -8,7 +8,7 @@ const {
     TAG_NAT
 } = require('./parserASTfunction.js');
 
-
+import structuredClone from '@ungap/structured-clone';
 
 //let testAST = parser.parse('hor (rect(1, 1, red), rect(1, 1, blue))')
 //let testAST = parser.parse('rect(1, 1, blue);')
@@ -101,7 +101,10 @@ function check(context, node){
             let theFunc = context[node.name];
             let oldTags = theFunc[0];
             let theBody = theFunc[1];
-            let newCon = context; //may need to clone instead?
+            let newCon = structuredClone(context); //may need to clone instead?
+            if (oldTags.length !== node.args.length) {
+                throw new Error(`Amount of inputs do not match function number of inputs.`);
+            }
             for (let x=0; x < oldTags.length; x++){
                 //first get old tag
                 let curOld = check(context, oldTags[x]);
@@ -178,11 +181,8 @@ function check(context, node){
             if (check(context, node.value) !== TAG_NAT_NUM) {
                 throw new Error(`Expected Integer to repeat over, got ${node.left}.`);
             }
-            for (let x=0; x < node.design.length; x++){
-                let theRect = check(context, node.right[x])
-                if (theRect !== TAG_RECT){
-                    throw new Error(`Expected Rectangles for a design, got ${theRect}.`);
-                }
+            if (check(context, node.design) !== TAG_RECT) {
+                throw new Error(`Expected some kind of rect, got ${check(context, node.design)}.`)
             }
             return TAG_RECT;
 
@@ -190,23 +190,17 @@ function check(context, node){
             if (check(context, node.value) !== TAG_NAT_NUM) {
                 throw new Error(`Expected Integer to repeat over, got ${node.left}.`);
             }
-            for (let x=0; x < node.design.length; x++){
-                let theRect = check(context, node.design[x])
-                if (theRect !== TAG_RECT){
-                    throw new Error(`Expected Rectangles for a design, got ${theRect}.`);
-                }
+            if (check(context, node.design) !== TAG_RECT) {
+                throw new Error(`Expected some kind of rect, got ${check(context, node.design)}.`)
             }
             return TAG_RECT;
 
         case TAG_ROT:
-            if (check(context, node.left) !== TAG_ROTATION) {
+            if (check(context, node.angle) !== TAG_ROTATION) {
                 throw new Error(`Expected 0/90/180/270 to rotate by, got ${node.left}.`);
             }
-            for (let x=0; x < node.right.length; x++){
-                let theRect = check(context, node.right[x])
-                if (theRect !== TAG_RECT){
-                    throw new Error(`Expected Rectangles for a design, got ${theRect}.`);
-                }
+            if (check(context, node.design) !== TAG_RECT) {
+                throw new Error(`Expected some kind of rect, got ${check(context, node.design)}.`)
             }
             return TAG_RECT;
 
@@ -315,6 +309,32 @@ function checkDefn (context, node) {
                 throw new Error(`Function ${node.name} was already declared.`);
             }
             else {
+                //args + body
+                //arg returns the identifier type
+                //can i slot this into context?
+                let fakeCon = structuredClone(context);
+                //idk about args. Will check back. there is problem.
+                //check thru args put into fakcecon not real so that they r not vars and then check that fakecon w body expr
+                //if return rect yippe
+                for (let x=0; x<node.args.length; x++){
+                    let theArg = check(context, node.args[x]);
+                    //should be only nat_num / rect
+                    if (!(theArg === TAG_RECT || theArg === TAG_NAT_NUM)){
+                        throw new Error(`Expected a rect or natural number for an argument, got ${theArg}.`);
+                    } else {
+                        fakeCon[node.args[x].name] = theArg;
+                    }
+                }
+                // now i check body with fakecon which has args
+                if (check(fakeCon, node.body) !== "RECT") {
+                    throw new Error(`Expected a RECT, got a ${check(context, node.body)}.`);
+                }
+                // (let x=0; x < node.definitions.length; x++){
+                //     let theDef = checkDefn(context, node.definitions[x])
+                //     //can be function, variable, assignment
+                //     if (!(theDef === TAG_FUNC || theDef === TAG_VARIABLE || theDef === TAG_ASSIGNMENT)){
+                //         throw new Error(`Expected Definitions for a design, got ${theDef}.`);
+                //     }
                 //inserting into context as is- will change later depending on what inputs
                 context[node.name] = [node.args, node.body];
             }
