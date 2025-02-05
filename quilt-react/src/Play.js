@@ -27,7 +27,7 @@ window.CodeMirror = CodeMirrorBase;
 const colorPalette = {
     red: '#b57c7c',
     orange: '#d9a078',
-    yellow: '#b57c7c',
+    yellow: '#c8b77a',
     green: '#85a586',
     blue: '#6a8caf',
     purple: '#9e86a6',
@@ -35,8 +35,8 @@ const colorPalette = {
     pink: '#d8a6b8',
     brown: '#a58c72',
     grey: '#b0b0b0',
+    white: '#ffffff', 
     gray: '#b0b0b0',
-    white: '000000',
     larry: 'larry'
 };
 
