@@ -1,5 +1,6 @@
 // run with 
 // node typechecker.js
+import structuredClone from '@ungap/structured-clone';
 
 //const parser = require("./autogenparser")
 const {
@@ -8,7 +9,7 @@ const {
     TAG_NAT
 } = require('./parserASTfunction.js');
 
-import structuredClone from '@ungap/structured-clone';
+
 
 //let testAST = parser.parse('hor (rect(1, 1, red), rect(1, 1, blue))')
 //let testAST = parser.parse('rect(1, 1, blue);')
