@@ -1,6 +1,6 @@
-node_modules
-quilt-react/node_modules
-quilt-react/build
 .git
 .gitignore
 .dockerignore
+quilt-react/node_modules  # Remove this line if causing issues
+quilt-react/build  # Keep this since we build inside Docker
+

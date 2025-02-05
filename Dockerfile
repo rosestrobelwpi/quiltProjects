@@ -7,8 +7,9 @@ WORKDIR /app
 # Copy package.json and package-lock.json first (for better caching)
 COPY quilt-react/package.json quilt-react/package-lock.json ./
 
-# Install dependencies
+# Install dependencies (explicitly include CodeMirror)
 RUN npm install
+RUN npm install codemirror react-codemirror2  # Ensure CodeMirror is installed
 
 # Copy the entire React app
 COPY quilt-react ./

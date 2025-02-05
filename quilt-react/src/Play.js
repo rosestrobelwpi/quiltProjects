@@ -10,7 +10,6 @@ import parser from "./parser";
 import evaluator from "./interpreter";
 import typechecker from "./typechecker"
 import "./App.css";
-
 //laura messing around with inserting images
 //local import for now, not sure how to get image from user dynamically
 import imageSRC from './laura_test_image/larry.png';
@@ -19,6 +18,10 @@ import imageSRCgrey from './laura_test_image/pumpkinFabric.png';
 import imageSRCblue from './laura_test_image/gooseFabric.png';
 import imageSRCpurple from './laura_test_image/halloweenFabric.png';
 import imageSRCbrown from './laura_test_image/woodlandFabric.png';
+
+// Ensure it's available globally
+import CodeMirrorBase from "codemirror";
+window.CodeMirror = CodeMirrorBase;
 
 // Define a muted color palette
 const colorPalette = {
@@ -291,7 +294,7 @@ function Play() {
                             lineNumbers: true,
                             lineWrapping: true,
                         }}
-                        onBeforeChange={(editor, data, value) => setTextInput(value)}
+                        onBeforeChange={(value) => setTextInput(value)}
                     />
                 </div>
                 </div>
