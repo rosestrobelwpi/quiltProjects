@@ -55,8 +55,6 @@ html, body {
   width: 100%;
 }
 
-.react-codemirror2 > .CodeMirror:first-child { display: none; }
-
 
 .parser-container {
   flex: 1;
@@ -84,6 +82,15 @@ html, body {
   max-width: 50vw;
   border: 0.5px solid #542e0e !important;
 }
+
+.CodeMirror {
+  display: block !important;
+  height: 300px !important;
+  min-height: 300px !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
 
 .CodeMirror-gutter {
   background-color: #d3ceb2 !important;

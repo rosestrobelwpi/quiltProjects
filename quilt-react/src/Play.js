@@ -27,7 +27,7 @@ window.CodeMirror = CodeMirrorBase;
 const colorPalette = {
     red: '#b57c7c',
     orange: '#d9a078',
-    yellow: '#d8a6b8',
+    yellow: '#c8b77a',
     green: '#85a586',
     blue: '#6a8caf',
     purple: '#9e86a6',
@@ -35,14 +35,14 @@ const colorPalette = {
     pink: '#d8a6b8',
     brown: '#a58c72',
     grey: '#b0b0b0',
+    white: '#ffffff', 
     gray: '#b0b0b0',
-    white: '000000',
     larry: 'larry'
 };
 
 //Function to resize canvas
 function resizeCanvas(canvas){
-    const canvasSize = Math.min(window.innerWidth, window.innerHeight) * 0.85;
+    const canvasSize = Math.min(window.innerWidth, window.innerHeight) * 0.8;
 
     if (canvasSize > 1100) {
         canvas.width = 1100;
@@ -233,6 +233,25 @@ function Play() {
     }
   }
 
+  useEffect(() => {
+    // Ensure CodeMirror is visible after mounting
+    const fixCodeMirrorVisibility = () => {
+        const editor = document.querySelector('.CodeMirror');
+        if (editor) {
+            editor.style.display = 'block';
+            editor.style.height = '300px';
+            editor.style.opacity = '1';
+            console.log("✅ CodeMirror is now visible.");
+        } else {
+            console.log("⚠️ CodeMirror not found, retrying...");
+            setTimeout(fixCodeMirrorVisibility, 500); // Retry if not found
+        }
+    };
+    
+    fixCodeMirrorVisibility();
+}, []);
+
+
     useEffect(() => {
       const keyPressed = (event) => {
           if (event.shiftKey && event.key === "Enter") {
@@ -287,6 +306,7 @@ function Play() {
                 </div>
                 <div className="codemirror-container">
                     <CodeMirror
+
                         value={textInput}
                         options={{
                             mode: "javascript",
@@ -294,7 +314,7 @@ function Play() {
                             lineNumbers: true,
                             lineWrapping: true,
                         }}
-                        onBeforeChange={(value) => setTextInput(value)}
+                        onBeforeChange={(editor,data,value) => setTextInput(value)}
                     />
                 </div>
                 </div>
