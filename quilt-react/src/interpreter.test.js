@@ -931,13 +931,13 @@ test("rot() 90deg design", () => {
         "patches": [
             {
                 "x": 0,
-                "y": 6.123233995736766e-17,
+                "y": 0,
                 "width": 1,
                 "height": 3,
                 "color": "black"
             },
             {
-                "x": 2.220446049250313e-16,
+                "x": 0,
                 "y": 3,
                 "width": 1,
                 "height": 1,
@@ -955,14 +955,14 @@ test("rot() 180deg design", () => {
         "patches": [
             {
                 "x": 1,
-                "y": 3.3306690738754696e-16,
+                "y": 0,
                 "width": 3,
                 "height": 1,
                 "color": "black"
             },
             {
                 "x": 0,
-                "y": 4.440892098500626e-16,
+                "y": 0,
                 "width": 1,
                 "height": 1,
                 "color": "yellow"
@@ -978,14 +978,14 @@ test("rot() 270deg design", () => {
         "height": 4,
         "patches": [
             {
-                "x": -5.51091059616309e-16,
+                "x": 0,
                 "y": 1,
                 "width": 1,
                 "height": 3,
                 "color": "black"
             },
             {
-                "x": -7.347880794884119e-16,
+                "x": 0,
                 "y": 0,
                 "width": 1,
                 "height": 1,

@@ -20,8 +20,8 @@ import imageSRCpurple from './laura_test_image/halloweenFabric.png';
 import imageSRCbrown from './laura_test_image/woodlandFabric.png';
 
 // Ensure it's available globally
-import CodeMirrorBase from "codemirror";
-window.CodeMirror = CodeMirrorBase;
+//import CodeMirrorBase from "codemirror";
+//window.CodeMirror = CodeMirrorBase;
 
 // Define a muted color palette
 const colorPalette = {
@@ -115,6 +115,17 @@ function Play() {
     const [textInput, setTextInput] = useState(""); // Store input for handling submission
     const canvasRef = useRef(null);
 
+    //LAURA added
+    //https://react.dev/reference/react/Component#componentwillunmount
+    const editorRef = useRef(null); //set editor ref when the CodeMirror element is initialized
+    const editorWillUnmount = () => {
+        //setting editorRef.current = null doesn't work
+        editorRef.current.display.wrapper.remove()
+        //display refers to the code mirror editor
+        //wrapper refers to the <div> it's in
+        //remove() removes that <div> from the document tree
+    }
+
      // Preload code from URL on component mount
      useEffect(() => {
         const canvas = canvasRef.current;
@@ -149,7 +160,6 @@ function Play() {
         const maxWidth = design.width
         const maxHeight = design.height
 
-        //FIXME remove minus 100 later, just fitting it to my screen -laura
         const scaleX = (canvas.width) / maxWidth;
         const scaleY = (canvas.height) / maxHeight;
         const scale = Math.min(scaleX, scaleY); // Uniform scaling
@@ -233,23 +243,23 @@ function Play() {
     }
   }
 
-  useEffect(() => {
-    // Ensure CodeMirror is visible after mounting
-    const fixCodeMirrorVisibility = () => {
-        const editor = document.querySelector('.CodeMirror');
-        if (editor) {
-            editor.style.display = 'block';
-            editor.style.height = '300px';
-            editor.style.opacity = '1';
-            console.log("✅ CodeMirror is now visible.");
-        } else {
-            console.log("⚠️ CodeMirror not found, retrying...");
-            setTimeout(fixCodeMirrorVisibility, 500); // Retry if not found
-        }
-    };
+//   useEffect(() => {
+//     // Ensure CodeMirror is visible after mounting
+//     const fixCodeMirrorVisibility = () => {
+//         const editor = document.querySelector('.CodeMirror');
+//         if (editor) {
+//             editor.style.display = 'block';
+//             editor.style.height = '300px';
+//             editor.style.opacity = '1';
+//             console.log("✅ CodeMirror is now visible.");
+//         } else {
+//             console.log("⚠️ CodeMirror not found, retrying...");
+//             setTimeout(fixCodeMirrorVisibility, 500); // Retry if not found
+//         }
+//     };
     
-    fixCodeMirrorVisibility();
-}, []);
+//     fixCodeMirrorVisibility();
+// }, []);
 
 
     useEffect(() => {
@@ -315,6 +325,13 @@ function Play() {
                             lineWrapping: true,
                         }}
                         onBeforeChange={(editor,data,value) => setTextInput(value)}
+
+                        //LAURA added
+                        //https://react.dev/reference/react/Component#componentdidmount
+                        editorDidMount={(editor) => {
+                            editorRef.current = editor; //store in reference variable
+                        }}
+                        editorWillUnmount={editorWillUnmount}
                     />
                 </div>
                 </div>

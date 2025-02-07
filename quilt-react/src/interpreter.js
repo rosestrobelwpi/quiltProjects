@@ -27,27 +27,6 @@ function Design(maxWidth, maxHeight, patches) {
     this.patches = patches;
 }
 
-//some sample strings to parse
-//testAST = parser.parse("(2+2)*(1+2)")
-//testAST = parser.parse("(vert (rect 1 2) (rect 2 2))")
-//testAST = parser.parse("(vert (vert (rect 2 2 red)(rect 2 2 blue))(vert (rect 2 2 yellow)(rect 2 2 green)))")
-//testAST = parser.parse("(vert (rect 2 2) (hor (rect 1 2) (rect 2 2)))")
-//testAST = parser.parse("(vert (hor (rect 2 2 blue) (rect 2 3 red)) (rect 2 3 yellow))")
-//testAST = parser.parse("(vert (rect 1 2 red)(rect 2 2 blue)(rect 2 2 green)(rect 3 3 pink))")
-//testAST = parser.parse("(vert (vert (rect 1 1 red)(rect 1 1 blue))(vert (rect 2 2 green)(rect 2 2 yellow))(vert (rect 3 3 black)(rect 3 3 pink)))")
-//testAST = parser.parse("(vert (vert (rect 1 1 red)(rect 1 1 blue)(rect 1 1 red))(vert (rect 2 2 green)(rect 2 2 yellow)(rect 2 2 green))(vert (rect 3 3 black)(rect 3 3 pink)(rect 3 3 black)))")
-//testAST = parser.parse("hor(vert(rect(1, 2, red), rect(1, 2, blue), rect(1, 2, red)), vert(rect(2, 2, yellow), rect(2, 2, green), rect(2, 2, yellow)), vert(rect(3, 2, black), rect(3, 2, pink), rect(3, 2, black)))")
-//testAST = parser.parse("hor(hor(rect(1, 2, red), rect(1, 2, blue), rect(1, 2, red)), hor(rect(2, 2, yellow), rect(2, 2, green), rect(2, 2, yellow)), hor(rect(3, 2, black), rect(3, 2, pink), rect(3, 2, black)))")
-//testAST = parser.parse("vert(rect(2, 2, red), rect(3, 3, blue))")
-//testAST = parser.parse("vert(rect(3, 2, red), rect(3, 3, blue))")
-//testAST = parser.parse("rep 4 rect(1, 2, red)")
-//testAST = parser.parse("rep 4 vert(rect(3, 2, red), rect(3, 3, blue))")
-//let testAST = parser.parse("rot 90 vert(rect(3, 2, red), rect(3, 3, blue))")
-//let testAST = parser.parse("rect x = rect(3,2,blue);rect y = rect(3,2,red);vert(x, y);")
-
-//console.log(testAST)
-//console.log(evaluatorLogic(environment, testAST))
-//evaluator(environment, testAST)
 
 //ERRORS TO ADD: at least 2 rectangles for hor,vert,etc
 
@@ -82,8 +61,6 @@ function evaluatorLogic(env, node) {
                 Object.setPrototypeOf(clone, Patch.prototype); // because JS is STUPID and has to be reminded that it is a Patch object
             } else if (lookup instanceof Design) {
                 Object.setPrototypeOf(clone, Design.prototype); // because JS is STUPID and has to be reminded that it is a Design object
-            // } else if (lookup instanceof NatNum) {
-            //     Object.setPrototypeOf(clone, NatNum.prototype);
             } else {
                 // console.log("i am trying to lookup", node.name)
                 // console.log("i got a ", clone)
@@ -282,13 +259,6 @@ function evaluatorLogic(env, node) {
                             x = patch.x
                             y = patch.y
 
-                            //FIXME, eliminates rounding errors
-                            //take advantage of cos/sin of 90 degrees
-                            //seperate and examine cos and sin, 
-                            // helper(angle){
-                            //     switch angle
-                            //      case 0: return ...
-                            //     case 90:
                             patch.x = -y //equations to rotating round origin
                             patch.y = x  //will result in clockwise movement
                             
