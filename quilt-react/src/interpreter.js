@@ -281,8 +281,16 @@ function evaluatorLogic(env, node) {
                             patch.y += patch.height //moving to what the reference corner should be after the rotation
                             x = patch.x
                             y = patch.y
-                            patch.x = Math.cos(angle*(Math.PI/180))*x - Math.sin(angle*(Math.PI/180))*y //equations to rotating round origin
-                            patch.y = Math.sin(angle*(Math.PI/180))*x + Math.cos(angle*(Math.PI/180))*y //will result in clockwise movement
+
+                            //FIXME, eliminates rounding errors
+                            //take advantage of cos/sin of 90 degrees
+                            //seperate and examine cos and sin, 
+                            // helper(angle){
+                            //     switch angle
+                            //      case 0: return ...
+                            //     case 90:
+                            patch.x = -y //equations to rotating round origin
+                            patch.y = x  //will result in clockwise movement
                             
                             tempWidth = patch.width //since 90 degrees, the widths and the heights will be switched
                             patch.width = patch.height;
@@ -299,8 +307,8 @@ function evaluatorLogic(env, node) {
                             patch.y += patch.height
                             x = patch.x
                             y = patch.y
-                            patch.x = Math.cos(angle*(Math.PI/180))*x - Math.sin(angle*(Math.PI/180))*y //equations to rotating round origin
-                            patch.y = Math.sin(angle*(Math.PI/180))*x + Math.cos(angle*(Math.PI/180))*y //will result in clockwise movement
+                            patch.x = -x //equations to rotating round origin
+                            patch.y = -y //will result in clockwise movement
                             
                             patch.x += designRot.width //have to move horizontally and vertically 
                             patch.y += designRot.height 
@@ -313,8 +321,8 @@ function evaluatorLogic(env, node) {
                             patch.x += patch.width //appropriate reference corner
                             x = patch.x
                             y = patch.y
-                            patch.x = Math.cos(angle*(Math.PI/180))*x - Math.sin(angle*(Math.PI/180))*y //equations to rotating round origin
-                            patch.y = Math.sin(angle*(Math.PI/180))*x + Math.cos(angle*(Math.PI/180))*y //will result in clockwise movement
+                            patch.x =  y //equations to rotating round origin
+                            patch.y = -x  //will result in clockwise movement
                             
                             tempWidth = patch.width //since 180 degrees, the widths and the heights will be switched
                             patch.width = patch.height;
