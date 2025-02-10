@@ -206,7 +206,6 @@ function evaluatorLogic(env, node) {
                 }
             }
 
-            //FIXME height and width
             return new Design(firstDesignOver.width, firstDesignOver.height, allPatchesOver)
 
         case TAG_ROT:
@@ -400,10 +399,12 @@ function evaluatorLogic(env, node) {
                 }
 
                 if (currentDesign instanceof Patch) { //Patch case is easier since we only have to worry about a single Patch
-                    currentDesign.x = (prevPatchHor.width + prevPatchHor.x) //since hor, this calculation will give us the correct x-value
+                    //currentDesign.x = (prevPatchHor.width + prevPatchHor.x) //since hor, this calculation will give us the correct x-value
+                    currentDesign.x += cumulativeWidths
                     sumWidthsHor += currentDesign.width //width bookkeeping
                     allPatchesHor.push(currentDesign) //add updated Patch to our collection
                     prevPatchHor = currentDesign //making sure to update prevPatch so that the next processed Patch has the correct information
+                    cumulativeWidths += currentDesign.width
                 } else if (currentDesign instanceof Design) { //Design case more complicated since we have to loop through all the Patches inside
                     let lastPatch = {}
                     for (let patch of currentDesign.patches) {
@@ -451,10 +452,12 @@ function evaluatorLogic(env, node) {
                     throw new Error("Widths need to be the same in order to place Patches vertically.")
                 }
                 if (currentDesign instanceof Patch) { //Patch case is easier since we only have to worry about a single Patch
-                    currentDesign.y = (prevPatchVert.height + prevPatchVert.y) //since vert, this calculation will give us the correct y-value
+                    //currentDesign.y = (prevPatchVert.height + prevPatchVert.y) //since vert, this calculation will give us the correct y-value
+                    currentDesign.y += cumulativeHeights
                     sumHeightsVert += currentDesign.height //height bookkeeping
                     allPatchesVert.push(currentDesign) //add updated Patch to our collection
                     prevPatchVert = currentDesign //making sure to update prevPatch so that the next processed Patch/Design has the correct information
+                    cumulativeHeights += currentDesign.height
                 } else if (currentDesign instanceof Design) { //Design case more complicated since we have to loop through all the Patches inside
                     let lastPatch = {} //eventually will want to set prevPatchVert to be the last Patch in the Design
                     for (let patch of currentDesign.patches) {

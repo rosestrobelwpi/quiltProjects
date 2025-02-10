@@ -101,6 +101,7 @@ function drawRectangle(ctx, x, y, width, height, color) {
     
     } else {
         ctx.fillStyle = mutedColor;
+        //ctx.fillRect(x, y, width, height)
         ctx.fillRect(Math.floor(x), Math.floor(y), Math.ceil(width), Math.ceil(height));
 
         //White lines caused by anti-aliasing (computer trying to get rid of jagged edges)
@@ -173,7 +174,7 @@ function Play() {
                     patch.width * scale,
                     patch.height * scale,
                     colorPalette[patch.color],
-                    patch.rotationFromOriginal //FIXME laura added for testing images
+                    //patch.rotationFromOriginal //FIXME laura added for testing images
                 );
             });
         } else if (design.x !== undefined && design.y !== undefined) {
@@ -184,7 +185,7 @@ function Play() {
                 design.width * scale,
                 design.height * scale,
                 colorPalette[design.color],
-                design.rotationFromOriginal //FIXME laura added for testing images
+                //design.rotationFromOriginal //FIXME laura added for testing images
             );
         }
     };
