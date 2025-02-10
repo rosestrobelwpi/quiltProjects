@@ -27,27 +27,6 @@ function Design(maxWidth, maxHeight, patches) {
     this.patches = patches;
 }
 
-//some sample strings to parse
-//testAST = parser.parse("(2+2)*(1+2)")
-//testAST = parser.parse("(vert (rect 1 2) (rect 2 2))")
-//testAST = parser.parse("(vert (vert (rect 2 2 red)(rect 2 2 blue))(vert (rect 2 2 yellow)(rect 2 2 green)))")
-//testAST = parser.parse("(vert (rect 2 2) (hor (rect 1 2) (rect 2 2)))")
-//testAST = parser.parse("(vert (hor (rect 2 2 blue) (rect 2 3 red)) (rect 2 3 yellow))")
-//testAST = parser.parse("(vert (rect 1 2 red)(rect 2 2 blue)(rect 2 2 green)(rect 3 3 pink))")
-//testAST = parser.parse("(vert (vert (rect 1 1 red)(rect 1 1 blue))(vert (rect 2 2 green)(rect 2 2 yellow))(vert (rect 3 3 black)(rect 3 3 pink)))")
-//testAST = parser.parse("(vert (vert (rect 1 1 red)(rect 1 1 blue)(rect 1 1 red))(vert (rect 2 2 green)(rect 2 2 yellow)(rect 2 2 green))(vert (rect 3 3 black)(rect 3 3 pink)(rect 3 3 black)))")
-//testAST = parser.parse("hor(vert(rect(1, 2, red), rect(1, 2, blue), rect(1, 2, red)), vert(rect(2, 2, yellow), rect(2, 2, green), rect(2, 2, yellow)), vert(rect(3, 2, black), rect(3, 2, pink), rect(3, 2, black)))")
-//testAST = parser.parse("hor(hor(rect(1, 2, red), rect(1, 2, blue), rect(1, 2, red)), hor(rect(2, 2, yellow), rect(2, 2, green), rect(2, 2, yellow)), hor(rect(3, 2, black), rect(3, 2, pink), rect(3, 2, black)))")
-//testAST = parser.parse("vert(rect(2, 2, red), rect(3, 3, blue))")
-//testAST = parser.parse("vert(rect(3, 2, red), rect(3, 3, blue))")
-//testAST = parser.parse("rep 4 rect(1, 2, red)")
-//testAST = parser.parse("rep 4 vert(rect(3, 2, red), rect(3, 3, blue))")
-//let testAST = parser.parse("rot 90 vert(rect(3, 2, red), rect(3, 3, blue))")
-//let testAST = parser.parse("rect x = rect(3,2,blue);rect y = rect(3,2,red);vert(x, y);")
-
-//console.log(testAST)
-//console.log(evaluatorLogic(environment, testAST))
-//evaluator(environment, testAST)
 
 //ERRORS TO ADD: at least 2 rectangles for hor,vert,etc
 
@@ -82,8 +61,6 @@ function evaluatorLogic(env, node) {
                 Object.setPrototypeOf(clone, Patch.prototype); // because JS is STUPID and has to be reminded that it is a Patch object
             } else if (lookup instanceof Design) {
                 Object.setPrototypeOf(clone, Design.prototype); // because JS is STUPID and has to be reminded that it is a Design object
-            // } else if (lookup instanceof NatNum) {
-            //     Object.setPrototypeOf(clone, NatNum.prototype);
             } else {
                 // console.log("i am trying to lookup", node.name)
                 // console.log("i got a ", clone)
@@ -229,7 +206,6 @@ function evaluatorLogic(env, node) {
                 }
             }
 
-            //FIXME height and width
             return new Design(firstDesignOver.width, firstDesignOver.height, allPatchesOver)
 
         case TAG_ROT:
@@ -281,8 +257,9 @@ function evaluatorLogic(env, node) {
                             patch.y += patch.height //moving to what the reference corner should be after the rotation
                             x = patch.x
                             y = patch.y
-                            patch.x = Math.cos(angle*(Math.PI/180))*x - Math.sin(angle*(Math.PI/180))*y //equations to rotating round origin
-                            patch.y = Math.sin(angle*(Math.PI/180))*x + Math.cos(angle*(Math.PI/180))*y //will result in clockwise movement
+
+                            patch.x = -y //equations to rotating round origin
+                            patch.y = x  //will result in clockwise movement
                             
                             tempWidth = patch.width //since 90 degrees, the widths and the heights will be switched
                             patch.width = patch.height;
@@ -299,8 +276,8 @@ function evaluatorLogic(env, node) {
                             patch.y += patch.height
                             x = patch.x
                             y = patch.y
-                            patch.x = Math.cos(angle*(Math.PI/180))*x - Math.sin(angle*(Math.PI/180))*y //equations to rotating round origin
-                            patch.y = Math.sin(angle*(Math.PI/180))*x + Math.cos(angle*(Math.PI/180))*y //will result in clockwise movement
+                            patch.x = -x //equations to rotating round origin
+                            patch.y = -y //will result in clockwise movement
                             
                             patch.x += designRot.width //have to move horizontally and vertically 
                             patch.y += designRot.height 
@@ -313,8 +290,8 @@ function evaluatorLogic(env, node) {
                             patch.x += patch.width //appropriate reference corner
                             x = patch.x
                             y = patch.y
-                            patch.x = Math.cos(angle*(Math.PI/180))*x - Math.sin(angle*(Math.PI/180))*y //equations to rotating round origin
-                            patch.y = Math.sin(angle*(Math.PI/180))*x + Math.cos(angle*(Math.PI/180))*y //will result in clockwise movement
+                            patch.x =  y //equations to rotating round origin
+                            patch.y = -x  //will result in clockwise movement
                             
                             tempWidth = patch.width //since 180 degrees, the widths and the heights will be switched
                             patch.width = patch.height;
@@ -422,10 +399,12 @@ function evaluatorLogic(env, node) {
                 }
 
                 if (currentDesign instanceof Patch) { //Patch case is easier since we only have to worry about a single Patch
-                    currentDesign.x = (prevPatchHor.width + prevPatchHor.x) //since hor, this calculation will give us the correct x-value
+                    //currentDesign.x = (prevPatchHor.width + prevPatchHor.x) //since hor, this calculation will give us the correct x-value
+                    currentDesign.x += cumulativeWidths
                     sumWidthsHor += currentDesign.width //width bookkeeping
                     allPatchesHor.push(currentDesign) //add updated Patch to our collection
                     prevPatchHor = currentDesign //making sure to update prevPatch so that the next processed Patch has the correct information
+                    cumulativeWidths += currentDesign.width
                 } else if (currentDesign instanceof Design) { //Design case more complicated since we have to loop through all the Patches inside
                     let lastPatch = {}
                     for (let patch of currentDesign.patches) {
@@ -473,10 +452,12 @@ function evaluatorLogic(env, node) {
                     throw new Error("Widths need to be the same in order to place Patches vertically.")
                 }
                 if (currentDesign instanceof Patch) { //Patch case is easier since we only have to worry about a single Patch
-                    currentDesign.y = (prevPatchVert.height + prevPatchVert.y) //since vert, this calculation will give us the correct y-value
+                    //currentDesign.y = (prevPatchVert.height + prevPatchVert.y) //since vert, this calculation will give us the correct y-value
+                    currentDesign.y += cumulativeHeights
                     sumHeightsVert += currentDesign.height //height bookkeeping
                     allPatchesVert.push(currentDesign) //add updated Patch to our collection
                     prevPatchVert = currentDesign //making sure to update prevPatch so that the next processed Patch/Design has the correct information
+                    cumulativeHeights += currentDesign.height
                 } else if (currentDesign instanceof Design) { //Design case more complicated since we have to loop through all the Patches inside
                     let lastPatch = {} //eventually will want to set prevPatchVert to be the last Patch in the Design
                     for (let patch of currentDesign.patches) {

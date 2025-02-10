@@ -22,7 +22,7 @@ const colorPalette = {
 // Function to draw a single rectangle
 const drawRectangle = (ctx, x, y, width, height, color) => {
   ctx.fillStyle = color;
-  ctx.fillRect(x, y, width, height);
+  ctx.fillRect(Math.floor(x), Math.floor(y), Math.ceil(width), Math.ceil(height));
 };
 
 // Function to render a design on a canvas
@@ -37,14 +37,12 @@ const renderDesign = (canvas, code) => {
     const parsedInput = parser.parse(code);
     const design = evaluator(parsedInput);
 
-    const maxWidth = design.patches
-      ? Math.max(...design.patches.map((p) => p.x + p.width))
-      : design.x + design.width;
-    const maxHeight = design.patches
-      ? Math.max(...design.patches.map((p) => p.y + p.height))
-      : design.y + design.height;
+    const maxWidth = design.width
+    const maxHeight = design.height
 
-    const scale = Math.min(width / maxWidth, height / maxHeight);
+    const scaleX = (canvas.width) / maxWidth;
+    const scaleY = (canvas.height) / maxHeight;
+    const scale = Math.min(scaleX, scaleY); // Uniform scaling
 
     if (design.patches && Array.isArray(design.patches)) {
       design.patches.forEach((patch) => {
