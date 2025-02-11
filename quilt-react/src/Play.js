@@ -172,7 +172,7 @@ function Play() {
                     patch.y * scale,
                     patch.width * scale,
                     patch.height * scale,
-                    colorPalette[patch.color],
+                    colorPalette[patch.color] || patch.color,
                     patch.rotationFromOriginal //FIXME laura added for testing images
                 );
             });
@@ -183,7 +183,7 @@ function Play() {
                 design.y * scale,
                 design.width * scale,
                 design.height * scale,
-                colorPalette[design.color],
+                colorPalette[design.color] || design.color,
                 design.rotationFromOriginal //FIXME laura added for testing images
             );
         }
