@@ -7,16 +7,16 @@ import parser from "./parser";
 import evaluator from "./interpreter";
 
 const colorPalette = {
-  red: '#b57c7c',
-  orange: '#d9a078',
-  yellow: '#c8b77a',
-  green: '#85a586',
-  blue: '#6a8caf',
-  purple: '#9e86a6',
-  black: '#4d4d4d',
-  pink: '#d8a6b8',
-  brown: '#a58c72',
-  grey: '#b0b0b0',
+  // red: '#b57c7c',
+  // orange: '#d9a078',
+  // yellow: '#c8b77a',
+  // green: '#85a586',
+  // blue: '#6a8caf',
+  // purple: '#9e86a6',
+  // black: '#4d4d4d',
+  // pink: '#d8a6b8',
+  // brown: '#a58c72',
+  // grey: '#b0b0b0',
 };
 
 // Function to draw a single rectangle
@@ -52,7 +52,7 @@ const renderDesign = (canvas, code) => {
           patch.y * scale,
           patch.width * scale,
           patch.height * scale,
-          colorPalette[patch.color]
+          colorPalette[patch.color] || patch.color
         );
       });
     } else if (design.x !== undefined && design.y !== undefined) {
@@ -62,7 +62,7 @@ const renderDesign = (canvas, code) => {
         design.y * scale,
         design.width * scale,
         design.height * scale,
-        colorPalette[design.color]
+        colorPalette[design.color] || design.color
       );
     }
   } catch (error) {
