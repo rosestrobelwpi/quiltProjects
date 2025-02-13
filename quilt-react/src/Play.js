@@ -25,19 +25,19 @@ import imageSRCbrown from './laura_test_image/woodlandFabric.png';
 
 // Define a muted color palette
 const colorPalette = {
-    red: '#b57c7c',
-    orange: '#d9a078',
-    yellow: '#c8b77a',
-    green: '#85a586',
-    blue: '#6a8caf',
-    purple: '#9e86a6',
-    black: '#4d4d4d',
-    pink: '#d8a6b8',
-    brown: '#a58c72',
-    grey: '#b0b0b0',
-    white: '#ffffff', 
-    gray: '#b0b0b0',
-    larry: 'larry'
+    // red: '#b57c7c',
+    // orange: '#d9a078',
+    // yellow: '#c8b77a',
+    // green: '#85a586',
+    // blue: '#6a8caf',
+    // purple: '#9e86a6',
+    // black: '#4d4d4d',
+    // pink: '#d8a6b8',
+    // brown: '#a58c72',
+    // grey: '#b0b0b0',
+    // white: '#ffffff', 
+    // gray: '#b0b0b0',
+    // larry: 'larry'
 };
 
 //Function to resize canvas
@@ -57,6 +57,7 @@ function resizeCanvas(canvas){
 // Function to draw a single rectangle
 function drawRectangle(ctx, x, y, width, height, color) {
     const mutedColor = colorPalette[color] || color;
+    console.log(mutedColor)
 
     //console.log("rotationFromOriginal", rotationFromOriginal)
     if (mutedColor === 'larry') {
@@ -173,7 +174,7 @@ function Play() {
                     patch.y * scale,
                     patch.width * scale,
                     patch.height * scale,
-                    colorPalette[patch.color],
+                    colorPalette[patch.color] || patch.color,
                     //patch.rotationFromOriginal //FIXME laura added for testing images
                 );
             });
@@ -184,7 +185,7 @@ function Play() {
                 design.y * scale,
                 design.width * scale,
                 design.height * scale,
-                colorPalette[design.color],
+                colorPalette[design.color] || design.color,
                 //design.rotationFromOriginal //FIXME laura added for testing images
             );
         }
