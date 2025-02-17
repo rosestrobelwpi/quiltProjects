@@ -35,7 +35,22 @@ const Document = () => {
           Following the name, the function can either take in parameters surrounded by parenthesis, or have 0 parameters. To mark the beginning and end of a function,
           we will use curly braces. Inside of these curly braces is where we put the expression we would like to use. <br /> <br />
         </p>
-        
+        <h1>Examples</h1><br />
+          <i><u>FUNCTIONS WHAT FOR OMGOGMOMGOMGOMGOMG</u></i>
+
+          <pre>
+            <code>
+              <span className='variable'>rect</span> yellowRect = <span className='variable'>rect</span>(1, 1, yellow);<br />
+              <span className='variable'>rect</span> blackRect = <span className='keyword'>rect</span>(1, 1, black);<br /><br />
+
+              <span className='variable'>rect</span> yellowBackground = <span className='keyword'>hor</span>(<span className='keyword'>repX</span>(8, yellowRect));<br />
+              <span className='variable'>rect</span> eyes = <span className='keyword'>hor</span>(yellowRect, yellowRect, blackRect, yellowRect, yellowRect, blackRect, yellowRect, yellowRect);<br />
+              <span className='variable'>rect</span> topLip = <span className='keyword'>hor</span>(yellowRect, blackRect, yellowRect, yellowRect, yellowRect, yellowRect, blackRect, yellowRect);<br />
+              <span className='variable'>rect</span> bottomLip = <span className='keyword'>hor</span>(yellowRect, yellowRect, blackRect, blackRect, blackRect, blackRect, yellowRect, yellowRect);<br /><br />
+
+              <span className='keyword'>vert</span>(yellowBackground, yellowBackground, yellowBackground, eyes, yellowBackground, yellowBackground, topLip, bottomLip, yellowBackground);
+            </code>
+          </pre>
         
       </div>
     </div>
