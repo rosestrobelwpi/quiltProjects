@@ -20,7 +20,7 @@ const Document = () => {
       <h1>Functions</h1>
       <div className="getting-started-text-container">
         <p>
-          Functions make it easier to repeat certain blocks of code, which makes it easier to create patterns.<br /> <br />
+          Functions make it easier to repeat certain blocks of code and reduce redundancy.<br /> <br />
           <h4>Define functions</h4>
           To define a function, use the syntax:
           <pre>
@@ -35,8 +35,21 @@ const Document = () => {
           Following the name, the function can either take in parameters surrounded by parenthesis, or have 0 parameters. To mark the beginning and end of a function,
           we will use curly braces. Inside of these curly braces is where we put the expression we would like to use. <br /> <br />
         </p>
-        
-        
+        <h1>Examples</h1><br />
+          <i><u>Colorful Checkboard</u></i>
+
+          <pre>
+            <code>
+              <span className='variable'>define</span> checkerboard = (rect a, rect b, rect x, rect y)	&#123;<br />
+              <span className='variable'>return</span> <span className='keyword'>repX</span> (4, hor(vert(a,b,x,y,a,b,x,y), vert(y,x,b,a,y,x,b,a)));<br />&#125;<br /> 	
+
+              <span className='variable'>rect</span> theGreen =  <span className='variable'>rect</span> (1, 1, <span className='keyword'>darkseagreen</span>);<br />
+              <span className='variable'>rect</span> theYellow =  <span className='variable'>rect</span> (1, 1, <span className='keyword'>khaki</span>);<br />
+              <span className='variable'>rect</span> theBlue =  <span className='variable'>rect</span> (1, 1, <span className='keyword'>darkcyan</span>);<br />
+              <span className='variable'>checkerboard</span>(<span className='keyword'>theGreen</span>, <span className='keyword'>theBlue</span>, <span className='keyword'>theYellow</span>, <span className='keyword'>thePurple</span>);<br />
+            </code>
+          </pre>
+          <img src='./static/colorful-checkboard.png' className='example-pictures'></img>
       </div>
     </div>
   );

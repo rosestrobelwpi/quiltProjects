@@ -113,22 +113,8 @@ const Document = () => {
         </p>
         
         <h1>Colors</h1>
-        <p>Colors are a big part of our quilt designer. In order to achieve the same aesthetic as the rest of our website, we decided to use <i>muted</i> colors.<br /><br />
+        <p>Colors are a big part of our quilt designer. Easily recognizable colors, like red and blue, are usable, but to achieve a wider range of colors, we opted to use the HTML color scheme. <br /><br /><a href='https://www.w3schools.com/colors/colors_names.asp'>Click here</a> to view the full list of color names.<br /><br />
         <i>Note: </i>Colors <strong>must</strong> be begin with a lowercase letter.</p><br />
-
-        <h3>Valid colors:</h3>
-        <ul className='valid-colors'>
-          <li id='red-valid'>red</li>
-          <li id='orange-valid'>orange</li>
-          <li id='yellow-valid'>yellow</li>
-          <li id='green-valid'>green</li>
-          <li id='blue-valid'>blue</li>
-          <li id='purple-valid'>purple</li>
-          <li id='black-valid'>black</li>
-          <li id='pink-valid'>pink</li>
-          <li id='brown-valid'>brown</li>
-          <li id='grey-valid'>grey</li>
-        </ul>
 
         <h1>Variables</h1>
         <p>
@@ -154,32 +140,13 @@ const Document = () => {
 
           <h1>Examples</h1><br />
           <i><u>Smiley Face Design:</u></i>
-          {/* <pre>
-            <code>
-              <span className='keyword'>rect</span> yellowRect = <span className='keyword'>rect</span>(1, 1, yellow);<br />
-              <span className='keyword'>rect</span> blackRect = <span className='keyword'>rect</span>(1, 1, black);<br /><br />
-
-              <span className='keyword'>rect</span> rowOne = hor(rep(8, yellowRect));<br />
-              <span className='keyword'>rect</span> rowTwo = rowOne;<br />
-              <span className='keyword'>rect</span> rowThree = rowOne;<br />
-              <span className='keyword'>rect</span> rowFour = hor(yellowRect, yellowRect, blackRect, yellowRect, yellowRect, blackRect, yellowRect, yellowRect);<br />
-              <span className='keyword'>rect</span> rowFive = rowOne;<br />
-              <span className='keyword'>rect</span> rowSix = rowOne;<br />
-              <span className='keyword'>rect</span> rowSeven = hor(yellowRect, blackRect, yellowRect, yellowRect, yellowRect, yellowRect, blackRect, yellowRect);<br />
-              <span className='keyword'>rect</span> rowEight = hor(yellowRect, yellowRect, blackRect, blackRect, blackRect, blackRect, yellowRect, yellowRect);<br />
-              <span className='keyword'>rect</span> rowNine = rowOne;<br /><br />
-
-              <span className='keyword'>vert</span>(rowOne, rowTwo, rowThree, rowFour, rowFive, rowSix, rowSeven, rowEight, rowNine);
-            </code>
-          </pre>
-          This is much easier to read and understand compared to doing everything on one line! But it's extremely long. Let's see if we can condense it into something more readable. */}
 
           <pre>
             <code>
               <span className='variable'>rect</span> yellowRect = <span className='variable'>rect</span>(1, 1, yellow);<br />
               <span className='variable'>rect</span> blackRect = <span className='keyword'>rect</span>(1, 1, black);<br /><br />
 
-              <span className='variable'>rect</span> yellowBackground = <span className='keyword'>hor</span>(<span className='keyword'>rep</span>(8, yellowRect));<br />
+              <span className='variable'>rect</span> yellowBackground = <span className='keyword'>hor</span>(<span className='keyword'>repX</span>(8, yellowRect));<br />
               <span className='variable'>rect</span> eyes = <span className='keyword'>hor</span>(yellowRect, yellowRect, blackRect, yellowRect, yellowRect, blackRect, yellowRect, yellowRect);<br />
               <span className='variable'>rect</span> topLip = <span className='keyword'>hor</span>(yellowRect, blackRect, yellowRect, yellowRect, yellowRect, yellowRect, blackRect, yellowRect);<br />
               <span className='variable'>rect</span> bottomLip = <span className='keyword'>hor</span>(yellowRect, yellowRect, blackRect, blackRect, blackRect, blackRect, yellowRect, yellowRect);<br /><br />
@@ -187,6 +154,7 @@ const Document = () => {
               <span className='keyword'>vert</span>(yellowBackground, yellowBackground, yellowBackground, eyes, yellowBackground, yellowBackground, topLip, bottomLip, yellowBackground);
             </code>
           </pre>
+          <img src='./static/smiley_face.png' className='example-pictures'></img><br/>
           {/* Perfect! We made use of the <span className='keyword'>rep</span> variable to condense the yellow horizontal row into one line of code!<br /><br /> */}
           <i><u>Checkboard Design:</u></i>
           <pre>
@@ -196,11 +164,12 @@ const Document = () => {
 
             <span className='variable'>rect</span> top = <span className='keyword'>hor</span>(grey, black);<br />
             <span className='variable'>rect</span> bottom = <span className='keyword'>hor</span>(black, grey);<br />
-            <span className='variable'>rect</span> repeat = <span className='keyword'>rep</span>(4, (vert(top, bottom)));<br /><br />
+            <span className='variable'>rect</span> repeat = <span className='keyword'>repX</span>(4, (vert(top, bottom)));<br /><br />
 
             <span className='keyword'>vert</span>(repeat, repeat, repeat, repeat);
             </code>
           </pre>
+          <img src='./static/checkboard_design.png' className='example-pictures'></img>
         </p>
       </div>
     </div>

@@ -119,6 +119,19 @@
   .variable {
     color: rgb(236, 117, 5);
   }
+
+  .example-pictures {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .example-pictures img {
+    height: auto;
+    margin: 0 auto;
+  }
   
 .valid-colors li {
   list-style: none;
