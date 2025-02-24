@@ -113,7 +113,7 @@ const Document = () => {
         </p>
         
         <h1>Colors</h1>
-        <p>Colors are a big part of our quilt designer. Easily recognizable colors, like red and blue, are usable, but to achieve a wider range of colors, we opted to use the HTML color scheme. <br /><br /><a href='https://www.w3schools.com/colors/colors_names.asp'>Click here</a> to view the full list of color names.<br /><br />
+        <p>Colors are a big part of our quilt designer. Easily recognizable colors, like red and blue, are usable, but to achieve a wider range of colors, we opted to use the HTML color scheme. <br /><br /><a href='https://www.w3schools.com/colors/colors_names.asp' target="_blank">Click here</a> to view the full list of color names.<br /><br />
         <i>Note: </i>Colors <strong>must</strong> be begin with a lowercase letter.</p><br />
 
         <h1>Variables</h1>
