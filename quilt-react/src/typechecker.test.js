@@ -513,7 +513,10 @@ test("func good-using args and vars to call", () => {
 });
 
 
-
+//func good - big body
+test("func w big body", () => {
+    expect(typecheck(parser.parse("define thefunc(int x, int y) { int see = 3; rect wat = rect(see, y, blue); wat; } int a = 3; int b = 17; thefunc(a,b);"))).toEqual("RECT");
+});
 
 
 
@@ -531,4 +534,3 @@ test("var good init- color names", () => {
 // test("func no args", () => {
 //     expect(typecheck(parser.parse("define z () {rect(1,1,blue);} z;"))).toEqual("RECT");
 // });
-

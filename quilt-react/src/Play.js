@@ -2,8 +2,11 @@ import React, { useState, useRef, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Controlled as CodeMirror } from "react-codemirror2";
 import "codemirror/lib/codemirror.css";
+import "codemirror/lib/codemirror.js";
 import "codemirror/theme/material.css";
 import "codemirror/mode/javascript/javascript";
+import "codemirror/addon/edit/matchbrackets";
+import "codemirror/addon/edit/closebrackets";
 //import { Link } from 'react-router-dom';
 //import { Alert } from "bootstrap";
 import parser from "./parser";
@@ -41,7 +44,7 @@ const colorPalette = {
 };
 
 //Function to resize canvas
-function resizeCanvas(canvas){
+function resizeCanvas(canvas) {
     const canvasSize = Math.min(window.innerWidth, window.innerHeight) * 0.8;
 
     if (canvasSize > 1100) {
@@ -75,31 +78,31 @@ function drawRectangle(ctx, x, y, width, height, color) {
         // ctx.drawImage(image, -width / 2, -height / 2, width, height); //draw image, rotates around its center
         // ctx.restore(); //restore canvas from ctx.save()
 
-    // } else if (color === '#d9a078'){
-    //     const image = new Image();
-    //     image.src = imageSRCorange;
-    //     ctx.drawImage(image, x, y, width, height);
+        // } else if (color === '#d9a078'){
+        //     const image = new Image();
+        //     image.src = imageSRCorange;
+        //     ctx.drawImage(image, x, y, width, height);
 
-    // } else if (color === "#b0b0b0"){
-    //     const image = new Image();
-    //     image.src = imageSRCgrey;
-    //     ctx.drawImage(image, x, y, width, height);
+        // } else if (color === "#b0b0b0"){
+        //     const image = new Image();
+        //     image.src = imageSRCgrey;
+        //     ctx.drawImage(image, x, y, width, height);
 
-    // } else if (color === "#6a8caf"){
-    //     const image = new Image();
-    //     image.src = imageSRCblue;
-    //     ctx.drawImage(image, x, y, width, height);
+        // } else if (color === "#6a8caf"){
+        //     const image = new Image();
+        //     image.src = imageSRCblue;
+        //     ctx.drawImage(image, x, y, width, height);
 
-    // } else if (color === "#9e86a6"){
-    //     const image = new Image();
-    //     image.src = imageSRCpurple;
-    //     ctx.drawImage(image, x, y, width, height);
+        // } else if (color === "#9e86a6"){
+        //     const image = new Image();
+        //     image.src = imageSRCpurple;
+        //     ctx.drawImage(image, x, y, width, height);
 
-    // } else if (color === "#a58c72"){
-    //     const image = new Image();
-    //     image.src = imageSRCbrown;
-    //     ctx.drawImage(image, x, y, width, height);
-    
+        // } else if (color === "#a58c72"){
+        //     const image = new Image();
+        //     image.src = imageSRCbrown;
+        //     ctx.drawImage(image, x, y, width, height);
+
     } else {
         ctx.fillStyle = mutedColor;
         //ctx.fillRect(x, y, width, height)
@@ -117,6 +120,13 @@ function Play() {
     const [textInput, setTextInput] = useState(""); // Store input for handling submission
     const canvasRef = useRef(null);
 
+
+    // const [renderCount, setRenderCount] = useState(0);
+    // useEffect(() => {
+    //     setRenderCount(renderCount + 1);  // Increment render count on every render
+    //     console.log(`Rendered ${renderCount + 1} times`);  // Log the render count
+    // });
+
     //LAURA added
     //https://react.dev/reference/react/Component#componentwillunmount
     const editorRef = useRef(null); //set editor ref when the CodeMirror element is initialized
@@ -128,10 +138,11 @@ function Play() {
         //remove() removes that <div> from the document tree
     }
 
-     // Preload code from URL on component mount
-     useEffect(() => {
+
+    // Preload code from URL on component mount
+    useEffect(() => {
         const canvas = canvasRef.current;
-        if(canvas) {
+        if (canvas) {
             resizeCanvas(canvas)
         }
         if (code) {
@@ -142,7 +153,7 @@ function Play() {
             const loadDesign = evaluator(parsedInput);
             renderDesign(loadDesign);
         }
-        
+
     }, [code]);
 
     // Render design on the canvas based on input text
@@ -201,84 +212,65 @@ function Play() {
 
     // Only called on Submit button click
     const handleSubmit = () => {
-      try {
-          const parsedInput = parser.parse(textInput); // This is where the detailed error occurs
-          typechecker(parsedInput);
-          const design = evaluator(parsedInput);
-          renderDesign(design);
-  
-      } catch (error) {
-            console.error("Error:", error, typeof(error));
         try {
-            // Extract the detailed error message from the caught error
-            const errorMessage = error.message || "An unknown error occurred.";
-            alert(`Parse ERROR at line ${error.location.start.line}, column ${error.location.start.column}:\n${errorMessage}`);
+            const parsedInput = parser.parse(textInput); // This is where the detailed error occurs
+            typechecker(parsedInput);
+            const design = evaluator(parsedInput);
+            renderDesign(design);
 
-        } catch (error2) {
-            const errorMessage = error.message || "An unknown error occurred.";
-            alert(`Interpreter or Typechecker ERROR:\n${errorMessage}`);
+        } catch (error) {
+            console.error("Error:", error, typeof (error));
+            try {
+                // Extract the detailed error message from the caught error
+                const errorMessage = error.message || "An unknown error occurred.";
+                alert(`Parse ERROR at line ${error.location.start.line}, column ${error.location.start.column}:\n${errorMessage}`);
+
+            } catch (error2) {
+                const errorMessage = error.message || "An unknown error occurred.";
+                alert(`Interpreter or Typechecker ERROR:\n${errorMessage}`);
+
+            }
+
 
         }
-          
+    };
 
-      }
-  };
-  
-  function downloadCanvasDrawing() {
-    var canvas = document.getElementById("canvas");
-    var url = canvas.toDataURL("image/png");
-    var fileName = prompt("Enter file name:")
+    function downloadCanvasDrawing() {
+        var canvas = document.getElementById("canvas");
+        var url = canvas.toDataURL("image/png");
+        var fileName = prompt("Enter file name:")
 
-    if (fileName === null) {
-      return;
+        if (fileName === null) {
+            return;
+        }
+
+        if (fileName) {
+            if (!fileName.endsWith(".png")) {
+                fileName += ".png";
+            }
+            var link = document.createElement('a');
+            link.download = fileName;
+            link.href = url;
+            link.click();
+
+        }
     }
-
-    if (fileName) {
-      if (!fileName.endsWith(".png")) {
-        fileName += ".png";
-      }
-      var link = document.createElement('a');
-      link.download = fileName;
-      link.href = url;
-      link.click();
-
-    }
-  }
-
-//   useEffect(() => {
-//     // Ensure CodeMirror is visible after mounting
-//     const fixCodeMirrorVisibility = () => {
-//         const editor = document.querySelector('.CodeMirror');
-//         if (editor) {
-//             editor.style.display = 'block';
-//             editor.style.height = '300px';
-//             editor.style.opacity = '1';
-//             console.log("✅ CodeMirror is now visible.");
-//         } else {
-//             console.log("⚠️ CodeMirror not found, retrying...");
-//             setTimeout(fixCodeMirrorVisibility, 500); // Retry if not found
-//         }
-//     };
-    
-//     fixCodeMirrorVisibility();
-// }, []);
-
 
     useEffect(() => {
-      const keyPressed = (event) => {
-          if (event.shiftKey && event.key === "Enter") {
-              handleSubmit();
-              event.preventDefault();
-          } else if (event.shiftKey && event.key === "Backspace") {
-              handleClear();
-              event.preventDefault();
-          }
-      };
-      window.addEventListener("keydown", keyPressed);
-      return () => {
-          window.removeEventListener("keydown", keyPressed);
-      };
-  }, [textInput]);
+        const keyPressed = (event) => {
+            if (event.shiftKey && event.key === "Enter") {
+                handleSubmit();
+                event.preventDefault();
+            } else if (event.shiftKey && event.key === "Backspace") {
+                handleClear();
+                event.preventDefault();
+            }
+        };
+        window.addEventListener("keydown", keyPressed);
+        return () => {
+            window.removeEventListener("keydown", keyPressed);
+        };
+    }, [textInput]);
 
 
     return (
@@ -297,55 +289,57 @@ function Play() {
                 </div>
             </div>
             <div className="container2">
-                
+
 
                 <div className="parser-container">
-                {/* <div className="drawingName">
+                    {/* <div className="drawingName">
                     <form>
                         <input type="text" name="drawing-name" placeholder="Enter the name of your creation here!"></input>
                     </form>
                 </div> */}
-                <div className="button-help">
-                    <div className="btn-action">
-                        <code id="submitBtn" onClick={handleSubmit}>Shift + Enter</code> <span>to submit</span>
+                    <div className="button-help">
+                        <div className="btn-action">
+                            <code id="submitBtn" onClick={handleSubmit}>Shift + Enter</code> <span>to submit</span>
+                        </div>
+                        <div className="btn-action">
+                            <code id="clearBtn" onClick={handleClear}>Shift + Backspace</code> <span>to clear</span>
+                        </div>
+                        <div className="btn-action">
+                            <code id="downloadBtn" onClick={downloadCanvasDrawing}>Download</code>
+                        </div>
                     </div>
-                    <div className="btn-action">
-                        <code id="clearBtn" onClick={handleClear}>Shift + Backspace</code> <span>to clear</span>
-                    </div>
-                    <div className="btn-action">
-                        <code id="downloadBtn" onClick={downloadCanvasDrawing}>Download</code>
-                    </div>
-                </div>
-                <div className="codemirror-container">
-                    <CodeMirror
+                    <div className="codemirror-container">
+                        <CodeMirror
 
-                        value={textInput}
-                        options={{
-                            mode: "javascript",
-                            theme: "material",
-                            lineNumbers: true,
-                            lineWrapping: true,
-                        }}
-                        onBeforeChange={(editor,data,value) => setTextInput(value)}
+                            value={textInput}
+                            options={{
+                                mode: "javascript",
+                                theme: "material",
+                                matchBrackets: true,
+                                autoCloseBrackets: true,
+                                lineNumbers: true,
+                                lineWrapping: true,
+                            }}
+                            onBeforeChange={(editor, data, value) => setTextInput(value)}
 
-                        //LAURA added
-                        //https://react.dev/reference/react/Component#componentdidmount
-                        editorDidMount={(editor) => {
-                            editorRef.current = editor; //store in reference variable
-                        }}
-                        editorWillUnmount={editorWillUnmount}
-                    />
-                </div>
+                            //LAURA added
+                            //https://react.dev/reference/react/Component#componentdidmount
+                            editorDidMount={(editor) => {
+                                editorRef.current = editor; //store in reference variable
+                            }}
+                            editorWillUnmount={editorWillUnmount}
+                        />
+                    </div>
                 </div>
                 <div className="drawing-container">
                     <canvas id="canvas" ref={canvasRef} width={400} height={400}></canvas>
                 </div>
             </div>
         </div>
-        
-    );
-    
-  }
 
-  export default Play;
+    );
+
+}
+
+export default Play;
 

@@ -5,7 +5,7 @@ const {
     TAG_VAR_CALL, TAG_OVER, TAG_PROGRAM, TAG_ASSIGNMENT, TAG_FUNC, TAG_FUN_CALL
 } = require('./parserASTfunction.js');
 
-const parser = require("./parser.js");
+// const parser = require("./parser.js");
 
 
 
@@ -78,9 +78,7 @@ function evaluatorLogic(env, node) {
             //evaluate each input first
             let evaluatedArgs = []
             for (let arg of node.args) {
-                console.log("arg tag!!", arg.tag)
                 evaluatedArgs.push(evaluatorLogic(env, arg))
-                console.log("what did it giv?!", evaluatedArgs)
             }
 
             //insert into environment (like a variable)
@@ -93,8 +91,6 @@ function evaluatorLogic(env, node) {
             }
 
             //now we can evaluate the function body, now that the environment has the input names connected to the values
-            console.log("this is func body", funcBody)
-            console.log("env before lookin at funcbody maybe", newEnvironment)
             return evaluatorLogic(newEnvironment, funcBody)
        
         case TAG_NAT_NUM:
@@ -390,30 +386,24 @@ function evaluatorLogic(env, node) {
            //now we process all of the rest of the patches/designs
            console.log(firstDesignHor)
            let sumWidthsHor = firstDesignHor.width //since this is placing horizontally, we add all the widths to get the overall Design width
-           let cumulativeWidths = firstDesignHor.width //need to keep track of where to place designs after the first two
            for (let i = 1; i < (node.design).length; i++) { //start at index 1 bc already took care of the first one
                 let currentDesign = evaluatorLogic(env, node.design[i]) //recursively process the very next Patch/Design
                 if (currentDesign.height !== heightHor) { //check to make sure heights are compatable, works regardless of if it's a Design or a Patch
                     throw new Error("Heights need to be the same in order to place Patches horizontally.");
-                    //return "unsuccessful :( please make sure heights match when using hor()";
                 }
 
                 if (currentDesign instanceof Patch) { //Patch case is easier since we only have to worry about a single Patch
-                    //currentDesign.x = (prevPatchHor.width + prevPatchHor.x) //since hor, this calculation will give us the correct x-value
-                    currentDesign.x += cumulativeWidths
+                    currentDesign.x += sumWidthsHor
                     sumWidthsHor += currentDesign.width //width bookkeeping
                     allPatchesHor.push(currentDesign) //add updated Patch to our collection
                     prevPatchHor = currentDesign //making sure to update prevPatch so that the next processed Patch has the correct information
-                    cumulativeWidths += currentDesign.width
                 } else if (currentDesign instanceof Design) { //Design case more complicated since we have to loop through all the Patches inside
                     let lastPatch = {}
                     for (let patch of currentDesign.patches) {
-                        //patch.x += (prevPatchHor.width + prevPatchHor.x) //FIXME this doesn't work for overlay
-                        patch.x += cumulativeWidths
+                        patch.x += sumWidthsHor
                         allPatchesHor.push(patch) //add updated Patches as we modify each
                         lastPatch = patch 
                     }
-                    cumulativeWidths += currentDesign.width
                     prevPatchHor = lastPatch
                     sumWidthsHor += currentDesign.width //width bookkeeping
                 } else {
@@ -445,7 +435,6 @@ function evaluatorLogic(env, node) {
            
            //now we process all of the rest of the patches/designs
            let sumHeightsVert = firstDesignVert.height //since this is placing vertically, we add all the heights to get the overall Design height
-           let cumulativeHeights = firstDesignVert.height
            for (let i = 1; i < (node.design).length; i++) { //start at index 1 bc already took care of the first one
                 let currentDesign = evaluatorLogic(env, node.design[i]) //recursively process the very next Patch/Design
                 if (currentDesign.width !== widthVert) { //check to make sure widths are compatable, works regardless of if it's a Design or a Patch
@@ -453,20 +442,18 @@ function evaluatorLogic(env, node) {
                 }
                 if (currentDesign instanceof Patch) { //Patch case is easier since we only have to worry about a single Patch
                     //currentDesign.y = (prevPatchVert.height + prevPatchVert.y) //since vert, this calculation will give us the correct y-value
-                    currentDesign.y += cumulativeHeights
+                    currentDesign.y += sumHeightsVert
                     sumHeightsVert += currentDesign.height //height bookkeeping
                     allPatchesVert.push(currentDesign) //add updated Patch to our collection
                     prevPatchVert = currentDesign //making sure to update prevPatch so that the next processed Patch/Design has the correct information
-                    cumulativeHeights += currentDesign.height
                 } else if (currentDesign instanceof Design) { //Design case more complicated since we have to loop through all the Patches inside
                     let lastPatch = {} //eventually will want to set prevPatchVert to be the last Patch in the Design
                     for (let patch of currentDesign.patches) {
                         //patch.y += (prevPatchVert.height + prevPatchVert.y) //doesn't work with overlay
-                        patch.y += cumulativeHeights
+                        patch.y += sumHeightsVert
                         allPatchesVert.push(patch) //add updated Patches as we modify each
                         lastPatch = patch //when for loop terminates, lastPatch will contain the very last patch in the Design
                     }
-                    cumulativeHeights += currentDesign.height //incrementing to prepare for next design
                     prevPatchVert = lastPatch //make sure to update for next Patch/Design
                     sumHeightsVert += currentDesign.height //height bookkeeping, design should already know its overall height
                 } else {

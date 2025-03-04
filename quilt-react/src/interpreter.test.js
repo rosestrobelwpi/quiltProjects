@@ -10,6 +10,7 @@ import parser from './parser.js';
 // });
 
 
+//---------------------BASIC RECTANGLE------------------------
 
 //simple square
 test("square", () => {
@@ -25,6 +26,9 @@ test("tall rectangle", () => {
 test("wide rectangle", () => {
     expect(evaluator(parser.parse("rect(2,1,red);"))).toEqual({"x": 0, "y": 0, "width": 2, "height": 1, "color": "red"});
 });
+
+
+//---------------------ARITHMETIC------------------------
 
 //add two numbers
 test("add two numbers in rect()", () => {
@@ -58,6 +62,8 @@ test("nested arithmetic in rect()", () => {
         "color": "red"
     });  
 });
+
+//---------------------HOR() AND VERT()------------------------
 
 //hor() with compatable rectangles
 test("simple hor() - heights compatible", () => {
@@ -406,6 +412,9 @@ test("hor() nested in hor() - incompatable", () => {
 // test("", () => {
 //     expect(() => {evaluator(parser.parse("CODE_HERE"))}).toThrow;    
 // });
+
+
+//---------------------OVER()------------------------
 
 //over() using TL with two compatable rectangles
 test("over() TL - compatable", () => {
@@ -855,6 +864,9 @@ test("over() design - incompatable", () => {
     expect(() => {evaluator(parser.parse("CODE_HERE"))}).toThrow;  
 });
 
+
+//---------------------ROT()------------------------
+
 //rot() using 0 degrees to rotate a rectangle
 test("rot() 0deg rectangle", () => {
     expect(evaluator(parser.parse("rot(0, rect(2,1,red));"))).toEqual({
@@ -994,6 +1006,8 @@ test("rot() 270deg design", () => {
         ]
     });  
 });
+
+//---------------------REPX() AND REPY()------------------------
 
 //repX() with rectangle
 test("repX() rectangle", () => {
@@ -1651,6 +1665,9 @@ test("repY() design", () => {
     });  
 });
 
+
+//---------------------VARIABLES------------------------
+
 //defining and using integer variables
 test("simple int variables", () => {
     expect(evaluator(parser.parse("int a = 3; int b = 4; rect(a, b, red);"))).toEqual({
@@ -1697,9 +1714,84 @@ test("simple rect (design) variable", () => {
     });  
 });
 
+//defining and redefining an int variable
+test("redefining integer variable", () => {
+    expect(evaluator(parser.parse("int number = 5; number = 1; rect(number, number, blue);"))).toEqual({
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "color": "blue"
+    });  
+});
+
+//defining and redefining an int variable using the int variable
+test("redefining integer variable using the variable", () => {
+    expect(evaluator(parser.parse("int i = 0; i = i+2; rect(i,i,blue);"))).toEqual({
+        "x": 0,
+        "y": 0,
+        "width": 2,
+        "height": 2,
+        "color": "blue"
+    });  
+});
+
+//defining and redefining a rect variable
+test("redefining rect variable", () => {
+    expect(evaluator(parser.parse("rect variable = rect(1,1,red); variable = rect(1,1,blue); variable;"))).toEqual({
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "color": "blue"
+    });  
+});
+
+//defining and redefining a rect (design) variable
+test("redefining rect (design) variable", () => {
+    expect(evaluator(parser.parse("rect square = rect(1,1,blue); square = rect(1,1,red); square;"))).toEqual({
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "color": "red"
+    });  
+});
+
+//defining and redefining a rect variable using that variable
+test("redefining rect (design) variable using the variable", () => {
+    expect(evaluator(parser.parse("rect design = rect(1,1,red); design = hor(design, rect(1,1,blue), design); design;"))).toEqual({
+        "width": 3,
+        "height": 1,
+        "patches": [
+            {
+                "x": 0,
+                "y": 0,
+                "width": 1,
+                "height": 1,
+                "color": "red"
+            },
+            {
+                "x": 1,
+                "y": 0,
+                "width": 1,
+                "height": 1,
+                "color": "blue"
+            },
+            {
+                "x": 2,
+                "y": 0,
+                "width": 1,
+                "height": 1,
+                "color": "red"
+            }
+        ]
+    });  
+});
 
 
 
+//---------------------FUNCTIONS------------------------
 
 //defining and calling a function using hor with compatable rectangles
 test("simple function with hor", () => {
