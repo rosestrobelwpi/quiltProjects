@@ -199,7 +199,6 @@ test("hor() nested in vert(), rectangle - compatable", () => {
     });  
 });
 
-
 //hor() inside vert(), using incompatable rectangles (widths between first and second design don't match)
 test("hor() nested in vert() - incompatable", () => {
     expect(() => {evaluator(parser.parse("vert(hor(rect(3,1,red), rect(2,1,blue)), hor(rect(1,1,yellow), rect(1,1,green)));"))}).toThrow;  
@@ -388,30 +387,128 @@ test("hor() nested in hor() - incompatable", () => {
     expect(() => {evaluator(parser.parse("hor(hor(rect(1,2,red), rect(1,2,blue)), hor(rect(1,1,yellow), rect(1,1,green)));"))}).toThrow;    
 });
 
-//5 hor() nested, incompatable
-// test("", () => {
-//     expect(() => {evaluator(parser.parse("CODE_HERE"))}).toThrow;    
-// });
-
 //2 vert() nested, compatable
-// test("", () => {
-//     expect(evaluator(parser.parse("CODE_HERE"))).toEqual(OBJECT_HERE);  
-// });
+test("vert() nested inside vert() - compatable", () => {
+    expect(evaluator(parser.parse("vert(vert(rect(1,1,blue), rect(1,1,red)),vert(rect(1,1,green), rect(1,1,yellow)));"))).toEqual({
+        "width": 1,
+        "height": 4,
+        "patches": [
+            {
+                "x": 0,
+                "y": 0,
+                "width": 1,
+                "height": 1,
+                "color": "blue"
+            },
+            {
+                "x": 0,
+                "y": 1,
+                "width": 1,
+                "height": 1,
+                "color": "red"
+            },
+            {
+                "x": 0,
+                "y": 2,
+                "width": 1,
+                "height": 1,
+                "color": "green"
+            },
+            {
+                "x": 0,
+                "y": 3,
+                "width": 1,
+                "height": 1,
+                "color": "yellow"
+            }
+        ]
+    });  
+});
 
 //5 vert() nested, compatable
-// test("", () => {
-//     expect(evaluator(parser.parse("CODE_HERE"))).toEqual(OBJECT_HERE);  
-// });
+test("5 vert() nested inside vert() - compatable", () => {
+    expect(evaluator(parser.parse("vert(vert(rect(1,1,blue), rect(1,1,red)),vert(rect(1,1,green), rect(1,1,yellow)), vert(rect(1,1,purple), rect(1,1,pink)), vert(rect(1,1,black), rect(1,1,white)), vert(rect(1,1,grey), rect(1,1,cyan)));"))).toEqual({
+        "width": 1,
+        "height": 10,
+        "patches": [
+            {
+                "x": 0,
+                "y": 0,
+                "width": 1,
+                "height": 1,
+                "color": "blue"
+            },
+            {
+                "x": 0,
+                "y": 1,
+                "width": 1,
+                "height": 1,
+                "color": "red"
+            },
+            {
+                "x": 0,
+                "y": 2,
+                "width": 1,
+                "height": 1,
+                "color": "green"
+            },
+            {
+                "x": 0,
+                "y": 3,
+                "width": 1,
+                "height": 1,
+                "color": "yellow"
+            },
+            {
+                "x": 0,
+                "y": 4,
+                "width": 1,
+                "height": 1,
+                "color": "purple"
+            },
+            {
+                "x": 0,
+                "y": 5,
+                "width": 1,
+                "height": 1,
+                "color": "pink"
+            },
+            {
+                "x": 0,
+                "y": 6,
+                "width": 1,
+                "height": 1,
+                "color": "black"
+            },
+            {
+                "x": 0,
+                "y": 7,
+                "width": 1,
+                "height": 1,
+                "color": "white"
+            },
+            {
+                "x": 0,
+                "y": 8,
+                "width": 1,
+                "height": 1,
+                "color": "grey"
+            },
+            {
+                "x": 0,
+                "y": 9,
+                "width": 1,
+                "height": 1,
+                "color": "cyan"
+            }
+        ]
+    });  
+});
 
 //2 vert() nested, incompatable
-// test("", () => {
-//     expect(() => {evaluator(parser.parse("CODE_HERE"))}).toThrow;    
-// });
-
-//5 vert() nested, incompatable
-// test("", () => {
-//     expect(() => {evaluator(parser.parse("CODE_HERE"))}).toThrow;    
-// });
+test("vert() nested inside vert() - incompatable", () => {
+    expect(() => {evaluator(parser.parse("vert(vert(rect(2,1,blue), rect(2,1,red)),vert(rect(1,1,green), rect(1,1,yellow)));"))}).toThrow;    
+});
 
 
 //---------------------OVER()------------------------
@@ -512,7 +609,6 @@ test("over() BR - compatable", () => {
     });  
 });
 
-
 //over() using C with two compatable rectangles
 test("over() C - compatable", () => {
     expect(evaluator(parser.parse("over(C, rect(2,2,red), rect(1,1,blue));"))).toEqual({
@@ -537,24 +633,20 @@ test("over() C - compatable", () => {
     });  
 });
 
-
 //over() with second rectangle being too wide
 test("over() second too wide - incompatable", () => {
     expect(() => {evaluator(parser.parse("over(C, rect(2,2,blue), rect(3,1,red));"))}).toThrow;  
 });
-
 
 //over() with second rectangle being too tall
 test("over() second too tall - incompatable", () => {
     expect(() => {evaluator(parser.parse("over(C, rect(2,2,blue), rect(1,3,red));"))}).toThrow;  
 });
 
-
 //over() with second rectangle being too wide and too tall
 test("over() - incompatable", () => {
     expect(() => {evaluator(parser.parse("over(C, rect(2,2,blue), rect(3,3,red));"))}).toThrow;  
 });
-
 
 //2 over() nested, compatable
 test("over() 2 nested - compatable", () => {
@@ -648,14 +740,6 @@ test("over() 2 nested - incompatable", () => {
 test("over() 5 nested - incompatable", () => {
     expect(() => {evaluator(parser.parse("over(BR, rect(6,6, red), over(TL, rect(5,5,blue), over(BR, rect(2,4,yellow), over(TL, rect(3,3,green), over(C, rect(2,2,purple), rect(1,1,grey))))));"))}).toThrow;    
 });
-
-//over() with designs (ADD MULTIPLE)
-// test("", () => {
-//     expect(evaluator(parser.parse("CODE_HERE"))).toEqual(OBJECT_HERE);  
-// });
-// test("", () => {
-//     expect(() => {evaluator(parser.parse("CODE_HERE"))}).toThrow;    
-// });
 
 //over() using TL with two compatable designs
 test("over() TL design - compatable", () => {
@@ -849,19 +933,17 @@ test("over() C design - compatable", () => {
 
 //over() with second design being too wide
 test("over() second design too wide - incompatable", () => {
-    expect(() => {evaluator(parser.parse("CODE_HERE"))}).toThrow;  
+    expect(() => {evaluator(parser.parse("over(C, hor(rect(1,4,yellow), rect(1,4,green)), hor(rect(2,4,blue), rect(2,4,red)));"))}).toThrow;  
 });
-
 
 //over() with second design being too tall
 test("over() second design too tall - incompatable", () => {
-    expect(() => {evaluator(parser.parse("CODE_HERE"))}).toThrow;  
+    expect(() => {evaluator(parser.parse("over(C, hor(rect(1,2,yellow), rect(1,2,green)), hor(rect(1,4,blue), rect(1,4,red)), );"))}).toThrow;  
 });
-
 
 //over() with second design being too wide and too tall
 test("over() design - incompatable", () => {
-    expect(() => {evaluator(parser.parse("CODE_HERE"))}).toThrow;  
+    expect(() => {evaluator(parser.parse("over(C, hor(rect(1,2,yellow), rect(1,2,green)), hor(rect(2,4,blue), rect(2,4,red)));"))}).toThrow;  
 });
 
 
@@ -1789,12 +1871,27 @@ test("redefining rect (design) variable using the variable", () => {
     });  
 });
 
+//declaring but not initializing a variable (should not work in our language)
+test("declaring but not initializing a variable - error", () => {
+    expect(() => {evaluator(parser.parse("rect red; red = rect(1,1,red); red;"))}).toThrow;    
+});
+
+//calling a variable in a variable definition
+test("variable in a variable def", () => {
+    expect(evaluator(parser.parse("rect square = rect(1,1,blue); rect newSquare = square; newSquare;"))).toEqual({
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "color": "blue"
+    });  
+});
 
 
 //---------------------FUNCTIONS------------------------
 
-//defining and calling a function using hor with compatable rectangles
-test("simple function with hor", () => {
+//function with rectangle params, returns rect, using rect arguments
+test("function with rectangle params, rectangle args", () => {
     expect(evaluator(parser.parse("define func(rect x, rect y) {hor(x, y);}func(rect(1, 2, blue), rect(1, 2, red));"))).toEqual({
             "width": 2,
             "height": 2,
@@ -1815,6 +1912,228 @@ test("simple function with hor", () => {
                 }
             ]
     });
+});
+
+//function with rectangle params, returns rect, using rect (design) arguments
+test("function with rectangle params, rectangle (design) args", () => {
+    expect(evaluator(parser.parse("define func(rect x, rect y) { hor(x, y); } func(vert(rect(1, 1, blue), rect(1,1,red)), vert(rect(1, 1, yellow), rect(1,1,green)));"))).toEqual({
+        "width": 2,
+        "height": 2,
+        "patches": [
+            {
+                "x": 0,
+                "y": 0,
+                "width": 1,
+                "height": 1,
+                "color": "blue"
+            },
+            {
+                "x": 0,
+                "y": 1,
+                "width": 1,
+                "height": 1,
+                "color": "red"
+            },
+            {
+                "x": 1,
+                "y": 0,
+                "width": 1,
+                "height": 1,
+                "color": "yellow"
+            },
+            {
+                "x": 1,
+                "y": 1,
+                "width": 1,
+                "height": 1,
+                "color": "green"
+            }
+        ]
+    });  
+});
+
+//function with integer params, returns rect
+test("function with integer params", () => {
+    expect(evaluator(parser.parse("define func(int x, int y) { rect(x, y, blue); } func(3,3);"))).toEqual({
+        "x": 0,
+        "y": 0,
+        "width": 3,
+        "height": 3,
+        "color": "blue"
+    });  
+});
+
+//function with mixed params, returns rect
+test("function with int and rect params", () => {
+    expect(evaluator(parser.parse("define func(int x, rect square) { repX(x, square); } func(3, vert(hor(rect(1,1,purple), rect(1,1,yellow)), hor(rect(1,1,yellow), rect(1,1,purple))));"))).toEqual({
+        "width": 6,
+        "height": 2,
+        "patches": [
+            {
+                "x": 0,
+                "y": 0,
+                "width": 1,
+                "height": 1,
+                "color": "purple"
+            },
+            {
+                "x": 1,
+                "y": 0,
+                "width": 1,
+                "height": 1,
+                "color": "yellow"
+            },
+            {
+                "x": 0,
+                "y": 1,
+                "width": 1,
+                "height": 1,
+                "color": "yellow"
+            },
+            {
+                "x": 1,
+                "y": 1,
+                "width": 1,
+                "height": 1,
+                "color": "purple"
+            },
+            {
+                "x": 2,
+                "y": 0,
+                "width": 1,
+                "height": 1,
+                "color": "purple"
+            },
+            {
+                "x": 3,
+                "y": 0,
+                "width": 1,
+                "height": 1,
+                "color": "yellow"
+            },
+            {
+                "x": 2,
+                "y": 1,
+                "width": 1,
+                "height": 1,
+                "color": "yellow"
+            },
+            {
+                "x": 3,
+                "y": 1,
+                "width": 1,
+                "height": 1,
+                "color": "purple"
+            },
+            {
+                "x": 4,
+                "y": 0,
+                "width": 1,
+                "height": 1,
+                "color": "purple"
+            },
+            {
+                "x": 5,
+                "y": 0,
+                "width": 1,
+                "height": 1,
+                "color": "yellow"
+            },
+            {
+                "x": 4,
+                "y": 1,
+                "width": 1,
+                "height": 1,
+                "color": "yellow"
+            },
+            {
+                "x": 5,
+                "y": 1,
+                "width": 1,
+                "height": 1,
+                "color": "purple"
+            }
+        ]
+    });  
+});
+
+//function with no params, throws error, not implemented in the language
+test("function no params - error", () => {
+    expect(() => {evaluator(parser.parse("define redSquare() { rect(1,1,red); } redSquare();"))}).toThrow;    
+});
+
+//function that returns an integer, returns integer
+// define add(int a, int b) {
+//     (a+b);
+// }
+// rect(add(2, 3), add(1, 2), green);
+
+//function calls another function
+test("function calls another function", () => {
+    expect(evaluator(parser.parse("define funcOne(rect a, rect b) { hor(a, b); } define funcTwo(int i) { repX(i, funcOne(rect(1,1,red), rect(1,1,blue))); } funcTwo(3);"))).toEqual({
+        "width": 6,
+        "height": 1,
+        "patches": [
+            {
+                "x": 0,
+                "y": 0,
+                "width": 1,
+                "height": 1,
+                "color": "red"
+            },
+            {
+                "x": 1,
+                "y": 0,
+                "width": 1,
+                "height": 1,
+                "color": "blue"
+            },
+            {
+                "x": 2,
+                "y": 0,
+                "width": 1,
+                "height": 1,
+                "color": "red"
+            },
+            {
+                "x": 3,
+                "y": 0,
+                "width": 1,
+                "height": 1,
+                "color": "blue"
+            },
+            {
+                "x": 4,
+                "y": 0,
+                "width": 1,
+                "height": 1,
+                "color": "red"
+            },
+            {
+                "x": 5,
+                "y": 0,
+                "width": 1,
+                "height": 1,
+                "color": "blue"
+            }
+        ]
+    });  
+});
+
+//function tries to call a function defined later (should throw)
+test("function calls function defined later - error", () => {
+    expect(() => {evaluator(parser.parse("define funcTwo(int i) { repX(i, funcOne(rect(1,1,red), rect(1,1,blue))); } define funcOne(rect a, rect b) { hor(a, b); } funcTwo(3);"))}).toThrow;    
+});
+
+//function inside a function
+test("function inside a function", () => {
+    expect(evaluator(parser.parse("define outer(int x, int y) { define inner(int a, int b) { rect(a, b, red); } inner(x,y); } outer(1,1);"))).toEqual({
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "color": "red"
+    });  
 });
 
 
