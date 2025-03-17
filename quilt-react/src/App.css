@@ -77,6 +77,7 @@ html, body {
   border: none !important;
   color: #ffd000 !important;
   min-height: 50vh !important;
+  font-family: cursive !important;
   font-size: 18px;
   min-width: 50vw;
   max-width: 50vw;
@@ -111,12 +112,26 @@ html, body {
 color: #283618 !important;
 }
 
+.cm-s-material .cm-keyword {
+  color: indigo !important;
+}
+
 .cm-s-material .cm-variable {
-  color: #de6800 !important;
+  color: black !important;
+}
+
+.cm-s-material .cm-builtin {
+  color: green !important
 }
 
 .cm-operator {
   color: #283618 !important;
+}
+
+.cm-s-material .CodeMirror-matchingbracket {
+  text-decoration: none !important;
+  background-color:#FFFFEE !important;
+  color: black !important;
 }
 
 .drawing-container {

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Play from './Play';
+import Play2 from './Play2';
 import Home from './Home';
 import About from './About';
 import Examples from './Examples';
@@ -13,6 +14,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/play" element={<Play />} />
+      {/* <Route path="/play" element={<Play2 />} /> */}
       {/* Add a dynamic route to handle preloaded designs */}
       <Route path="/play/:code" element={<Play />} />
       <Route path="/about" element={<About />} />

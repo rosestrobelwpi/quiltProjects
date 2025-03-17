@@ -289,8 +289,6 @@ function Play() {
                 </div>
             </div>
             <div className="container2">
-
-
                 <div className="parser-container">
                     {/* <div className="drawingName">
                     <form>
@@ -316,7 +314,7 @@ function Play() {
                                 mode: "javascript",
                                 theme: "material",
                                 matchBrackets: true,
-                                autoCloseBrackets: true,
+                                autoCloseBrackets: false,
                                 lineNumbers: true,
                                 lineWrapping: true,
                             }}
