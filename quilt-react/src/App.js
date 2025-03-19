@@ -13,8 +13,8 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/play" element={<Play />} />
-      {/* <Route path="/play" element={<Play2 />} /> */}
+      {/* <Route path="/play" element={<Play />} /> */}
+      <Route path="/play" element={<Play2 />} />
       {/* Add a dynamic route to handle preloaded designs */}
       <Route path="/play/:code" element={<Play />} />
       <Route path="/about" element={<About />} />

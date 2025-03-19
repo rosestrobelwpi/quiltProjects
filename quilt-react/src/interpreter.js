@@ -131,11 +131,11 @@ function evaluatorLogic(env, node) {
             for (let i = 1; i < (node.design).length; i++) {
                 let currentDesign = evaluatorLogic(env, node.design[i])
                 if (currentDesign.width >  firstDesignOver.width && currentDesign.height > firstDesignOver.height) {
-                    throw new Error("Patch #" + (i+1) + " is wider AND taller than the Design it is being placed over. Please put the larger Design first.")
+                    throw new Error("Problem with over() call: \nPatch #" + (i+1) + " is wider AND taller than the Design it is being placed over. Please put the larger Design first.")
                 } else if(currentDesign.width >  firstDesignOver.width) {
-                    throw new Error("Patch #" + (i+1) + " is wider than the Design it is being placed over. Please put the larger Design first.")
+                    throw new Error("Problem with over() call: \nPatch #" + (i+1) + " is wider than the Design it is being placed over. Please put the larger Design first.")
                 } else if (currentDesign.height > firstDesignOver.height) {
-                    throw new Error("Patch #" + (i+1) + " is taller than the Design it is being placed over. Please put the larger Design first.")
+                    throw new Error("Problem with over() call: \nPatch #" + (i+1) + " is taller than the Design it is being placed over. Please put the larger Design first.")
                 }
 
                 if (currentDesign instanceof Patch) {
@@ -389,7 +389,7 @@ function evaluatorLogic(env, node) {
            for (let i = 1; i < (node.design).length; i++) { //start at index 1 bc already took care of the first one
                 let currentDesign = evaluatorLogic(env, node.design[i]) //recursively process the very next Patch/Design
                 if (currentDesign.height !== heightHor) { //check to make sure heights are compatable, works regardless of if it's a Design or a Patch
-                    throw new Error("Heights need to be the same in order to place Patches horizontally.");
+                    throw new Error(`Problem with hor() call: \nTrying to place a Patch of height "${currentDesign.height}" next to a Patch of height "${heightHor}".\nHeights need to be the same in order to place Patches horizontally.`);
                 }
 
                 if (currentDesign instanceof Patch) { //Patch case is easier since we only have to worry about a single Patch
@@ -438,7 +438,7 @@ function evaluatorLogic(env, node) {
            for (let i = 1; i < (node.design).length; i++) { //start at index 1 bc already took care of the first one
                 let currentDesign = evaluatorLogic(env, node.design[i]) //recursively process the very next Patch/Design
                 if (currentDesign.width !== widthVert) { //check to make sure widths are compatable, works regardless of if it's a Design or a Patch
-                    throw new Error("Widths need to be the same in order to place Patches vertically.")
+                    throw new Error(`Problem with vert() call: \nTrying to place a Patch of width "${currentDesign.width}" below a Patch of width "${widthVert}".\nWidths need to be the same in order to place Patches vertically.`)
                 }
                 if (currentDesign instanceof Patch) { //Patch case is easier since we only have to worry about a single Patch
                     //currentDesign.y = (prevPatchVert.height + prevPatchVert.y) //since vert, this calculation will give us the correct y-value
@@ -481,7 +481,7 @@ function evaluatorDefn (env, node) {
         case TAG_ASSIGNMENT:
             //console.log("BEFORE", env)
             env[node.name] = evaluatorLogic(env, node.value) //store evaluated value in environment 
-            //console.log("AFTER", env)
+            console.log("AFTER", env)
             break;
 
         case TAG_FUNC:

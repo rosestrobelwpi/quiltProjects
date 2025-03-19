@@ -223,11 +223,11 @@ function Play() {
             try {
                 // Extract the detailed error message from the caught error
                 const errorMessage = error.message || "An unknown error occurred.";
-                alert(`Parse ERROR at line ${error.location.start.line}, column ${error.location.start.column}:\n${errorMessage}`);
+                alert(`---Parse ERROR--- \nat line ${error.location.start.line}, column ${error.location.start.column}:\n${errorMessage}`);
 
             } catch (error2) {
                 const errorMessage = error.message || "An unknown error occurred.";
-                alert(`Interpreter or Typechecker ERROR:\n${errorMessage}`);
+                alert(`---Interpreter or Typechecker ERROR---\n${errorMessage}`);
 
             }
 
